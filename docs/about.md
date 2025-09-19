@@ -37,7 +37,7 @@
 - C++
 - C#
 - Python
-- JavaScript
+- JAVA
 
 ### 开发框架
 - ObjectARX.NET
@@ -46,7 +46,8 @@
 - Vue.js
 
 ### 开发工具
-- Visual Studio
+- Visual Studio Code
+- Visual Studio 2022
 - PyCharm
 - Git
 - MkDocs

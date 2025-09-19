@@ -101,7 +101,7 @@ def define_env(env):
             for category in all_categories:
                 cat_lower = category.lower()
                 if cat_lower == 'cpp' or 'c++' in cat_lower:
-                    category_display_names[category] = 'C++开发'
+                    category_display_names[category] = 'CPP开发'
                 elif cat_lower == 'python' or 'python' in cat_lower:
                     category_display_names[category] = 'Python开发'
                 elif 'autocad' in cat_lower or 'cad' in cat_lower:
@@ -240,7 +240,7 @@ def define_env(env):
                     count = len(category_info[category])
                     
                     if cat_lower == 'cpp' or 'c++' in cat_lower:
-                        display_name = 'C++'
+                        display_name = 'CPP'
                         icon = '🖥️'
                     elif cat_lower == 'python':
                         display_name = 'Python'

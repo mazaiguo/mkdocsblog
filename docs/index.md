@@ -8,36 +8,15 @@
 
 ## 💻 技术领域
 
-### AutoCAD二次开发
-- ObjectARX.NET开发
-- CAD图纸处理和自动化
-- 自定义命令和菜单开发
+<!-- # blog-->
 
-### Python开发  
-- 文件格式转换（DWG、SVG、PDF等）
-- 自动化脚本开发
-- 数据处理和分析
-
-### C#/.NET开发
-- WPF应用程序开发
-- JSON数据处理
-- .NET Framework应用
-
-### 开发工具
-- YAML配置文件处理
-- 项目构建和打包
-- 开发环境配置
+<!-- material/blog-->
 
 ## 🏷️ 热门标签
 
-<div class="tag-cloud">
-  <span class="tag">AutoCAD</span>
-  <span class="tag">Python</span>
-  <span class="tag">C#</span>
-  <span class="tag">ObjectARX.NET</span>
-  <span class="tag">文件转换</span>
-  <span class="tag">自动化</span>
-</div>
+<!-- # Tags -->
+<!-- material/tags -->
+
 
 查看完整标签请访问：[标签页面](tags.html)
 

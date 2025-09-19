@@ -1,18 +1,16 @@
 ---
-title: Csharp使用Newtonsoft.Json生成JSON字符串
-date: 2025-09-18
+title: Csharp使用Newtonsoft.Json生成JSON
+date: 2024-07-10
 categories:
-  - Csharp
-  - .NET开发
+  - Csharp开发
+  - .NET
 tags:
   - Csharp
-  - Newtonsoft.Json
   - JSON
-  - 序列化
+  - Newtonsoft.Json
   - 数据处理
-description: 详细介绍如何在C#中使用Newtonsoft.Json库处理复杂JSON数据，包括类创建、序列化和反序列化
-authors:
-  - JerryMa
+description: 详细介绍C#中使用Newtonsoft.Json库进行JSON数据的序列化和反序列化操作
+author: JerryMa
 ---
 
 # Csharp使用Newtonsoft.Json生成JSON字符串
@@ -204,3 +202,4 @@ Console.WriteLine(jObj.ToString());
   ]
 }
 ```
+

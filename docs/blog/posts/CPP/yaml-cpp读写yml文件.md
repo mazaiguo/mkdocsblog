@@ -2,14 +2,14 @@
 title: yaml-cpp读写yml文件
 date: 2025-09-18
 categories:
-  - cpp
+  - CPP
   - 开发工具
 tags:
   - cpp
   - yaml-cpp
   - 文件操作
   - 配置文件
-description: 使用yaml-cpp库在C++中读写YAML配置文件的完整指南，包括编译配置和UTF-8字符处理
+description: 使用yaml-cpp库在CPP中读写YAML配置文件的完整指南，包括编译配置和UTF-8字符处理
 authors:
   - JerryMa
 ---

@@ -198,7 +198,7 @@ extra:
     Python: python
     AutoCAD: autocad
     C++: cpp
-    "C#": csharp
+    "Csharp": csharp
     ".NET": dotnet
   generator: false #是否删除页脚显示"使用 MkDocs 材料制造"
 #extra_javascript:
@@ -392,8 +392,8 @@ def define_env(env):
                     category_display_names[category] = 'Python开发'
                 elif 'autocad' in cat_lower or 'cad' in cat_lower:
                     category_display_names[category] = 'AutoCAD开发'
-                elif cat_lower == 'csharp' or 'c#' in cat_lower or '.net' in cat_lower:
-                    category_display_names[category] = 'C#/.NET开发'
+                elif cat_lower == 'csharp' or 'Csharp' in cat_lower or '.net' in cat_lower:
+                    category_display_names[category] = 'Csharp/.NET开发'
                 elif '开发工具' in category or '工具' in category:
                     category_display_names[category] = '开发工具'
                 elif '未分类' in category:
@@ -598,3 +598,8 @@ jobs:
 
 此时，当一个新的提交推送到`master`或`main`时，我们的静态网站的内容将自动生成并完成部署。可以尝试推送一个提交来查看GitHub Actions的工作状况。
 
+添加相关权限：
+
+![image-20250919104024286](http://image.jerryma.xyz//images/20250919-image-20250919104024286.png)
+
+![image-20250919104720037](http://image.jerryma.xyz//images/20250919-image-20250919104720037.png)

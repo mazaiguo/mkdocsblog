@@ -1,19 +1,17 @@
 ---
-title: DWG转SVG - Python实现AutoCAD文件格式转换
-date: 2025-08-12
+title: DWG转SVG
+date: 2024-05-22
 categories:
+  - CAD
+  - 文件转换
   - Python
-  - CAD开发
 tags:
-  - Python
   - DWG
   - SVG
   - ezdxf
-  - ODA File Converter
-  - 文件转换
-description: 使用Python和ezdxf库将DWG文件转换为SVG格式，支持批量处理和多种输出格式
-authors:
-  - JerryMa
+  - CAD转换
+description: 使用Python和ezdxf库将DWG文件转换为SVG格式的详细实现方法
+author: JerryMa
 ---
 
 # DWG转svg
@@ -79,16 +77,13 @@ odafc.win_exec_path = (
     r"C:\\Program Files\\ODA\\ODAFileConverter 25.5.0\\ODAFileConverter.exe"
 )
 
-
 # 自定义config解析
 class myconf(configparser.ConfigParser):
     def __init__(self, defaults=None):
         """
         初始化ConfigParser类的实例。
-
         通过调用父类configparser.ConfigParser的构造方法，初始化配置解析器实例。
         该构造方法允许指定默认配置值，这些值将在读取配置文件之前提供基本的配置项。
-
         参数:
         - defaults: 可选参数，字典类型，提供基本的配置项和值。如果未提供，将使用父类的默认设置。
         """
@@ -100,10 +95,8 @@ class myconf(configparser.ConfigParser):
     def write(self, fp):
         """
         将配置数据写入指定的文件指针。
-
         参数:
         - fp: 文件指针，用于写入配置数据。
-
         该方法首先检查是否有默认配置，默认配置是 configparser 模块的特殊部分。
         如果有默认配置，它将写入一个包含默认值的部分。
         然后，它遍历所有部分，为每个部分写入对应的键值对。
@@ -134,10 +127,8 @@ class myconf(configparser.ConfigParser):
 def getFileName(filedir):
     """
     获取指定目录下所有以"dwg"为后缀的文件的绝对路径列表。
-
     参数:
     filedir: str - 文件目录的路径。
-
     返回:
     List[str] - 包含所有符合条件的文件的绝对路径的列表，如果没有找到任何文件，则返回空列表。
     """
@@ -167,13 +158,7 @@ def get_current_file_path():
 
 # 用于将DXF格式的文件转换为指定格式的图像文件
 def convert_dxf_to_image(
-    dxf_path,
-    output_file_name,
-    width,
-    height,
-    backgroundtype,
-    file_suffix,
-    margin,
+    dxf_path, output_file_name, width=64, height=64, backgroundtype=0, file_suffix="pdf"
 ):
     try:
         doc = odafc.readfile(dxf_path)
@@ -205,7 +190,6 @@ def convert_dxf_to_image(
         5: config.BackgroundPolicy.MODELSPACE,
         6: config.BackgroundPolicy.OFF,
     }
-
     # 使用 try-except 来处理可能出现的 KeyError 异常
     try:
         background_policy = policy_map[backgroundtype]
@@ -221,9 +205,7 @@ def convert_dxf_to_image(
     # 绘制模型空间
     frontend.draw_layout(msp)
     # 创建A4页面布局
-    page = layout.Page(
-        width, height, layout.Units.mm, margins=layout.Margins.all(margin)
-    )
+    page = layout.Page(width, height, layout.Units.mm, margins=layout.Margins.all(20))
     # 获取PDF或PNG渲染结果作为字节流
     if file_suffix == "pdf":
         pdf_bytes = backend.get_pdf_bytes(page)
@@ -253,7 +235,7 @@ def convert_dxf_to_image(
 
 
 # 用于将DXF格式的文件转换为SVG格式的文件
-def convert_dwg_to_svg(dxf_path, svg_path, width, height, margin):
+def convert_dwg_to_svg(dxf_path, svg_path, width=64, height=64):
     try:
         doc = odafc.readfile(dxf_path)
     except odafc.DXFStructureError as e:
@@ -301,9 +283,7 @@ def convert_dwg_to_svg(dxf_path, svg_path, width, height, margin):
     # 4. draw the modelspace
     frontend.draw_layout(msp)
     # 5. create an A4 page layout, not required for all backends
-    page = layout.Page(
-        width, height, layout.Units.mm, margins=layout.Margins.all(margin)
-    )
+    page = layout.Page(width, height, layout.Units.mm, margins=layout.Margins.all(20))
     # 6. get the SVG rendering as string - this step is backend dependent
     svg_string = backend.get_string(page)
     with open(svg_path, "wt", encoding="utf8") as fp:
@@ -314,14 +294,11 @@ def convert_dwg_to_svg(dxf_path, svg_path, width, height, margin):
 def is_float_zero(num, epsilon=1e-6):
     """
     判断一个浮点数是否接近零。
-
     由于浮点数的精度问题，直接比较数值与零相等通常是不推荐的。通过指定一个极小的误差范围（epsilon），
     判断数值是否在这个误差范围内，从而确定该数值是否接近零。
-
     参数:
     num: 待判断的浮点数。
     epsilon: 可接受的误差范围，默认值为1e-6。
-
     返回值:
     如果 num 的绝对值小于 epsilon，返回 True，表示 num 接近零。
     否则，返回 False，表示 num 不接近零。
@@ -332,14 +309,11 @@ def is_float_zero(num, epsilon=1e-6):
 def read_config_file(inifile):
     """
     读取配置文件并解析其中的设置。
-
     该函数尝试读取一个INI格式的配置文件，并从中获取特定的设置值，
     包括输入路径、宽度、高度和文件后缀。如果无法读取或解析配置文件，
     它将返回一组默认的空值。
-
     参数:
     inifile (str): 配置文件的路径。
-
     返回:
     tuple: 包含输入路径（str）、宽度（float）、高度（float）和文件后缀（str）的元组。
            如果发生错误，返回("", 0.0, 0.0, "")。
@@ -353,19 +327,17 @@ def read_config_file(inifile):
         height = iniconfig.getfloat("settings", "height")
         file_suffix = iniconfig.get("settings", "file_suffix")
         backgroundtype = iniconfig.getint("settings", "backgroundtype")
-        margin = iniconfig.getfloat("settings", "margin")
         # 返回解析的配置项值
-        return inputpath, width, height, file_suffix, backgroundtype, margin
+        return inputpath, width, height, file_suffix, backgroundtype
     except Exception as e:
         # 如果发生异常，打印错误信息并返回一组默认的空值
         print(f"读取配置文件时发生错误: {e}")
-        return "", 0.0, 0.0, "", 0, 20
+        return "", 0.0, 0.0, "", 0
 
 
-def process_files(width, height, file_suffix, backgroundtype, filelist, margin):
+def process_files(width, height, file_suffix, backgroundtype, filelist):
     """
     根据提供的文件列表和参数，将指定的文件转换为指定格式的PDF或图片文件。
-
     参数:
     - width: 转换后文件的宽度，用于调整输出文件的尺寸。
     - height: 转换后文件的高度，用于调整输出文件的尺寸。
@@ -389,28 +361,24 @@ def process_files(width, height, file_suffix, backgroundtype, filelist, margin):
             pdf_file_name = os.path.join(outpath, f"{file_name}.png")
         # 如果文件格式为svg，则调用特定的转换函数
         if file_suffix == "svg":
-            convert_dwg_to_svg(file, pdf_file_name, width, height, margin)
+            convert_dwg_to_svg(file, pdf_file_name, width, height)
         # 对于其他格式，假设为dwg，调用转换为pdf或其他图片格式的函数
         else:
             convert_dxf_to_image(
-                file, pdf_file_name, width, height, backgroundtype, file_suffix, margin
+                file, pdf_file_name, width, height, backgroundtype, file_suffix
             )
-
 
 def ensure_non_empty_value(value, default):
     """
     Ensure the given value is non-empty. If the value is empty, return the default value.
-
     Parameters:
     - value: The value to check and return if it is non-empty.
     - default: The default value to return if the given value is empty.
-
     Returns:
     - The given value if it is non-empty; otherwise, the default value.
     """
     # Return the given value if it is non-empty, otherwise return the default value
     return value if value else default
-
 
 if __name__ == "__main__":
     currentPath = get_current_file_path()
@@ -440,33 +408,22 @@ if __name__ == "__main__":
         """
     )
     iniconfig = myconf()
-    inputpath, width, height, file_suffix, backgroundtype, margin = (
-        "",
-        0.0,
-        0.0,
-        "",
-        0,
-        0,
-    )
+    inputpath, width, height, file_suffix, backgroundtype = "", 0.0, 0.0, "", 0
     if os.path.exists(inifile):
-        inputpath, width, height, file_suffix, backgroundtype, margin = (
-            read_config_file(inifile)
+        inputpath, width, height, file_suffix, backgroundtype = read_config_file(
+            inifile
         )
     else:
         print(f"{inifile} 配置文件不存在，请检查配置文件路径是否正确")
-
     inputpath = ensure_non_empty_value(inputpath, currentPath)
     width = ensure_non_empty_value(width, 64)
     height = ensure_non_empty_value(height, 64)
     file_suffix = ensure_non_empty_value(file_suffix, "pdf")
     backgroundtype = ensure_non_empty_value(backgroundtype, 0)
-    margin = ensure_non_empty_value(margin, 0)
     print(f"dwg文件夹为:{inputpath}")
     filelist = getFileName(inputpath)
-    process_files(width, height, file_suffix, backgroundtype, filelist, margin)
-
+    process_files(width, height, file_suffix, backgroundtype, filelist)
     print("结束转换")
-
 ```
 
 ==dwg2svg.ini==
@@ -478,7 +435,6 @@ width=64
 height=64
 file_suffix=svg
 backgroundtype=0
-margin=0
 ```
 
 ## 其它设置
