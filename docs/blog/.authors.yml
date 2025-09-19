@@ -1,0 +1,13 @@
+authors:
+  JerryMa:
+    name: Jerry Ma
+    description: CAD开发工程师，专注于CAD二次开发、Python自动化和.NET应用开发
+    avatar: http://image.jerryma.xyz//images/20250919-image-20250919090316245.png
+    url: https://github.com/mazaiguo
+    social:
+      - icon: fontawesome/brands/github
+        url: https://github.com/mazaiguo
+      - icon: fontawesome/brands/gitlab
+        url: https://gitlab.zwsoft.cn/mazaiguo  
+      - icon: fontawesome/regular/envelope
+        url: mailto:mazaiguo@126.com
