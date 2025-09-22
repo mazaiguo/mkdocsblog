@@ -150,12 +150,16 @@ extra:
     "C#": csharp
     ".NET": dotnet
   generator: false #是否删除页脚显示"使用 MkDocs 材料制造"
-#extra_javascript:
+extra_javascript:
+  - javascripts/katex.js
+  - https://unpkg.com/katex@0/dist/katex.min.js
+  - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
   #- https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js
   #- javascripts/config.js
 extra_css:
   #- https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css
   - stylesheets/extra.css  
+  - https://unpkg.com/katex@0/dist/katex.min.css
 markdown_extensions:
   - abbr
   - admonition
@@ -164,6 +168,7 @@ markdown_extensions:
   - footnotes
   - md_in_html
   - meta
+  - tables
   - toc:
       permalink: true
       title: 目录

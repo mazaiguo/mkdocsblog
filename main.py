@@ -246,22 +246,20 @@ def define_env(env):
                                 
                                 title = front_matter.get('title', md_file.stem)
                                 categories = front_matter.get('categories', [])
-                                
+                                date_val = front_matter.get('date', '2025-09-18')
+
                                 # 处理分类
                                 if isinstance(categories, list) and categories:
                                     for category in categories:
-                                        cat_str = str(category)
+                                        cat_str = str(category).strip().lower()  # 归一化
                                         all_categories.add(cat_str)
-                                        category_info[cat_str].append(title)
+                                        category_info[cat_str].append((title, date_val, md_file.stem))
                                 
                             except yaml.YAMLError:
                                 continue
                              
                 except Exception:
                     continue
-            
-            if not category_info:
-                return f"## 📝 调试信息\n\n找到 {len(all_categories)} 个分类，{len(category_info)} 个有文章的分类\n\n所有分类: {list(all_categories)}\n\n"
             
             # 生成分类页面内容  
             result = []
@@ -287,9 +285,52 @@ def define_env(env):
                         display_name = category
                         icon = '💻'
                     
-                    result.append(f"### {icon} [{display_name}](category/{category}.html)")
+                    # 添加分类标题
+                    result.append(f"### {icon} [{display_name}](category/{cat_lower}.html)")
                     result.append(f"- **文章数量**: {count}篇")
-                    result.append(f"- **最新文章**: {', '.join(category_info[category][:3])}")
+                    
+                    latest = []
+                    print(f"category={category}, items={category_info[category]}")
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:3]:
+                        url = f"{generate_url_slug(t)}.html"  # 使用title转小写再编码
+                        dt = None
+                        try:
+                            if isinstance(d, datetime):
+                                dt = d
+                            elif isinstance(d, date):
+                                dt = datetime.combine(d, datetime.min.time())
+                            elif isinstance(d, str) and len(d) == 10:
+                                dt = datetime.strptime(d, "%Y-%m-%d")
+                        except Exception as ex:
+                            pass
+                        if dt:
+                            url = f"{dt.year}/{dt.month:02d}/{dt.day:02d}/{generate_url_slug(t)}.html"
+                        latest.append(f"[{t}]({url})")
+                    result.append(f"- **最新文章**: {', '.join(latest)}")
+                    result.append("")
+                else:
+                    icon = '💻'
+                    result.append(f"### {icon} [{cat_lower}](category/{cat_lower}.html)")
+                    result.append(f"- **文章数量**: {len(category_info[category])}篇")
+                    # 修正这里，生成带链接的最新文章
+                    latest = []
+                    print(f"category={category}, items={category_info[category]}")
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:3]:
+                        url = f"{generate_url_slug(t)}.html"  # 使用title转小写再编码
+                        dt = None
+                        try:
+                            if isinstance(d, datetime):
+                                dt = d
+                            elif isinstance(d, date):
+                                dt = datetime.combine(d, datetime.min.time())
+                            elif isinstance(d, str) and len(d) == 10:
+                                dt = datetime.strptime(d, "%Y-%m-%d")
+                        except Exception as ex:
+                            pass
+                        if dt:
+                            url = f"{dt.year}/{dt.month:02d}/{dt.day:02d}/{generate_url_slug(t)}.html"
+                        latest.append(f"[{t}]({url})")
+                    result.append(f"- **最新文章**: {', '.join(latest)}")
                     result.append("")
             
             # 开发框架和工具部分
@@ -300,9 +341,36 @@ def define_env(env):
                 cat_lower = category.lower()
                 if 'autocad' in cat_lower or 'cad' in cat_lower or '工具' in cat_lower:
                     count = len(category_info[category])
-                    result.append(f"### 🔧 [{category}](category/{category}.html)")
+                    
+                    # 添加分类标题
+                    if 'autocad' in cat_lower or 'cad' in cat_lower:
+                        icon = '🏗️'
+                        display_name = 'AutoCAD/CAD开发'
+                    else:
+                        icon = '🔧'
+                        display_name = category
+                    
+                    result.append(f"### {icon} [{display_name}](category/{cat_lower}.html)")
                     result.append(f"- **文章数量**: {count}篇")
-                    result.append(f"- **最新文章**: {', '.join(category_info[category][:3])}")
+                    
+                    latest = []
+                    print(f"category={category}, items={category_info[category]}")
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:3]:
+                        url = f"{generate_url_slug(t)}.html"  # 使用title转小写再编码
+                        dt = None
+                        try:
+                            if isinstance(d, datetime):
+                                dt = d
+                            elif isinstance(d, date):
+                                dt = datetime.combine(d, datetime.min.time())
+                            elif isinstance(d, str) and len(d) == 10:
+                                dt = datetime.strptime(d, "%Y-%m-%d")
+                        except Exception as ex:
+                            pass
+                        if dt:
+                            url = f"{dt.year}/{dt.month:02d}/{dt.day:02d}/{generate_url_slug(t)}.html"
+                        latest.append(f"[{t}]({url})")
+                    result.append(f"- **最新文章**: {', '.join(latest)}")
                     result.append("")
             
             # 统计信息
@@ -445,15 +513,12 @@ def define_env(env):
             
             for category in sorted(all_categories):
                 cat_lower = category.lower()
-                if cat_lower in ['cpp', 'python', 'csharp'] or 'c++' in cat_lower:
+                if 'windows' in cat_lower or 'window' in cat_lower:
                     count = len(category_info[category])
                     
-                    if cat_lower == 'cpp' or 'c++' in cat_lower:
-                        display_name = 'CPP'
-                        icon = '🖥️'
-                    elif cat_lower == 'python':
-                        display_name = 'Python'
-                        icon = '🐍'
+                    if cat_lower == 'window' or 'windows' in cat_lower:
+                        display_name = 'windows程序'
+                        icon = '🔨'
                     else:
                         display_name = category
                         icon = '💻'
@@ -464,7 +529,7 @@ def define_env(env):
                     
                     latest = []
                     print(f"category={category}, items={category_info[category]}")
-                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True):
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:]:
                         url = f"blog/{generate_url_slug(t)}.html"  # 使用title转小写再编码
                         dt = None
                         try:
@@ -482,13 +547,13 @@ def define_env(env):
                     result.append(f"- **最新文章**: {' '.join(latest)}")
                     result.append("")
                 else:
-                    icon = '💻'
+                    icon = '🛠️'
                     result.append(f"### {icon} [{cat_lower}](blog/category/{cat_lower}.html)")
                     result.append(f"- **文章数量**: {len(category_info[category])}篇")
                     # 修正这里，生成带链接的最新文章
                     latest = []
                     print(f"category={category}, items={category_info[category]}")
-                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True):
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:]:
                         url = f"blog/{generate_url_slug(t)}.html"  # 使用title转小写再编码
                         dt = None
                         try:
@@ -507,7 +572,7 @@ def define_env(env):
                     result.append("")
             
             # 开发框架和工具部分
-            result.append("## 🔧 开发框架与工具")
+            result.append("## 🏗️ 开发框架与工具")
             result.append("")
             
             for category in sorted(all_categories):
@@ -520,7 +585,7 @@ def define_env(env):
                         icon = '🏗️'
                         display_name = 'AutoCAD/CAD开发'
                     else:
-                        icon = '🔧'
+                        icon = '✏️'
                         display_name = category
                     
                     result.append(f"### {icon} [{display_name}](blog/category/{cat_lower}.html)")
@@ -528,7 +593,7 @@ def define_env(env):
                     
                     latest = []
                     print(f"category={category}, items={category_info[category]}")
-                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True):
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:]:
                         url = f"blog/{generate_url_slug(t)}.html"  # 使用title转小写再编码
                         dt = None
                         try:

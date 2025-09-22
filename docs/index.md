@@ -15,10 +15,7 @@
 ## auto_tag
 {{auto_tag()}}
 --- -->
----
-## auto_home_category()
 {{auto_home_category()}}
----
 
 ## 🏷️ 热门标签
 

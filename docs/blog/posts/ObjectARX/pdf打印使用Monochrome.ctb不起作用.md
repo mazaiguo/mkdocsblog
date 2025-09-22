@@ -4,7 +4,7 @@ date: 2024-05-18
 categories:
   - windows程序
 tags:
-  - ObjectArx
+  - ObjectARX
   - AcDbPlotSettings
 
 description: 解决CAD中PDF打印使用Monochrome.ctb打印样式表不起作用的问题

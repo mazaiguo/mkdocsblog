@@ -36,7 +36,7 @@ mkdocs-glightbox>=0.3.4
 # mkdocs-git-revision-date-localized-plugin>=1.2.0
 
 # 其他可选插件
-# mkdocs-awesome-pages-plugin
+mkdocs-awesome-pages-plugin
 # mkdocs-redirects
 # mkdocs-rss-plugin
 ```
@@ -270,6 +270,75 @@ nav:
      - 关于本站: about.md
 ```
 
+## 增加latex
+
+```bash
+$$
+\cos x=\sum_{k=0}^{\infty}\frac{(-1)^k}{(2k)!}x^{2k}
+$$
+```
+
+$$ \cos x=\sum_{k=0}^{\infty}\frac{(-1)^k}{(2k)!}x^{2k} $$
+
+```bash
+The homomorphism $f$ is injective if and only if its kernel is only the
+singleton set $e_G$, because otherwise $\exists a,b\in G$ with $a\neq b$ such
+that $f(a)=f(b)$.
+```
+
+The homomorphism $f$ is injective if and only if its kernel is only the singleton set $e_G$, because otherwise $\exists a,b\in G$ with $a\neq b$ such that $f(a)=f(b)$.
+
+
+
+## contents tab
+
+```bash
+=== "C"
+
+    ``` c
+    #include <stdio.h>
+
+    int main(void) {
+      printf("Hello world!\n");
+      return 0;
+    }
+```
+=== "C++"
+
+    ``` c++
+    #include <iostream>
+    
+    int main(void) {
+      std::cout << "Hello world!" << std::endl;
+      return 0;
+    }
+    ```
+```
+
+```
+
+=== "C"     ``` c    #include <stdio.h>     int main(void) {      printf("Hello world!\n");      return 0;    }    ``` === "C++"     ``` c++    #include <iostream>     int main(void) {      std::cout << "Hello world!" << std::endl;      return 0;    }    ```
+
+
+
+## **Admonition**
+
+!!! note "Outer Note"
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
+    massa, nec semper lorem quam in massa.
+    
+    !!! note "Inner Note"
+    
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
+        nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
+        massa, nec semper lorem quam in massa.
+!!! note
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
+    massa, nec semper lorem quam in massa.
 ## 特殊数据处理
 
 `archive/index.md`
@@ -600,3 +669,4 @@ jobs:
 ![image-20250919104024286](http://image.jerryma.xyz//images/20250919-image-20250919104024286.png)
 
 ![image-20250919104720037](http://image.jerryma.xyz//images/20250919-image-20250919104720037.png)
+```
