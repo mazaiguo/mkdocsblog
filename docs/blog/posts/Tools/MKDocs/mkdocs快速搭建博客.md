@@ -45,230 +45,232 @@ mkdocs-awesome-pages-plugin
 
 `mkdoc.yml`
 
-```yaml
-site_name: 我的帮助文档
-site_description: 关于mkdocs-material支持的markdown语法，包括传统语法和扩展语法
-site_author: JerryMa
-site_url: http://127.0.0.1:8000
+??? note "mkdoc.yml"
+	```yaml
+    site_name: 我的帮助文档
+    site_description: 关于mkdocs-material支持的markdown语法，包括传统语法和扩展语法
+    site_author: JerryMa
+    site_url: http://127.0.0.1:8000
 
-repo_name: 'mkdocsblog'
-repo_url: 'https://github.com/mazaiguo/mkdocsblog'
-theme:
-  name: material
-  palette:
-    # Toggle light mode
-    - scheme: default
-      primary: Blue Grey
-      accent: Pink
-      toggle:
-        icon: material/toggle-switch
-        name: 切换到明亮模式
-    # Toggle dark mode
-    - scheme: slate
-      primary: blue
-      accent: amber
-      toggle:
-        icon: material/toggle-switch-off-outline
-        name: 切换到暗黑模式
-  features:
-    - announce.dismiss
-    - content.tabs.link
-    - content.tooltips
-    - content.code.copy #代码复制
-    - content.code.select
-    - content.code.annotate   
-    - content.footnote.tooltips
-    - header.autohide
-    - navigation.footer
-    - navigation.indexes
-    - navigation.instant
-    - navigation.instant.prefetch
-    - navigation.instant.progress
-    - navigation.prune
-    - navigation.sections
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.top # 返回顶部的按钮 在上滑时出现  
-    - navigation.tracking
-    - search.highlight # 搜索出的文章关键词加入高亮
-    - search.share #搜索分享按钮   
-    - search.suggest # 搜索输入一些字母时推荐补全整个单词
-    - toc.follow
-    - toc.integrate
-  language: 'zh'
-plugins:
-  - macros
-  - blog:
-      blog_dir: blog
-      post_dir: "{blog}/posts"
-      post_date_format: full
-      post_url_format: "{date}/{slug}"
-      pagination_per_page: 10
-      pagination_url_format: "page/{page}"
-      authors_file: "{blog}/.authors.yml"
-      blog_toc: true
-      categories_toc: true
-      archive: true
-      archive_name: 归档
-      archive_date_format: "YYYY年MM月"
-      archive_url_format: "archive/{date}"
-      archive_toc: true
-      archive_file: "archive/index.md"
-      categories: true
-      categories_name: 分类
-      categories_url_format: "category/{slug}"
-      categories_slugify: !!python/object/apply:pymdownx.slugs.slugify
-        kwds:
-          case: lower
-  - offline
-  - tags:
-      tags_hierarchy: true
-      tags_slugify_format: "tag:{slug}"
-      tags_slugify: !!python/object/apply:pymdownx.slugs.slugify
-        kwds:
-          case: lower
-  - search:
-      lang: 
-        - zh
-        - en
-      separator: '[\s\-\.]+'
-  - minify:
-      minify_html: true
-      minify_js: true
-      minify_css: true
-      htmlmin_opts:
-        remove_comments: true
-      css_files:
-        - stylesheets/extra.css
-  - glightbox:
-      touchNavigation: true
-      loop: false
-      effect: zoom
-      slide_effect: slide
-      width: 100%
-      height: auto
-      zoomable: true
-      draggable: true
-      skip_classes:
-        - custom-skip-class-name
-      auto_caption: false
-      caption_position: bottom
-  # 注释掉 git 插件，因为需要系统安装 Git
-  # - git-revision-date-localized:
-  #     enable_creation_date: true
-  #     type: timeago
-  #     locale: zh
-  #     fallback_to_build_date: false
-  #     exclude:
-  #       - index.md
-  #       - tags.md
-  #       - blog/index.md
-extra:
-  social:
-    - icon: fontawesome/brands/github #联系方式图标 : https://fontawesome.com/ 去这里找图标
-      link: https://github.com/mazaiguo
-      name: JerryMa on Github
-    - icon: fontawesome/brands/gitlab
-      link: https://gitlab.zwsoft.cn/mazaiguo
-    - icon: fontawesome/regular/envelope
-      link: mailto:mazaiguo@126.com
-      name: Email
-  analytics:
-    feedback:
-      title: 这个页面对您有帮助吗？
-      ratings:
-        - icon: material/emoticon-happy-outline
-          name: 有帮助
-          data: 1
-          note: >-
-            感谢您的反馈！
-        - icon: material/emoticon-sad-outline
-          name: 可以改进
-          data: 0
-          note: >-
-            感谢您的反馈！请帮助我们改进这个页面，
-            <a href="https://github.com/mazaiguo/mazaiguo.github.io/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">告诉我们需要改进的地方</a>。
-  tags:
-    HTML5: html
-    JavaScript: js
-    CSS: css
-    Python: python
-    AutoCAD: autocad
-    C++: cpp
-    "Csharp": csharp
-    ".NET": dotnet
-  generator: false #是否删除页脚显示"使用 MkDocs 材料制造"
-#extra_javascript:
-  #- https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js
-  #- javascripts/config.js
-extra_css:
-  #- https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css
-  - stylesheets/extra.css  
-markdown_extensions:
-  - abbr
-  - admonition
-  - attr_list
-  - def_list
-  - footnotes
-  - md_in_html
-  - meta
-  - toc:
-      permalink: true
-      title: 目录
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret
-  - pymdownx.details
-  - pymdownx.emoji:
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-      linenums: true
-      linenums_style: pymdownx.inline
-      auto_title: true # 显示编程语言名称
-      use_pygments: true
-  - pymdownx.inlinehilite
-  - pymdownx.keys
-  - pymdownx.magiclink:
-      normalize_issue_symbols: true
-      repo_url_shorthand: true
-      user: mazaiguo
-      repo: helpdoc
-  - pymdownx.mark
-  - pymdownx.smartsymbols
-  - pymdownx.snippets:
-      check_paths: true
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
-      combine_header_slug: true
-      slugify: !!python/object/apply:pymdownx.slugs.slugify
-        kwds:
-          case: lower
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.tilde
-  - pymdownx.critic
-copyright: Copyright &copy; 2016 - present [JerryMa](https://github.com/mazaiguo)
-nav:
-  - 首页: index.md
-  - 博客:
-     - blog/index.md
-  - 归档: archive/index.md
-  - 分类: blog/category.md
-  - 标签: tags.md
-  - 关于: 
-     - 关于本站: about.md
-```
+    repo_name: 'mkdocsblog'
+    repo_url: 'https://github.com/mazaiguo/mkdocsblog'
+    theme:
+      name: material
+      palette:
+        # Toggle light mode
+        - scheme: default
+          primary: Blue Grey
+          accent: Pink
+          toggle:
+            icon: material/toggle-switch
+            name: 切换到明亮模式
+        # Toggle dark mode
+        - scheme: slate
+          primary: blue
+          accent: amber
+          toggle:
+            icon: material/toggle-switch-off-outline
+            name: 切换到暗黑模式
+      features:
+        - announce.dismiss
+        - content.tabs.link
+        - content.tooltips
+        - content.code.copy #代码复制
+        - content.code.select
+        - content.code.annotate   
+        - content.footnote.tooltips
+        - header.autohide
+        - navigation.footer
+        - navigation.indexes
+        - navigation.instant
+        - navigation.instant.prefetch
+        - navigation.instant.progress
+        - navigation.prune
+        - navigation.sections
+        - navigation.tabs
+        - navigation.tabs.sticky
+        - navigation.top # 返回顶部的按钮 在上滑时出现  
+        - navigation.tracking
+        - search.highlight # 搜索出的文章关键词加入高亮
+        - search.share #搜索分享按钮   
+        - search.suggest # 搜索输入一些字母时推荐补全整个单词
+        - toc.follow
+        - toc.integrate
+      language: 'zh'
+    plugins:
+      - macros
+      - blog:
+          blog_dir: blog
+          post_dir: "{blog}/posts"
+          post_date_format: full
+          post_url_format: "{date}/{slug}"
+          pagination_per_page: 10
+          pagination_url_format: "page/{page}"
+          authors_file: "{blog}/.authors.yml"
+          blog_toc: true
+          categories_toc: true
+          archive: true
+          archive_name: 归档
+          archive_date_format: "YYYY年MM月"
+          archive_url_format: "archive/{date}"
+          archive_toc: true
+          archive_file: "archive/index.md"
+          categories: true
+          categories_name: 分类
+          categories_url_format: "category/{slug}"
+          categories_slugify: !!python/object/apply:pymdownx.slugs.slugify
+            kwds:
+              case: lower
+      - offline
+      - tags:
+          tags_hierarchy: true
+          tags_slugify_format: "tag:{slug}"
+          tags_slugify: !!python/object/apply:pymdownx.slugs.slugify
+            kwds:
+              case: lower
+      - search:
+          lang: 
+            - zh
+            - en
+          separator: '[\s\-\.]+'
+      - minify:
+          minify_html: true
+          minify_js: true
+          minify_css: true
+          htmlmin_opts:
+            remove_comments: true
+          css_files:
+            - stylesheets/extra.css
+      - glightbox:
+          touchNavigation: true
+          loop: false
+          effect: zoom
+          slide_effect: slide
+          width: 100%
+          height: auto
+          zoomable: true
+          draggable: true
+          skip_classes:
+            - custom-skip-class-name
+          auto_caption: false
+          caption_position: bottom
+      # 注释掉 git 插件，因为需要系统安装 Git
+      # - git-revision-date-localized:
+      #     enable_creation_date: true
+      #     type: timeago
+      #     locale: zh
+      #     fallback_to_build_date: false
+      #     exclude:
+      #       - index.md
+      #       - tags.md
+      #       - blog/index.md
+    extra:
+      social:
+        - icon: fontawesome/brands/github #联系方式图标 : https://fontawesome.com/ 去这里找图标
+          link: https://github.com/mazaiguo
+          name: JerryMa on Github
+        - icon: fontawesome/brands/gitlab
+          link: https://gitlab.zwsoft.cn/mazaiguo
+        - icon: fontawesome/regular/envelope
+          link: mailto:mazaiguo@126.com
+          name: Email
+      analytics:
+        feedback:
+          title: 这个页面对您有帮助吗？
+          ratings:
+            - icon: material/emoticon-happy-outline
+              name: 有帮助
+              data: 1
+              note: >-
+                感谢您的反馈！
+            - icon: material/emoticon-sad-outline
+              name: 可以改进
+              data: 0
+              note: >-
+                感谢您的反馈！请帮助我们改进这个页面，
+                <a href="https://github.com/mazaiguo/mazaiguo.github.io/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">告诉我们需要改进的地方</a>。
+      tags:
+        HTML5: html
+        JavaScript: js
+        CSS: css
+        Python: python
+        AutoCAD: autocad
+        C++: cpp
+        "Csharp": csharp
+        ".NET": dotnet
+      generator: false #是否删除页脚显示"使用 MkDocs 材料制造"
+    #extra_javascript:
+      #- https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js
+      #- javascripts/config.js
+    extra_css:
+      #- https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css
+      - stylesheets/extra.css  
+    markdown_extensions:
+      - abbr
+      - admonition
+      - attr_list
+      - def_list
+      - footnotes
+      - md_in_html
+      - meta
+      - toc:
+          permalink: true
+          title: 目录
+      - pymdownx.arithmatex:
+          generic: true
+      - pymdownx.betterem:
+          smart_enable: all
+      - pymdownx.caret
+      - pymdownx.details
+      - pymdownx.emoji:
+          emoji_generator: !!python/name:material.extensions.emoji.to_svg
+          emoji_index: !!python/name:material.extensions.emoji.twemoji
+      - pymdownx.highlight:
+          anchor_linenums: true
+          line_spans: __span
+          pygments_lang_class: true
+          linenums: true
+          linenums_style: pymdownx.inline
+          auto_title: true # 显示编程语言名称
+          use_pygments: true
+      - pymdownx.inlinehilite
+      - pymdownx.keys
+      - pymdownx.magiclink:
+          normalize_issue_symbols: true
+          repo_url_shorthand: true
+          user: mazaiguo
+          repo: helpdoc
+      - pymdownx.mark
+      - pymdownx.smartsymbols
+      - pymdownx.snippets:
+          check_paths: true
+      - pymdownx.superfences:
+          custom_fences:
+            - name: mermaid
+              class: mermaid
+              format: !!python/name:pymdownx.superfences.fence_code_format
+      - pymdownx.tabbed:
+          alternate_style: true
+          combine_header_slug: true
+          slugify: !!python/object/apply:pymdownx.slugs.slugify
+            kwds:
+              case: lower
+      - pymdownx.tasklist:
+          custom_checkbox: true
+      - pymdownx.tilde
+      - pymdownx.critic
+    copyright: Copyright &copy; 2016 - present [JerryMa](https://github.com/mazaiguo)
+    nav:
+      - 首页: index.md
+      - 博客:
+         - blog/index.md
+      - 归档: archive/index.md
+      - 分类: blog/category.md
+      - 标签: tags.md
+      - 关于: 
+         - 关于本站: about.md
+    ```
+
 
 ## 增加latex
 
@@ -292,33 +294,39 @@ The homomorphism $f$ is injective if and only if its kernel is only the singleto
 
 ## contents tab
 
-```bash
-=== "C"
+=== "Unordered list"
 
-    ``` c
-    #include <stdio.h>
+    * Sed sagittis eleifend rutrum
+    * Donec vitae suscipit est
+    * Nulla tempor lobortis orci
 
-    int main(void) {
-      printf("Hello world!\n");
-      return 0;
-    }
-```
+=== "Ordered list"
+
+    1. Sed sagittis eleifend rutrum
+    2. Donec vitae suscipit est
+    3. Nulla tempor lobortis orci
+
 === "C++"
 
-    ``` c++
-    #include <iostream>
-    
-    int main(void) {
-      std::cout << "Hello world!" << std::endl;
-      return 0;
-    }
-    ```
+ ```cpp
+#include <iostream>
+
+int main(void) {
+  std::cout << "Hello world!" << std::endl;
+  return 0;
+}
+ ```
+
+=== "c"
+
+```c
+#include <stdio.h>
+
+int main(void) {
+  printf("Hello world!\n");
+  return 0;
+}
 ```
-
-```
-
-=== "C"     ``` c    #include <stdio.h>     int main(void) {      printf("Hello world!\n");      return 0;    }    ``` === "C++"     ``` c++    #include <iostream>     int main(void) {      std::cout << "Hello world!" << std::endl;      return 0;    }    ```
-
 
 
 ## **Admonition**
@@ -669,4 +677,7 @@ jobs:
 ![image-20250919104024286](http://image.jerryma.xyz//images/20250919-image-20250919104024286.png)
 
 ![image-20250919104720037](http://image.jerryma.xyz//images/20250919-image-20250919104720037.png)
+
+```
+
 ```
