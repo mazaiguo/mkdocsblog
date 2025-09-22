@@ -7,9 +7,6 @@ categories:
 tags:
   - XAML
   - WPF
-  - 格式化
-  - 开发工具
-  - Visual Studio
 description: XAML Styler格式化工具的使用方法，帮助规范和美化XAML代码格式
 author: JerryMa
 ---

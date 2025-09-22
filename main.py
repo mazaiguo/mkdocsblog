@@ -464,7 +464,7 @@ def define_env(env):
                     
                     latest = []
                     print(f"category={category}, items={category_info[category]}")
-                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:3]:
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True):
                         url = f"blog/{generate_url_slug(t)}.html"  # 使用title转小写再编码
                         dt = None
                         try:
@@ -478,8 +478,8 @@ def define_env(env):
                             pass
                         if dt:
                             url = f"blog/{dt.year}/{dt.month:02d}/{dt.day:02d}/{generate_url_slug(t)}.html"
-                        latest.append(f"[{t}]({url})")
-                    result.append(f"- **最新文章**: {', '.join(latest)}")
+                        latest.append(f"<li>[{t}]({url})</li>")
+                    result.append(f"- **最新文章**: {' '.join(latest)}")
                     result.append("")
                 else:
                     icon = '💻'
@@ -488,7 +488,7 @@ def define_env(env):
                     # 修正这里，生成带链接的最新文章
                     latest = []
                     print(f"category={category}, items={category_info[category]}")
-                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:3]:
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True):
                         url = f"blog/{generate_url_slug(t)}.html"  # 使用title转小写再编码
                         dt = None
                         try:
@@ -502,8 +502,8 @@ def define_env(env):
                             pass
                         if dt:
                             url = f"blog/{dt.year}/{dt.month:02d}/{dt.day:02d}/{generate_url_slug(t)}.html"
-                        latest.append(f"[{t}]({url})")
-                    result.append(f"- **最新文章**: {', '.join(latest)}")
+                        latest.append(f"<li>[{t}]({url})</li>")
+                    result.append(f"- **最新文章**: {' '.join(latest)}")
                     result.append("")
             
             # 开发框架和工具部分
@@ -528,7 +528,7 @@ def define_env(env):
                     
                     latest = []
                     print(f"category={category}, items={category_info[category]}")
-                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True)[:3]:
+                    for t, d, stem in sorted(category_info[category], key=lambda x: x[1], reverse=True):
                         url = f"blog/{generate_url_slug(t)}.html"  # 使用title转小写再编码
                         dt = None
                         try:
@@ -542,8 +542,8 @@ def define_env(env):
                             pass
                         if dt:
                             url = f"blog/{dt.year}/{dt.month:02d}/{dt.day:02d}/{generate_url_slug(t)}.html"
-                        latest.append(f"[{t}]({url})")
-                    result.append(f"- **最新文章**: {', '.join(latest)}")
+                        latest.append(f"<li>[{t}]({url})</li>")
+                    result.append(f"- **最新文章**: {''.join(latest)}")
                     result.append("")
             
             # 统计信息

@@ -5,9 +5,8 @@ categories:
   - windows程序
 tags:
   - CLR
-  - cpp
-  - 混合编程
-  - .NET
+  - CPP
+  - CSharp
 description: CLR与CPP混合编程的简单实现方式，包含DLL封装和调用方法
 author: JerryMa
 ---

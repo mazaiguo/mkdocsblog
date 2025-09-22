@@ -6,9 +6,7 @@ categories:
 
 tags:
   - Vue
-  - localStorage
-  - sessionStorage
-  - 数据存储
+
 description: Vue项目中封装localStorage和sessionStorage的实用工具类，提高代码的可维护性
 author: JerryMa
 ---

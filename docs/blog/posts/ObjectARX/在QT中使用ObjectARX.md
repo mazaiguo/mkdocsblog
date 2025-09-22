@@ -6,8 +6,7 @@ categories:
 tags:
   - QT
   - ObjectARX
-  - CAD开发
-  - cpp
+  - CPP
 description: 在QT应用程序中集成和使用ObjectARX的详细实现方法
 author: JerryMa
 ---

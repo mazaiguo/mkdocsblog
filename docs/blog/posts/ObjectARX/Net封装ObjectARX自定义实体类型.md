@@ -5,9 +5,7 @@ categories:
   - windows程序
 tags:
   - ObjectARX
-  - .NET
-  - 自定义实体
-  - C++/CLI
+  - CSharp
 description: 使用.NET技术封装ObjectARX自定义实体类型的完整实现方法
 author: JerryMa
 ---

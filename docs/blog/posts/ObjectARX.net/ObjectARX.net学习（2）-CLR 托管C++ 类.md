@@ -4,11 +4,8 @@ date: 2024-08-20
 categories:
   - windows程序
 tags:
-  - ObjectARX
-  - CLR
-  - cpp
-  - 托管代码
-  - AutoCAD
+  - ObjectARX.net
+  - CSharp
 description: ObjectARX.net学习第二部分，CLR托管C++类的创建和使用方法
 author: JerryMa
 ---

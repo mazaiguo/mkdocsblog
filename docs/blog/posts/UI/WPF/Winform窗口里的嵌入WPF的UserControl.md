@@ -8,7 +8,6 @@ tags:
   - Winform
   - WPF
   - UserControl
-  - 事件处理
 description: 在Winform窗口中嵌入WPF UserControl并处理窗口关闭事件的详细方法
 author: JerryMa
 ---

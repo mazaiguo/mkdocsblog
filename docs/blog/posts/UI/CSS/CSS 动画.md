@@ -5,9 +5,8 @@ categories:
   - 前端开发
 tags:
   - CSS3
-  - 动画
   - keyframes
-  - 前端
+
 description: CSS3动画详细教程，包含@keyframes规则和各种动画属性的使用
 author: JerryMa
 ---

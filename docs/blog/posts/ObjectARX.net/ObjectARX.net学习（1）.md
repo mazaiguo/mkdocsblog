@@ -4,10 +4,9 @@ date: 2024-08-15
 categories:
   - windows程序
 tags:
-  - ObjectARX
-  - AutoCAD
+  - ObjectARX.net
   - Csharp
-  - CAD插件
+
 description: ObjectARX.net入门教程，包含基础命令开发和绘图功能实现
 author: JerryMa
 ---

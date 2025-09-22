@@ -7,7 +7,6 @@ tags:
   - Python
   - setter
   - getter
-  - 代码生成
 description: Python脚本实现通过变量名自动生成setter和getter方法的实用工具
 author: JerryMa
 ---

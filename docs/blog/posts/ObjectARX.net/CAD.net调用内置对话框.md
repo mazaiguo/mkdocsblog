@@ -4,8 +4,7 @@ date: 2024-06-30
 categories:
   - windows程序
 tags:
-  - CAD.net
-  - 对话框
+  - ObjectARX.net
   - ColorDialog
   - LinetypeDialog
 description: CAD.net中调用内置颜色对话框和线型对话框的使用方法

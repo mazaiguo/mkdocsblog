@@ -5,9 +5,6 @@ categories:
   - 前端开发
 tags:
   - CSS
-  - 精灵图
-  - 背景图
-  - 用户界面
 description: CSS基础学习第七天，包含精灵图、背景图和用户界面样式的详细教程
 author: JerryMa
 ---

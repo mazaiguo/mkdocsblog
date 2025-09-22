@@ -5,9 +5,7 @@ categories:
   - windows程序
 tags:
   - ObjectARX
-  - AutoCAD
-  - 菜单
-  - cpp
+  - Menu
 description: ObjectARX开发中动态加载和创建菜单的实现方法和代码示例
 author: JerryMa
 ---

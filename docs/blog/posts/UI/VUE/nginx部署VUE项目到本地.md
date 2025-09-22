@@ -7,8 +7,6 @@ categories:
 tags:
   - Nginx
   - Vue
-  - 部署
-  - Web服务器
 description: 使用Nginx在本地部署Vue项目的详细配置步骤和注意事项
 author: JerryMa
 ---

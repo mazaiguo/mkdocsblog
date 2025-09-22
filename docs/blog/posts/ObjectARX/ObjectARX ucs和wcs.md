@@ -7,7 +7,6 @@ tags:
   - ObjectARX
   - UCS
   - WCS
-  - 坐标转换
 description: ObjectARX中用户坐标系（UCS）和世界坐标系（WCS）之间的转换方法
 author: JerryMa
 ---

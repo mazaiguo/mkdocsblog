@@ -5,8 +5,7 @@ categories:
   - web端程序
 tags:
   - 雪花算法
-  - 精度丢失
-  - Java
+  - JAVA
   - JSON
 description: 解决雪花算法生成的Long类型ID在前端显示时精度丢失问题的多种方案
 author: JerryMa

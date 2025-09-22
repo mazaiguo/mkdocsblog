@@ -6,7 +6,6 @@ categories:
 tags:
   - ObjectARX
   - AcDbDynBlockReference
-  - AutoCAD
 description: ObjectARX中获取AutoCAD背景颜色的两种实现方法和代码示例
 author: JerryMa
 ---

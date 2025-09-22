@@ -4,11 +4,9 @@ date: 2023-07-12
 categories:
   - windows程序
 tags:
-  - libcurl
+  - LIBCURL
   - OpenSSL
-  - zlib
-  - CPP库
-  - 编译
+  - CPP
 description: Windows平台下编译libcurl库并添加OpenSSL和zlib支持的详细步骤
 author: JerryMa
 ---

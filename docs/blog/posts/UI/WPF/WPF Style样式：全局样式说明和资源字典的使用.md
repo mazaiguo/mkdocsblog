@@ -6,8 +6,6 @@ categories:
 tags:
   - WPF
   - Style
-  - 资源字典
-  - UI样式
 description: WPF中Style样式的全局应用方法和资源字典的使用技巧
 author: JerryMa
 ---

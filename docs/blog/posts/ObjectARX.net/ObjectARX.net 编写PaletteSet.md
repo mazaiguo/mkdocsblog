@@ -4,10 +4,8 @@ date: 2024-09-05
 categories:
   - windows程序
 tags:
-  - ObjectARX
+  - ObjectARX.net
   - PaletteSet
-  - AutoCAD
-  - 工具面板
 description: ObjectARX.net中创建和使用PaletteSet工具面板的详细教程
 author: JerryMa
 ---

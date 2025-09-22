@@ -6,7 +6,6 @@ categories:
 tags:
   - Winform
   - WPF
-  - 混合开发
   - Csharp
 description: 在Winform应用程序中嵌入和使用WPF控件的方法，包含资源处理技巧
 author: JerryMa

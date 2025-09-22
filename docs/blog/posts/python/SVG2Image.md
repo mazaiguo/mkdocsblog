@@ -6,7 +6,6 @@ categories:
 tags:
   - Python
   - SVG
-  - 图像转换
   - cairosvg
 description: SVG图像转换为其他格式图像的Python实现方法，使用cairosvg库
 author: JerryMa

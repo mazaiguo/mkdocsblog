@@ -4,10 +4,7 @@ date: 2023-12-22
 categories:
   - windows程序
 tags:
-  - cpp
-  - 时间处理
-  - SYSTEMTIME
-  - CTime
+  - CPP
 description: Visual CPP中获取和处理时间的多种方法和技巧
 author: JerryMa
 ---

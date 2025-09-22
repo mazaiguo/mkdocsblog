@@ -5,9 +5,7 @@ categories:
   - windows程序
 tags:
   - SVG
-  - 矢量图形
-  - 图形绘制
-  - Web开发
+
 description: SVG矢量图形的基础绘制教程，包含各种基本图形元素的使用方法
 author: JerryMa
 ---

@@ -5,9 +5,6 @@ categories:
   - 前端开发
 tags:
   - CSS
-  - 布局
-  - 浮动
-  - 前端基础
 description: CSS基础学习第三天，包含传统网页布局方式、浮动和定位等重要概念
 author: JerryMa
 ---

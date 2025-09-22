@@ -5,9 +5,8 @@ categories:
   - windows程序
   - 三方库
 tags:
-  - cpp
-  - yaml-cpp
-  - 文件操作
+  - CPP
+  - YAML-CPP
   - 配置文件
 description: 使用yaml-cpp库在CPP中读写YAML配置文件的完整指南，包括编译配置和UTF-8字符处理
 authors:

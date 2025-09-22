@@ -5,9 +5,8 @@ categories:
   - 前端开发
 tags:
   - CSS
-  - 定位
   - position
-  - 元素显示
+
 description: CSS基础学习第六天，重点学习CSS定位属性和元素显示隐藏的方法
 author: JerryMa
 ---

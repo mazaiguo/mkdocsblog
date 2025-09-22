@@ -4,10 +4,9 @@ date: 2024-05-18
 categories:
   - windows程序
 tags:
-  - CAD打印
-  - CTB
-  - Monochrome
-  - 打印样式
+  - ObjectArx
+  - AcDbPlotSettings
+
 description: 解决CAD中PDF打印使用Monochrome.ctb打印样式表不起作用的问题
 author: JerryMa
 ---

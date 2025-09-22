@@ -5,9 +5,8 @@ categories:
   - windows程序
 tags:
   - ObjectARX
-  - CAD背景色
   - acedGetRGB
-  - AutoCAD
+
 description: ObjectARX中获取AutoCAD背景颜色的两种实现方法和代码示例
 author: JerryMa
 ---

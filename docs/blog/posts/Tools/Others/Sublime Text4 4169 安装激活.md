@@ -6,9 +6,6 @@ categories:
   - 软件安装
 tags:
   - Sublime Text
-  - 编辑器
-  - 破解
-  - 安装教程
 description: Sublime Text4编辑器4169版本的详细安装和激活教程
 author: JerryMa
 ---

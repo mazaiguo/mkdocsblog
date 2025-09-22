@@ -6,9 +6,7 @@ categories:
   - windows程序
 tags:
   - 雪花算法
-  - UUID
-  - cpp
-  - 分布式ID
+  - CPP
 description: Twitter雪花算法的CPP实现，用于生成分布式环境下的唯一ID
 author: JerryMa
 ---

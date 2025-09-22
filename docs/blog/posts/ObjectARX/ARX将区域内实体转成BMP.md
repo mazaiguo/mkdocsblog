@@ -6,8 +6,6 @@ categories:
 tags:
   - ObjectARX
   - BMP
-  - 图像转换
-  - 屏幕截图
 description: ObjectARX中将选定区域内的CAD实体转换为BMP图像文件的完整实现
 author: JerryMa
 ---

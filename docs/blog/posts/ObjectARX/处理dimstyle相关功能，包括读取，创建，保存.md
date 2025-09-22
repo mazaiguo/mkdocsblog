@@ -6,8 +6,6 @@ categories:
 tags:
   - ObjectARX
   - DimStyle
-  - CAD标注
-  - AutoCAD
 description: ObjectARX中处理标注样式的各种操作，包括读取、创建和保存功能
 author: JerryMa
 ---

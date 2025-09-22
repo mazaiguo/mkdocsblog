@@ -6,8 +6,6 @@ categories:
 tags:
   - Python
   - PyInstaller
-  - 打包
-  - 可执行文件
 description: 使用PyInstaller将Python脚本打包为独立可执行文件的方法和参数说明
 authors:
   - JerryMa

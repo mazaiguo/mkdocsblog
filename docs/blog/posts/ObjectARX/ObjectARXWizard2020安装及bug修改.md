@@ -6,8 +6,6 @@ categories:
 tags:
   - ObjectARX
   - Wizard
-  - 安装配置
-  - Bug修复
 description: ObjectARX Wizard 2020安装步骤和常见bug的修改方法
 author: JerryMa
 ---

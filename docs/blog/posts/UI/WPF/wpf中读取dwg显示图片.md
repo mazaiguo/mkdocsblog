@@ -6,8 +6,6 @@ categories:
 tags:
   - WPF
   - DWG
-  - 图像处理
-  - CAD显示
 description: 在WPF应用中读取DWG文件并转换为图片显示的实现方法
 author: JerryMa
 ---

@@ -6,8 +6,6 @@ categories:
 tags:
   - ObjectARX
   - DBMOD
-  - CAD保存
-  - 数据库状态
 description: ObjectARX开发中关于CAD图纸保存状态DBMOD的控制和处理方法
 author: JerryMa
 ---

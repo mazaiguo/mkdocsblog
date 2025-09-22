@@ -6,8 +6,7 @@ categories:
 tags:
   - WPF
   - GsPreviewCtrl
-  - CAD预览
-  - 图块显示
+
 description: 在WPF中使用GsPreviewCtrl控件预览CAD图块的完整实现方法
 author: JerryMa
 ---

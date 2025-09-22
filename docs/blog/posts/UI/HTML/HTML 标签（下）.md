@@ -5,9 +5,6 @@ categories:
   - 前端开发
 tags:
   - HTML
-  - 表格
-  - 表单
-  - 前端基础
 description: HTML基础标签学习下篇，包含表格和表单等重要元素的使用方法
 author: JerryMa
 ---

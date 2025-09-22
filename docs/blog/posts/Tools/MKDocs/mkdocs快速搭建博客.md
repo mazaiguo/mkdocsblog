@@ -7,8 +7,6 @@ categories:
 tags:
   - Python
   - PyInstaller
-  - 打包
-  - 可执行文件
   - MkDocs
   - MarkDown
 description: 使用mkdocs快速搭建博客或帮助文档

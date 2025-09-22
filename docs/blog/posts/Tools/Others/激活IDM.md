@@ -6,9 +6,6 @@ categories:
   - 开发工具
 tags:
   - IDM
-  - 下载工具
-  - 激活
-  - 软件破解
 description: Internet Download Manager下载工具的安装和激活方法
 author: JerryMa
 ---

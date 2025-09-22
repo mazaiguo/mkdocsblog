@@ -7,7 +7,6 @@ tags:
   - ObjectARX
   - Trim
   - Extend
-  - 自定义实体
 description: ObjectARX中自定义实体支持Trim和Extend操作的实现方法
 author: JerryMa
 ---

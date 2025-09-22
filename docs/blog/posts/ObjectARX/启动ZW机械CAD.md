@@ -4,10 +4,9 @@ date: 2024-11-20
 categories:
   - windows程序
 tags:
-  - ZWCAD
-  - CAD自动化
-  - Csharp
-  - COM接口
+  - ObjectARX
+  - CSharp
+  - COM
 description: 通过C#代码启动和控制ZW机械CAD应用程序的接口调用方法
 author: JerryMa
 ---

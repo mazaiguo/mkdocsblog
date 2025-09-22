@@ -6,8 +6,7 @@ categories:
 tags:
   - ObjectARX
   - OverRule
-  - AutoCAD
-  - 实体控制
+
 description: ObjectARX中OverRule功能的详细实现demo，包含实体锁定和交互控制
 author: JerryMa
 ---

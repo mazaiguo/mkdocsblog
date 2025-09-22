@@ -7,7 +7,6 @@ tags:
   - DWG
   - SVG
   - ezdxf
-  - CAD转换
 description: 使用Python和ezdxf库将DWG文件转换为SVG格式的详细实现方法
 author: JerryMa
 ---

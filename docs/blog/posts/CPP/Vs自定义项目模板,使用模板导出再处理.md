@@ -7,8 +7,6 @@ categories:
 tags:
   - Visual Studio
   - 项目模板
-  - 开发工具
-  - 项目管理
 description: Visual Studio中创建自定义项目模板的详细步骤和使用方法
 author: JerryMa
 ---

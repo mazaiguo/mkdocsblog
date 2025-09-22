@@ -6,8 +6,6 @@ categories:
 tags:
   - MFC
   - CXTPPropertyGrid
-  - Codejock
-  - UI控件
 description: Codejock Toolkit中CXTPPropertyGrid属性网格控件的使用方法和实例
 author: JerryMa
 ---

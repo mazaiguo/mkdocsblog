@@ -5,9 +5,6 @@ categories:
   - 前端开发
 tags:
   - CSS
-  - 权重
-  - 继承
-  - 前端基础
 description: CSS基础知识第二天学习内容，包含CSS权重、继承、层叠等重要概念
 author: JerryMa
 ---

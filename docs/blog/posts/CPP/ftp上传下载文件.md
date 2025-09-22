@@ -5,9 +5,8 @@ categories:
   - windows程序
 tags:
   - FTP
-  - libcurl
-  - cpp
-  - 文件传输
+  - LIBCURL
+  - CPP
 description: 使用libcurl库实现FTP文件上传下载功能的CPP实现
 author: JerryMa
 ---

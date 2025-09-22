@@ -4,10 +4,9 @@ date: 2024-10-25
 categories:
   - windows程序
 tags:
-  - CAD.net
+  - ObjectARX.net
   - Ribbon
-  - 界面设计
-  - XAML
+
 description: CAD.net中创建和处理Ribbon界面的详细教程，包含代码和XAML两种方式
 author: JerryMa
 ---

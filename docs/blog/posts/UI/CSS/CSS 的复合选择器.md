@@ -5,9 +5,6 @@ categories:
   - 前端开发
 tags:
   - CSS
-  - 选择器
-  - 复合选择器
-  - 前端基础
 description: CSS复合选择器的详细讲解，包括后代选择器、交集选择器等常用选择器类型
 author: JerryMa
 ---

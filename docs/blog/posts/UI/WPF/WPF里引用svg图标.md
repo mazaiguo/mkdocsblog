@@ -6,7 +6,6 @@ categories:
 tags:
   - WPF
   - SVG
-  - 图标
   - SharpVectors
 description: 在WPF应用程序中引用和显示SVG格式图标的多种实现方法
 author: JerryMa

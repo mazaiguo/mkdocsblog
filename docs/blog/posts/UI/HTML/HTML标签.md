@@ -5,9 +5,6 @@ categories:
   - 前端开发
 tags:
   - HTML
-  - 标签
-  - 前端基础
-  - Web开发
 description: HTML基础标签的使用方法，包括标题标签、段落标签等前端开发基础知识
 author: JerryMa
 ---

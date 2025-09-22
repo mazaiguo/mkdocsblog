@@ -5,9 +5,7 @@ categories:
   - windows程序
 tags:
   - WPF
-  - 弹窗
-  - 通知
-  - UI设计
+
 description: WPF中创建右下角通知弹窗的完整实现，包含动画效果和自动关闭功能
 author: JerryMa
 ---

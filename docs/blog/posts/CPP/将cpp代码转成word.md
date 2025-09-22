@@ -5,9 +5,7 @@ categories:
   - windows程序
 tags:
   - Python
-  - cpp
-  - Word文档
-  - 代码转换
+  - CPP
 description: 使用Python脚本将CPP代码文件转换为Word文档的实用工具
 author: JerryMa
 ---

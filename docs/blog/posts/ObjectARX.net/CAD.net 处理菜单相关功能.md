@@ -4,11 +4,8 @@ date: 2024-06-08
 categories:
   - windows程序
 tags:
-  - CAD
   - ObjectARX
-  - 菜单
   - CUI
-  - AutoCAD
 description: CAD.net开发中处理菜单、工具栏和双击事件的详细实现方法
 author: JerryMa
 ---
