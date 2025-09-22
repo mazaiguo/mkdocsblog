@@ -3,8 +3,7 @@ title: Nginx部署VUE项目到本地
 date: 2023-12-08
 categories:
   - Web部署
-  - Nginx
-  - Vue
+  - 前端开发
 tags:
   - Nginx
   - Vue

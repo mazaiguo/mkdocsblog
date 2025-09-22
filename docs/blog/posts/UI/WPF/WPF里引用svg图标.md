@@ -2,9 +2,7 @@
 title: WPF里引用SVG图标
 date: 2024-06-05
 categories:
-  - WPF
-  - Csharp开发
-  - UI设计
+  - windows程序
 tags:
   - WPF
   - SVG

@@ -1,9 +1,8 @@
 ---
-title: Csharp使用Newtonsoft.Json生成JSON
+title: CSharp使用Newtonsoft.Json生成JSON
 date: 2024-07-10
 categories:
-  - Csharp开发
-  - .NET
+  - windows程序
 tags:
   - Csharp
   - JSON

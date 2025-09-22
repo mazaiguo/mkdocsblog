@@ -2,8 +2,7 @@
 title: VC获取时间
 date: 2023-12-22
 categories:
-  - CPP
-  - Visual CPP
+  - windows程序
 tags:
   - cpp
   - 时间处理

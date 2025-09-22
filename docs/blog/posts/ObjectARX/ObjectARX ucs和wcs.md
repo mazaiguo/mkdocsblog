@@ -2,9 +2,7 @@
 title: ObjectARX UCS和WCS
 date: 2024-06-18
 categories:
-  - CAD开发
-  - ObjectARX
-  - 坐标系统
+  - windows程序
 tags:
   - ObjectARX
   - UCS

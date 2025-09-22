@@ -1,10 +1,8 @@
 ---
-title: .Net封装ObjectARX自定义实体类型
+title: Net封装ObjectARX自定义实体类型
 date: 2025-04-07
 categories:
-  - CAD开发
-  - ObjectARX
-  - .NET
+  - windows程序
 tags:
   - ObjectARX
   - .NET

@@ -2,9 +2,7 @@
 title: Winform 中使用 WPF Control（带资源）
 date: 2024-05-08
 categories:
-  - Winform
-  - WPF
-  - Csharp开发
+  - windows程序
 tags:
   - Winform
   - WPF

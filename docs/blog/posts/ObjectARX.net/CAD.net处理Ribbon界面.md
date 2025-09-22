@@ -2,9 +2,7 @@
 title: CAD.net处理Ribbon界面
 date: 2024-10-25
 categories:
-  - CAD开发
-  - .NET
-  - 界面开发
+  - windows程序
 tags:
   - CAD.net
   - Ribbon

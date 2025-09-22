@@ -3,7 +3,6 @@ title: CSS 的复合选择器
 date: 2024-01-22
 categories:
   - 前端开发
-  - CSS
 tags:
   - CSS
   - 选择器

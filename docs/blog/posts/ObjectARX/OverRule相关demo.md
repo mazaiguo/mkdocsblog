@@ -2,9 +2,7 @@
 title: OverRule相关demo
 date: 2024-11-05
 categories:
-  - CAD开发
-  - ObjectARX
-  - CPP
+  - windows程序
 tags:
   - ObjectARX
   - OverRule

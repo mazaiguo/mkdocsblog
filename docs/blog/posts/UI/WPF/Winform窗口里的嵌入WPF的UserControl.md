@@ -2,9 +2,8 @@
 title: Winform窗口里的嵌入WPF的UserControl
 date: 2024-04-12
 categories:
-  - Winform
-  - WPF
-  - Csharp开发
+  - windows程序
+ 
 tags:
   - Winform
   - WPF

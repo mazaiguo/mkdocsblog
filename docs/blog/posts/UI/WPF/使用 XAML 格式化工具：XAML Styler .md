@@ -2,11 +2,11 @@
 title: 使用 XAML 格式化工具：XAML Styler
 date: 2024-07-16
 categories:
-  - WPF
+  - windows程序
   - 开发工具
-  - XAML
 tags:
   - XAML
+  - WPF
   - 格式化
   - 开发工具
   - Visual Studio

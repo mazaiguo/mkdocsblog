@@ -1,10 +1,8 @@
 ---
-title: ObjectARX.net学习（2）-CLR 托管C++ 类
+title: ObjectARX.net学习2-CLR托管C++类
 date: 2024-08-20
 categories:
-  - CAD开发
-  - ObjectARX
-  - CLR
+  - windows程序
 tags:
   - ObjectARX
   - CLR

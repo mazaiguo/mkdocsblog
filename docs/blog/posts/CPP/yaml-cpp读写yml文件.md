@@ -2,8 +2,8 @@
 title: yaml-cpp读写yml文件
 date: 2025-09-18
 categories:
-  - CPP
-  - 开发工具
+  - windows程序
+  - 三方库
 tags:
   - cpp
   - yaml-cpp

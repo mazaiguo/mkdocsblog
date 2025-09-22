@@ -2,9 +2,7 @@
 title: CAD.net 处理菜单相关功能
 date: 2024-06-08
 categories:
-  - CAD开发
-  - ObjectARX
-  - .NET
+  - windows程序
 tags:
   - CAD
   - ObjectARX
@@ -105,7 +103,7 @@ author: JerryMa
 
 `CUITools.cs`
 
-```csharp
+​```csharp
 using System.Collections.Specialized;
 using System.IO;
 using ZwSoft.ZwCAD.ApplicationServices;
@@ -273,7 +271,7 @@ namespace CuiDemo
 
 ## 增加menu
 
-```csharp
+​```csharp
 [CommandMethod("AddMenu")]
 public void AddMenu()
 {

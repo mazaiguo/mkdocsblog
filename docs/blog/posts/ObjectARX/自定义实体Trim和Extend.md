@@ -2,9 +2,7 @@
 title: 自定义实体Trim和Extend
 date: 2024-03-12
 categories:
-  - CAD开发
-  - ObjectARX
-  - 自定义实体
+  - windows程序
 tags:
   - ObjectARX
   - Trim

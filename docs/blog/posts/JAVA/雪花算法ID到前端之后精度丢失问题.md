@@ -2,9 +2,7 @@
 title: 雪花算法ID到前端之后精度丢失问题
 date: 2024-02-20
 categories:
-  - Java
-  - 前端
-  - 问题解决
+  - web端程序
 tags:
   - 雪花算法
   - 精度丢失

@@ -2,8 +2,7 @@
 title: AutoCAD.net Mleader jig
 date: 2025-09-18
 categories:
-  - AutoCAD
-  - .NET开发
+  - windows程序
 tags:
   - ObjectARX.net
   - AutoCAD

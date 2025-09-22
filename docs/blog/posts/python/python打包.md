@@ -2,8 +2,7 @@
 title: Python应用程序打包指南
 date: 2025-09-18
 categories:
-  - Python
-  - 开发工具
+  - windows程序
 tags:
   - Python
   - PyInstaller

@@ -2,8 +2,8 @@
 title: 激活IDM
 date: 2024-09-23
 categories:
-  - 软件工具
-  - 下载工具
+  - Tools
+  - 开发工具
 tags:
   - IDM
   - 下载工具

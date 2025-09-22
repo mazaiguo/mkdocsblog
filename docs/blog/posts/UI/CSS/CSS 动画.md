@@ -3,7 +3,6 @@ title: CSS 动画
 date: 2024-06-20
 categories:
   - 前端开发
-  - CSS
 tags:
   - CSS3
   - 动画

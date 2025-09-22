@@ -2,8 +2,7 @@
 title: Csharp使用Newtonsoft.Json生成JSON字符串
 date: 2025-09-18
 categories:
-  - Csharp
-  - .NET开发
+  - windows程序
 tags:
   - Csharp
   - Newtonsoft.Json

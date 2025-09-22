@@ -425,7 +425,8 @@ Bob --> Alice: Authentication Response [[$../other-file docs]]
 ```
 
 ## 徽章查询服务
-
+```bash
 [徽章](badgen.net)
 
 [自定义徽章](img.shields.io)
+```

@@ -3,7 +3,6 @@ title: Day08-前端基础CSS第六天
 date: 2024-01-26
 categories:
   - 前端开发
-  - CSS
 tags:
   - CSS
   - 定位

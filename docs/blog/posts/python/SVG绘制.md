@@ -2,9 +2,7 @@
 title: SVG绘制
 date: 2024-04-05
 categories:
-  - 前端开发
-  - SVG
-  - 图形绘制
+  - windows程序
 tags:
   - SVG
   - 矢量图形

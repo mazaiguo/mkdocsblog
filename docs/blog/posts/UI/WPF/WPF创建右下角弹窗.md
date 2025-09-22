@@ -2,9 +2,7 @@
 title: WPF创建右下角弹窗
 date: 2024-09-01
 categories:
-  - WPF
-  - Csharp开发
-  - 界面开发
+  - windows程序
 tags:
   - WPF
   - 弹窗

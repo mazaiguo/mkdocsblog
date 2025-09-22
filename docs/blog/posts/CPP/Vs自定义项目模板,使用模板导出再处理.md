@@ -2,8 +2,8 @@
 title: VS自定义项目模板,使用模板导出再处理
 date: 2025-04-15
 categories:
-  - Visual Studio
   - 开发工具
+  - windows程序
 tags:
   - Visual Studio
   - 项目模板

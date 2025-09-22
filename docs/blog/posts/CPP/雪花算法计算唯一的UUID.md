@@ -3,8 +3,7 @@ title: 雪花算法计算唯一的UUID
 date: 2024-02-15
 categories:
   - 算法
-  - CPP
-  - 分布式系统
+  - windows程序
 tags:
   - 雪花算法
   - UUID

@@ -2,9 +2,7 @@
 title: 处理dimstyle相关功能，包括读取，创建，保存
 date: 2024-04-08
 categories:
-  - CAD开发
-  - ObjectARX
-  - CPP
+  - windows程序
 tags:
   - ObjectARX
   - DimStyle

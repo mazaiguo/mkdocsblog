@@ -2,9 +2,7 @@
 title: WPF中使用GsPreviewCtrl预览图块
 date: 2024-09-18
 categories:
-  - WPF
-  - CAD
-  - Csharp开发
+  - windows程序
 tags:
   - WPF
   - GsPreviewCtrl

@@ -2,9 +2,7 @@
 title: ObjectARXWizard2020安装及bug修改
 date: 2024-08-10
 categories:
-  - CAD开发
-  - ObjectARX
-  - 开发工具
+  - windows程序
 tags:
   - ObjectARX
   - Wizard

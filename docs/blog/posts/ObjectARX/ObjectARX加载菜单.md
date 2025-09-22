@@ -2,9 +2,7 @@
 title: ObjectARX加载菜单
 date: 2024-07-03
 categories:
-  - CAD开发
-  - ObjectARX
-  - CPP
+  - windows程序
 tags:
   - ObjectARX
   - AutoCAD

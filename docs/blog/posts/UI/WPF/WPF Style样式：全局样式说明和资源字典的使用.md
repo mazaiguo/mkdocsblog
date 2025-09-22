@@ -2,9 +2,7 @@
 title: WPF Style样式：全局样式说明和资源字典的使用
 date: 2024-10-21
 categories:
-  - WPF
-  - Csharp开发
-  - UI设计
+  - windows程序
 tags:
   - WPF
   - Style

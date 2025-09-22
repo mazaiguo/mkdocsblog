@@ -2,9 +2,7 @@
 title: WPF中读取DWG显示图片
 date: 2024-10-08
 categories:
-  - WPF
-  - CAD
-  - Csharp开发
+  - windows程序
 tags:
   - WPF
   - DWG

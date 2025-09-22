@@ -2,9 +2,8 @@
 title: Vue项目中封装localStorage和session
 date: 2024-04-25
 categories:
-  - Vue
   - 前端开发
-  - JavaScript
+
 tags:
   - Vue
   - localStorage

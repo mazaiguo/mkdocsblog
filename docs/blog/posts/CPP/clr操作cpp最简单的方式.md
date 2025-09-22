@@ -2,9 +2,7 @@
 title: CLR操作CPP最简单的方式
 date: 2024-07-25
 categories:
-  - CLR
-  - CPP
-  - .NET
+  - windows程序
 tags:
   - CLR
   - cpp

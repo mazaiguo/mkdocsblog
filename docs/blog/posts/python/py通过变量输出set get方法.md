@@ -2,8 +2,7 @@
 title: Python通过变量输出setter getter方法
 date: 2024-03-15
 categories:
-  - Python
-  - 编程技巧
+  - windows程序
 tags:
   - Python
   - setter

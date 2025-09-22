@@ -2,9 +2,7 @@
 title: SVG2Image
 date: 2024-08-28
 categories:
-  - Python
-  - 图像处理
-  - SVG
+  - windows程序
 tags:
   - Python
   - SVG

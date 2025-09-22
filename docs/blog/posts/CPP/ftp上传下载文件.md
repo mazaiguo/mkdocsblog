@@ -2,9 +2,7 @@
 title: FTP上传下载文件
 date: 2024-01-20
 categories:
-  - CPP
-  - 网络编程
-  - libcurl
+  - windows程序
 tags:
   - FTP
   - libcurl

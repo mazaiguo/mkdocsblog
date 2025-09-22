@@ -2,9 +2,7 @@
 title: CXTPPropertyGrid控件使用
 date: 2024-06-12
 categories:
-  - CPP
-  - MFC
-  - UI控件
+  - windows程序
 tags:
   - MFC
   - CXTPPropertyGrid

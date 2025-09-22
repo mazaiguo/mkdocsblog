@@ -3,7 +3,6 @@ title: HTML 标签（下）
 date: 2024-03-22
 categories:
   - 前端开发
-  - HTML
 tags:
   - HTML
   - 表格

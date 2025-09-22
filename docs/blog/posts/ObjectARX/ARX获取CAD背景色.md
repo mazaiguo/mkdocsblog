@@ -2,9 +2,7 @@
 title: ARX获取CAD背景色的两种方法
 date: 2024-03-08
 categories:
-  - CAD开发
-  - ObjectARX
-  - CPP
+  - windows程序
 tags:
   - ObjectARX
   - CAD背景色

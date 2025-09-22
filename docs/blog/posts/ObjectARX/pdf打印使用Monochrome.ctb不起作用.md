@@ -2,9 +2,7 @@
 title: PDF打印使用Monochrome.ctb不起作用
 date: 2024-05-18
 categories:
-  - CAD开发
-  - 打印问题
-  - ObjectARX
+  - windows程序
 tags:
   - CAD打印
   - CTB

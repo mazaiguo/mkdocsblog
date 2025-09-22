@@ -2,7 +2,6 @@
 title: mkdocs快速搭建博客
 date: 2025-09-19
 categories:
-  - Python
   - 开发工具
   - Tools
 tags:

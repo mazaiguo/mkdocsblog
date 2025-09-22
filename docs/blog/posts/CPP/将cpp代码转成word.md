@@ -2,9 +2,7 @@
 title: 将CPP代码转成Word
 date: 2024-04-30
 categories:
-  - Python
-  - 文档处理
-  - 代码工具
+  - windows程序
 tags:
   - Python
   - cpp

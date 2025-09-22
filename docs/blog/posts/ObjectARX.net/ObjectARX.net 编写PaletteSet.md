@@ -2,9 +2,7 @@
 title: ObjectARX.net 编写PaletteSet
 date: 2024-09-05
 categories:
-  - CAD开发
-  - ObjectARX
-  - .NET
+  - windows程序
 tags:
   - ObjectARX
   - PaletteSet

@@ -2,9 +2,7 @@
 title: ARX将区域内实体转成BMP
 date: 2024-02-25
 categories:
-  - CAD开发
-  - ObjectARX
-  - 图像处理
+  - windows程序
 tags:
   - ObjectARX
   - BMP

@@ -3,7 +3,6 @@ title: Day09-前端基础CSS第七天
 date: 2024-01-28
 categories:
   - 前端开发
-  - CSS
 tags:
   - CSS
   - 精灵图

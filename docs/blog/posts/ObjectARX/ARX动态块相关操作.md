@@ -2,9 +2,7 @@
 title: ARX动态块相关操作
 date: 2024-03-08
 categories:
-  - CAD开发
-  - ObjectARX
-  - CPP
+  - windows程序
 tags:
   - ObjectARX
   - AcDbDynBlockReference

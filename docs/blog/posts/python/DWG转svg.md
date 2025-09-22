@@ -2,9 +2,7 @@
 title: DWG转SVG
 date: 2024-05-22
 categories:
-  - CAD
-  - 文件转换
-  - Python
+  - windows程序
 tags:
   - DWG
   - SVG

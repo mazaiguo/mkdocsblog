@@ -2,9 +2,7 @@
 title: ARX保存相关问题
 date: 2024-01-15
 categories:
-  - CAD开发
-  - ObjectARX
-  - 问题解决
+  - windows程序
 tags:
   - ObjectARX
   - DBMOD

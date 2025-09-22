@@ -2,9 +2,7 @@
 title: 在QT中使用ObjectARX
 date: 2024-05-12
 categories:
-  - QT
-  - ObjectARX
-  - CPP
+  - windows程序
 tags:
   - QT
   - ObjectARX

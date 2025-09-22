@@ -2,9 +2,7 @@
 title: Windows 编译libcurl，添加openssl和zlib支持
 date: 2023-07-12
 categories:
-  - CPP
-  - 库编译
-  - Windows开发
+  - windows程序
 tags:
   - libcurl
   - OpenSSL

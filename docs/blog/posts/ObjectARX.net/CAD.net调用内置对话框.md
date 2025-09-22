@@ -2,9 +2,7 @@
 title: CAD.net调用内置对话框
 date: 2024-06-30
 categories:
-  - CAD开发
-  - .NET
-  - 对话框
+  - windows程序
 tags:
   - CAD.net
   - 对话框

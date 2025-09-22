@@ -1,10 +1,8 @@
 ---
-title: ObjectARX.net学习（1）
+title: ObjectARX.net学习1
 date: 2024-08-15
 categories:
-  - CAD开发
-  - ObjectARX
-  - .NET
+  - windows程序
 tags:
   - ObjectARX
   - AutoCAD

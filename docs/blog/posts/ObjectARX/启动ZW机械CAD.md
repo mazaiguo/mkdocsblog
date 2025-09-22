@@ -2,9 +2,7 @@
 title: 启动ZW机械CAD
 date: 2024-11-20
 categories:
-  - CAD
-  - Csharp开发
-  - 自动化
+  - windows程序
 tags:
   - ZWCAD
   - CAD自动化

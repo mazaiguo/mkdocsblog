@@ -3,7 +3,6 @@ title: CSS学习第二天
 date: 2024-02-28
 categories:
   - 前端开发
-  - CSS
 tags:
   - CSS
   - 权重

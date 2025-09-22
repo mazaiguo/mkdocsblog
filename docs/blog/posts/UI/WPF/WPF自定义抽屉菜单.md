@@ -2,9 +2,7 @@
 title: WPF自定义抽屉菜单
 date: 2025-08-12
 categories:
-  - WPF
-  - CSharp
-  - Windows程序
+  - windows程序
 tags:
   - WPF
   - MENU
