@@ -332,33 +332,33 @@ The homomorphism $f$ is injective if and only if its kernel is only the singleto
 !!! example
 
     === "Unordered List"
-
+    
         _Example_:
-
+    
         ``` markdown
         * Sed sagittis eleifend rutrum
         * Donec vitae suscipit est
         * Nulla tempor lobortis orci
         ```
-
+    
         _Result_:
-
+    
         * Sed sagittis eleifend rutrum
         * Donec vitae suscipit est
         * Nulla tempor lobortis orci
-
+    
     === "Ordered List"
-
+    
         _Example_:
-
+    
         ``` markdown
         1. Sed sagittis eleifend rutrum
         2. Donec vitae suscipit est
         3. Nulla tempor lobortis orci
         ```
-
+    
         _Result_:
-
+    
         1. Sed sagittis eleifend rutrum
         2. Donec vitae suscipit est
         3. Nulla tempor lobortis orci
@@ -380,6 +380,57 @@ The homomorphism $f$ is injective if and only if its kernel is only the singleto
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
     nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
     massa, nec semper lorem quam in massa.
+
+!!! info inline end   
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod    
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor    
+    massa, nec semper lorem quam in massa.	
+
+!!! abstract
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod    
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor    
+    massa, nec semper lorem quam in massa.	
+
+!!! info
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod    
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor    
+    massa, nec semper lorem quam in massa.	
+
+
+
+!!! tip
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod    
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor    
+    massa, nec semper lorem quam in massa.	
+
+!!! success
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod    
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor    
+    massa, nec semper lorem quam in massa.	
+
+!!!question
+    这是个问题
+
+!!!warning
+    这是个警告
+
+!!!failure
+    这是失败的提示
+
+!!!danger
+    危险错误的提示
+
+!!!error
+    错误的提示
+
+!!!bug
+    bug的提示
+
+!!!quote
+    quote的提示
+
+
 ## 特殊数据处理
 
 `archive/index.md`
@@ -1059,6 +1110,5 @@ jobs:
 
 ![image-20250919104720037](http://image.jerryma.xyz//images/20250919-image-20250919104720037.png)
 
-```
 
-```
+

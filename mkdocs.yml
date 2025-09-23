@@ -215,7 +215,7 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
   - pymdownx.critic
-copyright: Copyright &copy; 2016 - present JerryMa(https://github.com/mazaiguo)
+copyright: Copyright &copy; 2016 - present JerryMa
 nav:
   - 首页: index.md
   - 博客:
