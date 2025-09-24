@@ -2,13 +2,13 @@
   --md-code-hl-string-color: #0ff1ce;
   --md-code-hl-number-color: #ae81ff;
   --md-code-hl-special-color: #a846b9;
-  --md-code-hl-function-color: #66D9EF;
+  --md-code-hl-function-color: #66d9ef;
   --md-code-hl-constant-color: #f92672;
   --md-code-hl-keyword-color: #f92672;
   --md-code-hl-string-color: #e6db74;
   --md-code-hl-name-color: #feffff;
   --md-code-hl-operator-color: #f92672;
-  --md-code-hl-punctuation-color: #FFFFFF;
+  --md-code-hl-punctuation-color: #ffffff;
   --md-code-hl-comment-color: #757575;
   --md-code-hl-generic-color: #af82fc;
   --md-code-hl-variable-color: #f92672;
@@ -21,39 +21,30 @@
   background-color: #ffffff;
   color: #eb245c;
 }
-.md-typeset li code{
+.md-typeset li code {
   background-color: #ffffff;
   color: #eb245c;
 }
-/*代码块头部图标 start*/
-    .highlight span.filename pre:before {
-      content: '';
-      display: block;
-      background: url(../assets/images/codeHeader.png);
-      height: 30px;
-      background-size: 40px;
-      background-repeat: no-repeat;
-      background-color: #212121;
-      background-position: 10px 10px;
-    } 
-    /*代码块头部图标 end*/
 
-    .highlighttable .code pre>code {
-      color: #c0c3c1;
-      font-family: 'Inconsolata', consolas,"PingFang SC", "Microsoft YaHei", monospace;
-      background-color: #212121;
-      font-size: 15px;
-      white-space: pre;
-      line-height: 1.5;
-      -moz-tab-size: 4;
-      -o-tab-size: 4;
-      tab-size: 4;
-    }
-	.highlight span.filename{
-		color: white;
-	}
-	
-	/* 基础容器样式：确保导航项布局正常 */
+/*代码块头部图标 end*/
+
+.highlighttable .code pre > code {
+  color: #c0c3c1;
+  font-family: "Inconsolata", consolas, "PingFang SC", "Microsoft YaHei",
+    monospace;
+  background-color: #212121;
+  font-size: 15px;
+  white-space: pre;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+}
+.highlight span.filename {
+  color: black;
+}
+
+/* 基础容器样式：确保导航项布局正常 */
 .md-nav__list {
   list-style: none;
   padding: 0;
@@ -80,7 +71,7 @@
 }
 /* 鼠标悬浮（hover）效果：文本变色 + 底部渐变下划线 */
 .md-nav__link:hover .md-ellipsis {
-  color: #165DFF; /* 悬浮文本主色（可替换为品牌色） */
+  color: #165dff; /* 悬浮文本主色（可替换为品牌色） */
 }
 .md-nav__link:hover .md-ellipsis::after {
   content: "";
@@ -89,7 +80,7 @@
   bottom: -2px;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, #165DFF, #4080FF); /* 渐变下划线 */
+  background: linear-gradient(90deg, #165dff, #4080ff); /* 渐变下划线 */
   border-radius: 1px;
   transform: scaleX(1);
   transform-origin: left center;
@@ -103,7 +94,7 @@
   bottom: -2px;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, #165DFF, #4080FF);
+  background: linear-gradient(90deg, #165dff, #4080ff);
   border-radius: 1px;
   transform: scaleX(0);
   transform-origin: left center;
@@ -112,7 +103,7 @@
 
 /* 鼠标点击（active）效果：文本加深 + 背景压暗 */
 .md-nav__link:active .md-ellipsis {
-  color: #0E42D2; /* 点击文本加深色 */
+  color: #0e42d2; /* 点击文本加深色 */
   font-weight: 500; /* 点击时文本轻微加粗 */
 }
 .md-nav__link:active {
@@ -123,7 +114,7 @@
 
 /* 激活状态（.md-nav__link--active）：区分当前选中项 */
 .md-nav__link--active .md-ellipsis {
-  color: #165DFF;
+  color: #165dff;
   font-weight: 500;
 }
 .md-nav__link--active .md-ellipsis::after {
@@ -155,7 +146,7 @@
 .tag-cloud .tag:hover {
   background-color: var(--md-primary-fg-color);
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 暗色主题下的标签样式 */
@@ -179,7 +170,7 @@
 }
 
 .blog-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
 
@@ -251,11 +242,11 @@
     font-size: 0.75rem;
     padding: 0.2rem 0.4rem;
   }
-  
+
   .stats-grid {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
-  
+
   .stat-number {
     font-size: 1.5rem;
   }
@@ -264,7 +255,7 @@
 /* 代码块优化 */
 .highlight pre {
   border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 文章元信息样式 */
@@ -315,4 +306,75 @@
 .md-typeset h2:first-child,
 .md-typeset h3:first-child {
   margin-top: 0;
+}
+
+/* 子文件夹的样式 */
+.md-nav__item--section>.md-nav__link
+{
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+/* 子文件夹下的子项样式 */
+.md-nav__item--section>.md-nav__link:not(.md-nav__container)
+{
+  color: #ec5814; /* 文字颜色 */
+  font-weight:bold; /* 正常字体 */
+  font-size: 1.2rem; /* 字体大小 */
+}
+
+.md-nav__item--section>.md-nav>.md-nav__list>.md-nav__item
+{
+  padding-left: 20px;
+}
+/* 子文件夹在hover状态的样式 */
+.md-nav__item--nested > .md-nav__link:hover {
+    color: #3498db;
+    background-color: #f8f9fa;
+}
+/* 苹果风格代码块标题栏圆点样式 */
+/* 为代码块容器添加标题栏样式 */
+  /** 3个点 */
+  /* 确保代码块容器为相对定位，作为圆点的定位参考 */
+/* 代码块容器样式 */
+.highlight {
+    position: relative;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+/* 文件名容器 - 作为圆点的定位基准 */
+.highlight span.filename {
+    display: inline-block;
+    padding: 0.6rem 1rem;
+    background-color: #fff;
+    border-bottom: 1px solid #e0d4f0;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: monospace;
+    position: relative;
+    /* 为三个圆点预留左侧空间 */
+    padding-left: 3.2rem;
+}
+
+/* 单个伪元素创建三个圆点 */
+.highlight span.filename::before {
+    content: '';
+    position: absolute;
+    left: 0.2rem; /* 整体左侧距离 */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.6rem; 
+    height: 0.6rem; /* 高度=圆点直径 */
+    background-color: #fc625d; /* 红色圆点 */
+    border-radius: 50%; /* 圆形 */
+    box-shadow: 1rem 0 #fdbc40, 2rem 0 #35cd4b;
+}
+/* 代码内容区域样式 */
+.highlight pre {
+    margin: 0;
+    /* padding: 1rem; */
+    border-radius: 0;
+    border: none;
 }
