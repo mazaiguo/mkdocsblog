@@ -676,6 +676,7 @@ author: JerryMa
           align-items: center;
           text-align: center;
           padding: 2rem;
+          height: 80%;
         }
     
         .cover-simple .title {
@@ -983,9 +984,26 @@ author: JerryMa
     marp: true
     style: |
       @import url('custom.css');
-    paginate: true
-    backgroundImage: url('https://gitlab.com/zw2d/blogimg/-/raw/main/pictures/2025/10/24_9_51_22_20251024-PixPin_2025-10-24_09-50-10.png')
-    footer: ![h:20](https://statics.zwsoft.cn/web/global/img/header_logo.svg) 
+      /* 新增：补充页脚元素的强制不换行样式 */
+      footer {
+        display: flex !important; /* 弹性布局，让图片+文字横向排列 */
+        align-items: center !important; /* 垂直居中对齐（解决图片与文字高度差） */
+        justify-content: center !important; /* 整体水平居中 */
+        white-space: nowrap !important; /* 强制不换行 */
+        gap: 8px !important; /* 图片和文字之间留少量间距，避免拥挤 */
+        bottom:21px;
+      }
+      /* 确保footer内图片不超宽，适配行高 */
+      footer img {
+        height: 20px !important; /* 与原配置h:20保持一致，避免图片过高导致换行 */
+        width: auto !important;
+        margin: 0 !important; /* 清除全局img的margin，防止错位 */
+        border: none !important; /* 清除全局img的边框，避免样式干扰 */
+        box-shadow: none !important; /* 清除全局img的阴影，保持简洁 */
+      }
+      paginate: true
+      backgroundImage: url('https://gitlab.com/zw2d/blogimg/-/raw/main/pictures/2025/10/24_9_51_22_20251024-PixPin_2025-10-24_09-50-10.png')
+      footer: "![h:24](https://statics.zwsoft.cn/web/global/img/header_logo.svg) 这是页脚"
     ---
     <!-- 封面页样式 -->
     <!-- 样式1：简约品牌封面 -->
