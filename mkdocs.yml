@@ -152,6 +152,7 @@ extra:
   generator: false #是否删除页脚显示"使用 MkDocs 材料制造"
 extra_javascript:
   - javascripts/katex.js
+  - javascripts/apple-code-style.js
   - https://unpkg.com/katex@0/dist/katex.min.js
   - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
   #- https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js
