@@ -31,7 +31,7 @@ author: JerryMa
 
 - 💡 **用法示例**：
 
-  ```
+  ```bash
   ---
   theme: default
   class: lead
@@ -55,13 +55,13 @@ author: JerryMa
 
 - 📦 **安装**：
 
-  ```
+  ```bash
   npm install reveal-md -g
   ```
 
 - 💡 **用法**：
 
-  ```
+  ```bash
   reveal-md slides.md
   ```
 
@@ -82,7 +82,7 @@ author: JerryMa
 
 - ⚙️ **安装**：
 
-  ```
+  ```bash
   npm init slidev@latest
   npm run dev
   ```
@@ -97,7 +97,7 @@ author: JerryMa
 
 - 📘 **用法**：
 
-  ```
+  ```bash
   ---
   theme: default
   ---
@@ -129,7 +129,7 @@ author: JerryMa
 
 - 用 Marp CLI 导出为 PPT 或 PDF；
 
-  ```
+  ```bash
   marp myslides.md --pptx
   ```
 
@@ -151,7 +151,7 @@ author: JerryMa
 
 - 🔧 **命令行转换**：
 
-  ```
+  ```bash
   pandoc slides.md -t beamer -o slides.pdf
   ```
 

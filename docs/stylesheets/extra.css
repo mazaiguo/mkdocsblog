@@ -17,13 +17,56 @@
   --md-code-hl-color: #ffff7f;
   --md-default-fg-color--light: #75715f;
 }
-.md-typeset p > code {
-  background-color: #ffffff;
-  color: #eb245c;
+/* ============================================
+   内联代码样式 (Inline Code Styling)
+   ============================================ */
+.md-typeset .highlighttable {
+  margin: 0;
 }
-.md-typeset li code {
-  background-color: #ffffff;
-  color: #eb245c;
+.md-typeset p > code,
+.md-typeset li code,
+.md-typeset td code,
+.md-typeset th code {
+  background-color: rgba(248, 249, 250, 0.8);
+  color: #e83e8c;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.375rem;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Monaco,
+    "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  font-size: 0.875em;
+  font-weight: 500;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.md-typeset p > code:hover,
+.md-typeset li code:hover,
+.md-typeset td code:hover,
+.md-typeset th code:hover {
+  background-color: rgba(248, 249, 250, 1);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* 暗色主题下的内联代码样式 */
+[data-md-color-scheme="slate"] .md-typeset p > code,
+[data-md-color-scheme="slate"] .md-typeset li code,
+[data-md-color-scheme="slate"] .md-typeset td code,
+[data-md-color-scheme="slate"] .md-typeset th code {
+  background-color: rgba(45, 55, 72, 0.8);
+  color: #f093fb;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+[data-md-color-scheme="slate"] .md-typeset p > code:hover,
+[data-md-color-scheme="slate"] .md-typeset li code:hover,
+[data-md-color-scheme="slate"] .md-typeset td code:hover,
+[data-md-color-scheme="slate"] .md-typeset th code:hover {
+  background-color: rgba(45, 55, 72, 1);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 /*代码块头部图标 end*/
@@ -309,72 +352,251 @@
 }
 
 /* 子文件夹的样式 */
-.md-nav__item--section>.md-nav__link
-{
+.md-nav__item--section > .md-nav__link {
   font-weight: bold;
   font-size: 1.5rem;
 }
 /* 子文件夹下的子项样式 */
-.md-nav__item--section>.md-nav__link:not(.md-nav__container)
-{
+.md-nav__item--section > .md-nav__link:not(.md-nav__container) {
   color: #ec5814; /* 文字颜色 */
-  font-weight:bold; /* 正常字体 */
+  font-weight: bold; /* 正常字体 */
   font-size: 1.2rem; /* 字体大小 */
 }
 
-.md-nav__item--section>.md-nav>.md-nav__list>.md-nav__item
-{
+.md-nav__item--section > .md-nav > .md-nav__list > .md-nav__item {
   padding-left: 20px;
 }
 /* 子文件夹在hover状态的样式 */
 .md-nav__item--nested > .md-nav__link:hover {
-    color: #3498db;
-    background-color: #f8f9fa;
+  color: #3498db;
+  background-color: #f8f9fa;
 }
-/* 苹果风格代码块标题栏圆点样式 */
-/* 为代码块容器添加标题栏样式 */
-  /** 3个点 */
-  /* 确保代码块容器为相对定位，作为圆点的定位参考 */
-/* 代码块容器样式 */
+/* ============================================
+   真正的苹果风格代码块 (Authentic macOS Code Blocks)
+   ============================================ */
+
+/* 代码块整体容器 */
 .highlight {
-    position: relative;
-    margin-bottom: 1rem;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    border: 1px solid #e0e0e0;
+  position: relative;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #1e1e1e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* 文件名容器 - 作为圆点的定位基准 */
+/* macOS 标题栏背景 */
+.highlight::before {
+  content: "";
+  display: block;
+  height: 40px;
+  background: linear-gradient(180deg, #3c3c3c 0%, #2d2d2d 100%);
+  border-bottom: 1px solid #1a1a1a;
+  position: relative;
+}
+
+/* 三个 macOS 圆点按钮 */
+.highlight::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  width: 12px;
+  height: 12px;
+  background-color: #ff5f56;
+  border-radius: 50%;
+  box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27ca3f;
+  z-index: 10;
+}
+
+/* 语言标识 - 使用独立的元素而不是伪元素 */
+.highlight .apple-lang-label {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  color: #c9c9c9;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* 为带文件名的代码块，文件名显示在标题栏中央 */
 .highlight span.filename {
-    display: inline-block;
-    padding: 0.6rem 1rem;
-    background-color: #fff;
-    border-bottom: 1px solid #e0d4f0;
-    width: 100%;
-    box-sizing: border-box;
-    font-family: monospace;
-    position: relative;
-    /* 为三个圆点预留左侧空间 */
-    padding-left: 3.2rem;
+  position: absolute;
+  top: 0;
+  left: 5em;
+  right: 0;
+  height: 40px;
+  background: transparent;
+  border: none;
+  display: flex;
+  justify-content: left;
+  color: #c9c9c9;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  z-index: 5;
 }
 
-/* 单个伪元素创建三个圆点 */
-.highlight span.filename::before {
-    content: '';
-    position: absolute;
-    left: 0.2rem; /* 整体左侧距离 */
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0.6rem; 
-    height: 0.6rem; /* 高度=圆点直径 */
-    background-color: #fc625d; /* 红色圆点 */
-    border-radius: 50%; /* 圆形 */
-    box-shadow: 1rem 0 #fdbc40, 2rem 0 #35cd4b;
+/* 复制按钮样式 - 模仿 macOS 按钮 */
+.md-clipboard {
+  position: absolute !important;
+  top: 8px !important;
+  right: 12px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  padding: 6px 12px !important;
+  color: #c9c9c9 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 20 !important;
+  transition: all 0.2s ease !important;
 }
-/* 代码内容区域样式 */
+
+.md-clipboard:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* 代码内容区域 */
 .highlight pre {
-    margin: 0;
-    /* padding: 1rem; */
-    border-radius: 0;
-    border: none;
+  margin: 0 !important;
+  padding: 16px 0 16px 16px !important;
+  background-color: #1e1e1e !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas,
+    "Courier New", monospace !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #d4d4d4 !important;
+  overflow-x: auto !important;
+}
+
+.highlight pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  color: inherit !important;
+}
+
+/* 行号样式 - 模仿 VS Code */
+.highlight .linenos {
+  background-color: #1e1e1e !important;
+  border-right: none !important;
+  color: #858585 !important;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas,
+    monospace !important;
+  font-size: 14px !important;
+  padding: 16px 12px 16px 16px !important;
+  user-select: none !important;
+  text-align: right !important;
+  min-width: 40px !important;
+}
+
+.highlight .linenos .linenodiv pre {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: right !important;
+  line-height: 1.5 !important;
+}
+
+/* 语法高亮优化 */
+.highlight .k {
+  color: #569cd6 !important;
+} /* 关键字 - 蓝色 */
+.highlight .s,
+.highlight .s1,
+.highlight .s2 {
+  color: #ce9178 !important;
+} /* 字符串 - 橙色 */
+.highlight .c,
+.highlight .c1,
+.highlight .cm {
+  color: #6a9955 !important;
+} /* 注释 - 绿色 */
+.highlight .n {
+  color: #9cdcfe !important;
+} /* 标识符 - 浅蓝色 */
+.highlight .nc {
+  color: #4ec9b0 !important;
+} /* 类名 - 青绿色 */
+.highlight .nf {
+  color: #dcdcaa !important;
+} /* 函数名 - 黄色 */
+.highlight .mi,
+.highlight .mf {
+  color: #b5cea8 !important;
+} /* 数字 - 浅绿色 */
+.highlight .o {
+  color: #d4d4d4 !important;
+} /* 操作符 - 白色 */
+.highlight .p {
+  color: #d4d4d4 !important;
+} /* 标点 - 白色 */
+
+/* 语言标识规则已移至JavaScript处理 */
+
+/* 暗色主题保持一致 */
+[data-md-color-scheme="slate"] .highlight {
+  background-color: #1e1e1e;
+}
+
+[data-md-color-scheme="slate"] .highlight::before {
+  background: linear-gradient(180deg, #3c3c3c 0%, #2d2d2d 100%);
+}
+
+[data-md-color-scheme="slate"] .highlight span.filename {
+  background: linear-gradient(180deg, #3c3c3c 0%, #2d2d2d 100%);
+  color: #c9c9c9;
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 768px) {
+  .highlight {
+    margin: 1rem 0;
+    border-radius: 6px;
+  }
+
+  .highlight::after {
+    top: 12px;
+    left: 12px;
+    width: 10px;
+    height: 10px;
+    box-shadow: 16px 0 0 #ffbd2e, 32px 0 0 #27ca3f;
+  }
+
+  .highlight pre {
+    font-size: 13px !important;
+    padding: 12px 0 12px 12px !important;
+  }
+
+  .highlight .linenos {
+    font-size: 13px !important;
+    padding: 12px 8px 12px 12px !important;
+    min-width: 32px !important;
+  }
+
+  .md-clipboard {
+    top: 6px !important;
+    right: 8px !important;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+  }
 }
