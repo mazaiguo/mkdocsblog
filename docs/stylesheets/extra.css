@@ -395,7 +395,7 @@
   position: relative;
 }
 
-/* 三个 macOS 圆点按钮 */
+/* 三个 macOS 圆点按钮 - 固定在标题栏位置 */
 .highlight::after {
   content: "";
   position: absolute;
@@ -406,7 +406,8 @@
   background-color: #ff5f56;
   border-radius: 50%;
   box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27ca3f;
-  z-index: 10;
+  z-index: 15;
+  pointer-events: none;
 }
 
 /* 语言标识 - 使用独立的元素而不是伪元素 */
@@ -552,6 +553,282 @@
 } /* 标点 - 白色 */
 
 /* 语言标识规则已移至JavaScript处理 */
+
+/* ============================================
+   代码块折叠/展开功能样式 (Code Block Toggle)
+   ============================================ */
+
+/* 全局控制面板 */
+.code-toggle-controls {
+  position: sticky;
+  top: 80px;
+  z-index: 100;
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-controls-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.controls-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  color: #495057;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.toggle-btn:hover {
+  background: #e9ecef;
+  border-color: #dee2e6;
+  color: #212529;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-btn svg {
+  flex-shrink: 0;
+}
+
+/* 可切换代码块样式 */
+.highlight.toggleable {
+  transition: all 0.3s ease;
+}
+
+/* 标题栏点击区域 */
+.code-header-click-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  cursor: pointer;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.code-header-click-area:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.code-header-click-area:focus {
+  outline: 2px solid #007acc;
+  outline-offset: -2px;
+}
+
+/* 切换按钮样式 */
+.code-toggle-btn {
+  position: absolute;
+  right: 60px; /* 在Copy按钮左侧 */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #c9c9c9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+}
+
+.code-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* 切换图标 */
+.toggle-icon {
+  transition: all 0.2s ease;
+}
+
+/* 折叠状态样式 */
+.highlight.collapsed {
+  margin-bottom: 1rem;
+}
+
+.highlight.collapsed .highlighttable,
+.highlight.collapsed pre {
+  height: 0 !important;
+  overflow: hidden !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin: 0 !important;
+  transition: height 0.3s ease, padding 0.3s ease;
+}
+
+/* 代码内容的平滑过渡 */
+.highlight.toggleable .highlighttable,
+.highlight.toggleable pre {
+  transition: height 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+}
+
+/* 折叠指示器 - 圆点保持固定位置，使用其他元素显示提示 */
+
+/* 通过标题栏的底部边框来暗示折叠状态 */
+.highlight.collapsed .code-header-click-area::after {
+  content: '点击展开代码 ▼';
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #858585;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* 标题栏在折叠状态下的样式 */
+.highlight.collapsed .code-header-click-area {
+  border-bottom: 1px solid #404040;
+}
+
+/* 暗色主题适配 */
+[data-md-color-scheme="slate"] .code-toggle-controls {
+  background: rgba(45, 55, 72, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-md-color-scheme="slate"] .controls-label {
+  color: #a0aec0;
+}
+
+[data-md-color-scheme="slate"] .toggle-btn {
+  background: #374151;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+[data-md-color-scheme="slate"] .toggle-btn:hover {
+  background: #4a5568;
+  border-color: #5a6c7d;
+  color: #f7fafc;
+}
+
+[data-md-color-scheme="slate"] .code-header-click-area:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-md-color-scheme="slate"] .highlight.collapsed .code-header-click-area::after {
+  color: #718096;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 768px) {
+  .code-toggle-controls {
+    top: 60px;
+    margin: 0.75rem 0;
+    padding: 0.5rem;
+  }
+  
+  .toggle-controls-inner {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  
+  .controls-label {
+    text-align: center;
+    font-size: 0.8125rem;
+  }
+  
+  .toggle-btn {
+    justify-content: center;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .code-toggle-btn {
+    right: 50px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .highlight.collapsed .code-header-click-area::after {
+    content: '▼ 展开';
+    font-size: 11px;
+    bottom: -26px;
+    padding: 3px 6px;
+  }
+}
+
+/* 平滑滚动到代码块 */
+@media (prefers-reduced-motion: no-preference) {
+  .highlight.toggleable {
+    scroll-margin-top: 100px;
+  }
+}
+
+/* 无障碍访问支持 */
+@media (prefers-reduced-motion: reduce) {
+  .highlight.toggleable .highlighttable,
+  .highlight.toggleable pre,
+  .highlight.toggleable,
+  .code-toggle-btn,
+  .toggle-btn {
+    transition: none;
+  }
+}
+
+/* 打印样式 - 展开所有代码块 */
+@media print {
+  .code-toggle-controls {
+    display: none;
+  }
+  
+  .highlight.collapsed .highlighttable,
+  .highlight.collapsed pre {
+    height: auto !important;
+    overflow: visible !important;
+    padding: 16px 0 16px 16px !important;
+  }
+  
+  .highlight.collapsed .code-header-click-area::after {
+    display: none;
+  }
+
+  .code-toggle-btn {
+    display: none;
+  }
+}
 
 /* 暗色主题保持一致 */
 [data-md-color-scheme="slate"] .highlight {

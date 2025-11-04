@@ -153,6 +153,7 @@ extra:
 extra_javascript:
   - javascripts/katex.js
   - javascripts/apple-code-style.js
+  - javascripts/code-block-toggle.js
   - https://unpkg.com/katex@0/dist/katex.min.js
   - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
   #- https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js
