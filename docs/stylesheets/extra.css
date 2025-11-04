@@ -449,7 +449,7 @@
 
 /* 复制按钮样式 - 与折叠按钮统一，右侧垂直居中 */
 .code-header-click-area .md-clipboard {
-  position: relative !important;
+  position: static !important;
   margin: 0 !important;
   height: 24px !important; /* 与折叠按钮同样高度 */
   min-width: 28px;
