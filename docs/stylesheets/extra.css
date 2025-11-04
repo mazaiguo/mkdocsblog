@@ -585,7 +585,7 @@
 
 /* 全局控制面板 */
 .code-toggle-controls {
-  position: sticky;
+  position: static;
   top: 80px;
   z-index: 100;
   margin: 1rem 0;
