@@ -447,28 +447,53 @@
   z-index: 5;
 }
 
-/* 复制按钮样式 - 模仿 macOS 按钮 */
-.md-clipboard {
-  position: absolute !important;
-  top: 8px !important;
-  right: 12px !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 6px !important;
-  padding: 6px 12px !important;
-  color: #c9c9c9 !important;
+/* 复制按钮样式 - 与折叠按钮统一，右侧垂直居中 */
+.code-header-click-area .md-clipboard {
+  position: relative !important;
+  margin: 0 !important;
+  height: 24px !important; /* 与折叠按钮同样高度 */
+  min-width: 28px;
+  width: auto !important;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 5px !important; /* 与折叠按钮统一圆角 */
+  padding: 0 8px !important; /* 统一内边距 */
+  color: #ffffff !important;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif !important;
   font-size: 11px !important;
   font-weight: 500 !important;
+  line-height: 24px !important; /* 与按钮高度一致，确保文字垂直居中 */
+  letter-spacing: 0.3px !important;
   backdrop-filter: blur(10px) !important;
-  z-index: 20 !important;
+  z-index: 50 !important;
   transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+  vertical-align: middle !important; /* 额外确保垂直对齐 */
 }
 
-.md-clipboard:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
+/* 复制按钮内部元素对齐 */
+.code-header-click-area .md-clipboard * {
+  vertical-align: middle !important;
+  line-height: inherit !important;
+}
+
+/* 复制按钮内的 SVG 图标 */
+.code-header-click-area .md-clipboard svg {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+}
+
+.code-header-click-area .md-clipboard:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
   color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* 代码内容区域 */
@@ -627,9 +652,10 @@
   cursor: pointer;
   z-index: 15;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
+  align-items: center; /* 垂直居中 */
+  justify-content: flex-end; /* 内容靠右 */
+  padding: 0 12px 0 0; /* 右侧留出适当间距 */
+  gap: 6px; /* 按钮之间的间距 */
   transition: background-color 0.2s ease;
 }
 
@@ -642,31 +668,47 @@
   outline-offset: -2px;
 }
 
-/* 切换按钮样式 */
-.code-toggle-btn {
-  position: absolute;
-  right: 60px; /* 在Copy按钮左侧 */
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
+/* 按钮区域不要阻挡点击 */
+.code-header-click-area .code-toggle-btn,
+.code-header-click-area .md-clipboard {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* 切换按钮样式 - 在标题栏右侧垂直居中 */
+.code-header-click-area .code-toggle-btn {
+  position: relative;
+  width: auto;
+  min-width: 28px;
   height: 24px;
+  padding: 0 8px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  color: #c9c9c9;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 5px;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 24px; /* 与按钮高度一致，确保文字垂直居中 */
+  letter-spacing: 0.3px;
   cursor: pointer;
   transition: all 0.2s ease;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  z-index: 50;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  vertical-align: middle; /* 额外确保垂直对齐 */
 }
 
-.code-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+.code-header-click-area .code-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.35);
   color: #ffffff;
-  transform: translateY(-50%) scale(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* 切换图标 */
@@ -751,6 +793,36 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
+/* 暗色主题下的按钮样式 - 统一视觉效果 */
+[data-md-color-scheme="slate"] .code-header-click-area .code-toggle-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+[data-md-color-scheme="slate"] .code-header-click-area .code-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* 暗色主题下的复制按钮样式 */
+[data-md-color-scheme="slate"] .code-header-click-area .md-clipboard {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-md-color-scheme="slate"] .code-header-click-area .md-clipboard:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+}
+
 /* 响应式设计 */
 @media screen and (max-width: 768px) {
   .code-toggle-controls {
@@ -776,10 +848,30 @@
     font-size: 0.75rem;
   }
   
-  .code-toggle-btn {
-    right: 50px;
-    width: 20px;
+  .code-header-click-area {
+    padding: 0 8px 0 0; /* 移动端适当间距 */
+    gap: 4px; /* 移动端按钮间距 */
+  }
+
+  .code-header-click-area .code-toggle-btn {
+    min-width: 24px;
     height: 20px;
+    padding: 0 6px;
+    line-height: 20px; /* 移动端高度一致 */
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .code-header-click-area .md-clipboard {
+    min-width: 24px;
+    height: 20px !important; /* 与折叠按钮同样高度 */
+    padding: 0 6px !important;
+    font-size: 10px !important;
+    line-height: 20px !important; /* 移动端高度一致 */
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
   }
 
   .highlight.collapsed .code-header-click-area::after {

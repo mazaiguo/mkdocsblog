@@ -56,12 +56,22 @@ function setupToggleForCodeBlock(highlight, index) {
     // 添加切换按钮到标题栏
     clickArea.appendChild(toggleButton);
     
+    // 查找并移动复制按钮到标题栏内
+    moveCopyButtonToHeader(highlight, clickArea);
+    
     // 获取代码内容区域
     const codeContent = getCodeContent(highlight);
     if (!codeContent) return;
     
     // 添加切换状态类
     highlight.classList.add('toggleable');
+    
+    // 检查是否有Markdown标记要求初始折叠状态
+    const shouldCollapse = checkMarkdownCollapseMarkers(highlight);
+    if (shouldCollapse) {
+        // 标记为需要初始折叠
+        highlight.setAttribute('data-initial-collapse', 'true');
+    }
     
     // 绑定点击事件
     clickArea.addEventListener('click', function(e) {
@@ -92,17 +102,79 @@ function setupToggleForCodeBlock(highlight, index) {
 }
 
 /**
+ * 移动复制按钮到标题栏内
+ * @param {Element} highlight 代码块容器
+ * @param {Element} clickArea 标题栏点击区域
+ */
+function moveCopyButtonToHeader(highlight, clickArea) {
+    // 尝试多次查找复制按钮，因为它可能是延迟加载的
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    const moveButton = () => {
+        const copyButton = highlight.querySelector('.md-clipboard');
+        
+        if (copyButton) {
+            // 找到了复制按钮，将它移动到标题栏区域
+            if (!clickArea.contains(copyButton)) {
+                // 从原来的位置移除并添加到标题栏
+                clickArea.appendChild(copyButton);
+                
+                // 显式设置样式确保对齐
+                copyButton.style.position = 'relative';
+                copyButton.style.display = 'flex';
+                copyButton.style.alignItems = 'center';
+                copyButton.style.justifyContent = 'center';
+                copyButton.style.height = '24px';
+                copyButton.style.lineHeight = '24px';
+                copyButton.style.margin = '0';
+                copyButton.style.verticalAlign = 'middle';
+                
+                // 确保复制按钮内部元素也正确对齐
+                const copyButtonChildren = copyButton.querySelectorAll('*');
+                copyButtonChildren.forEach(child => {
+                    child.style.verticalAlign = 'middle';
+                    child.style.display = 'inline-flex';
+                    child.style.alignItems = 'center';
+                    if (child.tagName.toLowerCase() === 'svg') {
+                        child.style.margin = '0';
+                    }
+                });
+                
+                console.log('复制按钮已移动到标题栏内并设置对齐样式');
+            }
+        } else if (attempts < maxAttempts) {
+            // 如果还没找到，继续尝试
+            attempts++;
+            setTimeout(moveButton, 100);
+        }
+    };
+    
+    // 立即尝试一次
+    moveButton();
+}
+
+/**
  * 创建切换按钮
  * @returns {Element} 切换按钮元素
  */
 function createToggleButton() {
     const button = document.createElement('div');
     button.className = 'code-toggle-btn';
+    
+    // 显式设置对齐样式
+    button.style.display = 'flex';
+    button.style.alignItems = 'center';
+    button.style.justifyContent = 'center';
+    button.style.height = '24px';
+    button.style.lineHeight = '24px';
+    button.style.verticalAlign = 'middle';
+    
     button.innerHTML = `
-        <svg class="toggle-icon collapse-icon" viewBox="0 0 24 24" width="16" height="16">
+        <svg class="toggle-icon collapse-icon" viewBox="0 0 24 24" width="16" height="16" style="display: block; vertical-align: middle;">
             <path d="M7 14l5-5 5 5z" fill="currentColor"/>
         </svg>
-        <svg class="toggle-icon expand-icon" viewBox="0 0 24 24" width="16" height="16" style="display: none;">
+        <svg class="toggle-icon expand-icon" viewBox="0 0 24 24" width="16" height="16" style="display: none; vertical-align: middle;">
             <path d="M7 10l5 5 5-5z" fill="currentColor"/>
         </svg>
     `;
@@ -116,6 +188,13 @@ function createToggleButton() {
 function createHeaderClickArea() {
     const area = document.createElement('div');
     area.className = 'code-header-click-area';
+    
+    // 显式设置flexbox布局确保按钮正确对齐
+    area.style.display = 'flex';
+    area.style.alignItems = 'center';
+    area.style.justifyContent = 'flex-end';
+    area.style.gap = '6px';
+    
     return area;
 }
 
@@ -304,22 +383,78 @@ function saveToggleState(id, collapsed) {
 }
 
 /**
+ * 检查Markdown中的折叠标记
+ * @param {Element} highlight 代码块容器
+ * @returns {boolean} 是否应该初始折叠
+ */
+function checkMarkdownCollapseMarkers(highlight) {
+    // 方法1: 检查文件名中的标记 (title="file.py collapsed")
+    const filenameElement = highlight.querySelector('span.filename');
+    if (filenameElement) {
+        const filename = filenameElement.textContent || '';
+        if (filename.includes('collapsed') || filename.includes('hidden') || 
+            filename.includes('fold') || filename.includes('minimize')) {
+            return true;
+        }
+    }
+    
+    // 方法2: 检查代码块的类名
+    const classList = Array.from(highlight.classList);
+    if (classList.some(cls => ['collapsed', 'hidden', 'fold', 'minimize'].includes(cls))) {
+        return true;
+    }
+    
+    // 方法3: 检查data属性
+    if (highlight.hasAttribute('data-collapsed') || 
+        highlight.hasAttribute('data-hidden') ||
+        highlight.hasAttribute('data-fold')) {
+        return true;
+    }
+    
+    // 方法4: 检查注释标记（在代码内容中查找特殊注释）
+    const codeElement = highlight.querySelector('code');
+    if (codeElement) {
+        const codeText = codeElement.textContent || '';
+        const firstLine = codeText.split('\n')[0];
+        if (firstLine.includes('<!-- collapsed -->') || 
+            firstLine.includes('# collapsed') ||
+            firstLine.includes('// collapsed') ||
+            firstLine.includes('/* collapsed */')) {
+            return true;
+        }
+    }
+    
+    // 方法5: 检查代码块容器的data-lang属性是否包含折叠标记
+    const dataLang = highlight.getAttribute('data-lang');
+    if (dataLang && (dataLang.includes('collapsed') || dataLang.includes('hidden'))) {
+        return true;
+    }
+    
+    return false;
+}
+
+/**
  * 从本地存储恢复折叠状态
  */
 function restoreToggleStates() {
     try {
         const states = JSON.parse(localStorage.getItem('codeBlockStates') || '{}');
         
-        Object.keys(states).forEach(id => {
-            const highlight = document.getElementById(id);
-            if (highlight && states[id]) {
+        // 处理所有代码块
+        const highlights = document.querySelectorAll('.highlight.toggleable');
+        highlights.forEach(highlight => {
+            const id = highlight.id;
+            const hasStoredState = states[id] !== undefined;
+            const shouldCollapse = hasStoredState ? states[id] : highlight.hasAttribute('data-initial-collapse');
+            
+            if (shouldCollapse) {
                 // 延迟执行以确保DOM完全加载
                 setTimeout(() => {
                     const clickArea = highlight.querySelector('.code-header-click-area');
                     if (clickArea && !highlight.classList.contains('collapsed')) {
                         clickArea.click();
                     }
-                }, 100);
+                }, 150);
             }
         });
     } catch (e) {
