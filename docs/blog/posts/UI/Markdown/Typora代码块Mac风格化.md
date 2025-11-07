@@ -1,3 +1,4 @@
+---
 title: Typora代码块Mac风格化
 date: 2025-10-28
 categories:
@@ -10,6 +11,8 @@ tags:
 description: 将Typora的代码块Apple Style化
 authors:
   - JerryMa
+---
+
 
 # Typora代码块Mac风格化
 
