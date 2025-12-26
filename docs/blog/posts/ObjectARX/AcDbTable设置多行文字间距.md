@@ -1,6 +1,6 @@
 ---
 title: AcDbTable设置多行文字的行间距
-date: 2025-12-8
+date: 2025-12-08
 categories:
   - windows程序
 tags:
