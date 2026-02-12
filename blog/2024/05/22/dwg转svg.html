@@ -1,0 +1,848 @@
+<!DOCTYPE html><html lang="zh" class="no-js"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="使用Python和ezdxf库将DWG文件转换为SVG格式的详细实现方法"><meta name="author" content="JerryMa"><link rel="canonical" href="http://127.0.0.1:8000/blog/2024/05/22/dwg%E8%BD%ACsvg.html"><link rel="prev" href="../18/pdf%E6%89%93%E5%8D%B0%E4%BD%BF%E7%94%A8monochromectb%E4%B8%8D%E8%B5%B7%E4%BD%9C%E7%94%A8.html"><link rel="next" href="../30/rapidjson%E4%BB%A3%E7%A0%81%E5%B0%81%E8%A3%85.html"><link rel="icon" href="../../../../assets/images/favicon.png"><meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1"><title>DWG转SVG - 我的个人博客</title><link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css"><link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css"><script src="https://unpkg.com/iframe-worker/shim"></script><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback"><style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style><link rel="stylesheet" href="../../../../stylesheets/extra.min.css"><link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css"><script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href="../../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head> <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="Blue-Grey" data-md-color-accent="Pink"> <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off"> <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off"> <label class="md-overlay" for="__drawer"></label> <div data-md-component="skip"> <a href="#dwgsvg" class="md-skip"> 跳转至 </a> </div> <div data-md-component="announce"> </div> <header class="md-header md-header--shadow md-header--lifted" data-md-component="header"> <nav class="md-header__inner md-grid" aria-label="页眉"> <a href="../../../../index.html" title="我的个人博客" class="md-header__button md-logo" aria-label="我的个人博客" data-md-component="logo"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg> </a> <label class="md-header__button md-icon" for="__drawer"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg> </label> <div class="md-header__title" data-md-component="header-title"> <div class="md-header__ellipsis"> <div class="md-header__topic"> <span class="md-ellipsis"> 我的个人博客 </span> </div> <div class="md-header__topic" data-md-component="header-topic"> <span class="md-ellipsis"> DWG转SVG </span> </div> </div> </div> <form class="md-header__option" data-md-component="palette"> <input class="md-option" data-md-color-media data-md-color-scheme="default" data-md-color-primary="Blue-Grey" data-md-color-accent="Pink" aria-label="切换到明亮模式" type="radio" name="__palette" id="__palette_0"> <label class="md-header__button md-icon" title="切换到明亮模式" for="__palette_1" hidden> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"></path></svg> </label> <input class="md-option" data-md-color-media data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="amber" aria-label="切换到暗黑模式" type="radio" name="__palette" id="__palette_1"> <label class="md-header__button md-icon" title="切换到暗黑模式" for="__palette_0" hidden> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"></path></svg> </label> </form> <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script> <label class="md-header__button md-icon" for="__search"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg> </label> <div class="md-search" data-md-component="search" role="dialog"> <label class="md-search__overlay" for="__search"></label> <div class="md-search__inner" role="search"> <form class="md-search__form" name="search"> <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required> <label class="md-search__icon md-icon" for="__search"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg> </label> <nav class="md-search__options" aria-label="查找"> <a href="javascript:void(0)" class="md-search__icon md-icon" title="分享" aria-label="分享" data-clipboard data-clipboard-text data-md-component="search-share" tabindex="-1"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg> </a> <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg> </button> </nav> <div class="md-search__suggest" data-md-component="search-suggest"></div> </form> <div class="md-search__output"> <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix> <div class="md-search-result" data-md-component="search-result"> <div class="md-search-result__meta"> 正在初始化搜索引擎 </div> <ol class="md-search-result__list" role="presentation"></ol> </div> </div> </div> </div> </div> <div class="md-header__source"> <a href="https://github.com/mazaiguo/mkdocsblog" title="前往仓库" class="md-source" data-md-component="source"> <div class="md-source__icon md-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg> </div> <div class="md-source__repository"> mkdocsblog </div> </a> </div> </nav> <nav class="md-tabs" aria-label="标签" data-md-component="tabs"> <div class="md-grid"> <ul class="md-tabs__list"> <li class="md-tabs__item"> <a href="../../../../index.html" class="md-tabs__link"> 首页 </a> </li> <li class="md-tabs__item md-tabs__item--active"> <a href="../../../index.html" class="md-tabs__link"> 博客 </a> </li> <li class="md-tabs__item"> <a href="../../../../archive/index.html" class="md-tabs__link"> 归档 </a> </li> <li class="md-tabs__item"> <a href="../../../category.html" class="md-tabs__link"> 分类 </a> </li> <li class="md-tabs__item"> <a href="../../../../tags.html" class="md-tabs__link"> 标签 </a> </li> <li class="md-tabs__item"> <a href="../../../../about.html" class="md-tabs__link"> 关于 </a> </li> </ul> </div> </nav> </header> <div class="md-container" data-md-component="container"> <main class="md-main" data-md-component="main"> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden> <div class="md-sidebar__scrollwrap"> <div class="md-sidebar__inner"> <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0"> <label class="md-nav__title" for="__drawer"> <a href="../../../../index.html" title="我的个人博客" class="md-nav__button md-logo" aria-label="我的个人博客" data-md-component="logo"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg> </a> 我的个人博客 </label> <div class="md-nav__source"> <a href="https://github.com/mazaiguo/mkdocsblog" title="前往仓库" class="md-source" data-md-component="source"> <div class="md-source__icon md-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg> </div> <div class="md-source__repository"> mkdocsblog </div> </a> </div> <ul class="md-nav__list" data-md-scrollfix> <li class="md-nav__item"> <a href="../../../../index.html" class="md-nav__link"> <span class="md-ellipsis"> 首页 </span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked> <div class="md-nav__link md-nav__container"> <a href="../../../index.html" class="md-nav__link "> <span class="md-ellipsis"> 博客 </span> </a> <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex> <span class="md-nav__icon md-icon"></span> </label> </div> <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true"> <label class="md-nav__title" for="__nav_2"> <span class="md-nav__icon md-icon"></span> 博客 </label> <ul class="md-nav__list" data-md-scrollfix> <li class="md-nav__item md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2"> <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex> <span class="md-ellipsis"> 归档 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false"> <label class="md-nav__title" for="__nav_2_2"> <span class="md-nav__icon md-icon"></span> 归档 </label> <ul class="md-nav__list" data-md-scrollfix> <li class="md-nav__item"> <a href="../../../archive/2026.html" class="md-nav__link"> <span class="md-ellipsis"> 2026年02月 </span> </a> </li> <li class="md-nav__item"> <a href="../../../archive/2025.html" class="md-nav__link"> <span class="md-ellipsis"> 2025年12月 </span> </a> </li> <li class="md-nav__item"> <a href="../../../archive/2024.html" class="md-nav__link"> <span class="md-ellipsis"> 2024年11月 </span> </a> </li> <li class="md-nav__item"> <a href="../../../archive/2023.html" class="md-nav__link"> <span class="md-ellipsis"> 2023年12月 </span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3"> <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex> <span class="md-ellipsis"> 分类 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false"> <label class="md-nav__title" for="__nav_2_3"> <span class="md-nav__icon md-icon"></span> 分类 </label> <ul class="md-nav__list" data-md-scrollfix> <li class="md-nav__item"> <a href="../../../category/cad%E5%BC%80%E5%8F%91.html" class="md-nav__link"> <span class="md-ellipsis"> CAD开发 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/logger.html" class="md-nav__link"> <span class="md-ellipsis"> Logger </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/markdown.html" class="md-nav__link"> <span class="md-ellipsis"> MarkDown </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/objectarx.html" class="md-nav__link"> <span class="md-ellipsis"> ObjectARX </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/ppt.html" class="md-nav__link"> <span class="md-ellipsis"> PPT </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/tools.html" class="md-nav__link"> <span class="md-ellipsis"> Tools </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/unity.html" class="md-nav__link"> <span class="md-ellipsis"> Unity </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/vue.html" class="md-nav__link"> <span class="md-ellipsis"> VUE </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/web%E6%A1%86%E6%9E%B6.html" class="md-nav__link"> <span class="md-ellipsis"> Web框架 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/web%E9%83%A8%E7%BD%B2.html" class="md-nav__link"> <span class="md-ellipsis"> Web部署 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/deploy.html" class="md-nav__link"> <span class="md-ellipsis"> deploy </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/web%E7%AB%AF%E7%A8%8B%E5%BA%8F.html" class="md-nav__link"> <span class="md-ellipsis"> web端程序 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/windows%E7%A8%8B%E5%BA%8F.html" class="md-nav__link"> <span class="md-ellipsis"> windows程序 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/%E4%B8%89%E6%96%B9%E5%BA%93.html" class="md-nav__link"> <span class="md-ellipsis"> 三方库 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91.html" class="md-nav__link"> <span class="md-ellipsis"> 前端开发 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7.html" class="md-nav__link"> <span class="md-ellipsis"> 开发工具 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/%E6%95%99%E7%A8%8B%E6%96%87%E6%A1%A3.html" class="md-nav__link"> <span class="md-ellipsis"> 教程文档 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/%E7%AE%97%E6%B3%95.html" class="md-nav__link"> <span class="md-ellipsis"> 算法 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85.html" class="md-nav__link"> <span class="md-ellipsis"> 软件安装 </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class="md-nav__item"> <a href="../../../../archive/index.html" class="md-nav__link"> <span class="md-ellipsis"> 归档 </span> </a> </li> <li class="md-nav__item"> <a href="../../../category.html" class="md-nav__link"> <span class="md-ellipsis"> 分类 </span> </a> </li> <li class="md-nav__item"> <a href="../../../../tags.html" class="md-nav__link"> <span class="md-ellipsis"> 标签 </span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href="../../../../about.html" class="md-nav__link"> <span class="md-ellipsis"> 关于 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </div> </div> </div> <div class="md-content md-content--post" data-md-component="content"> <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation"> <div class="md-sidebar__scrollwrap"> <div class="md-sidebar__inner md-post"> <nav class="md-nav md-nav--primary"> <div class="md-post__back"> <div class="md-nav__title md-nav__container"> <a href="../../../index.html" class="md-nav__link"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg> <span class="md-ellipsis"> 回到主页 </span> </a> </div> </div> <ul class="md-post__meta md-nav__list"> <li class="md-nav__item md-nav__item--section"> <div class="md-post__title"> <span class="md-ellipsis"> 元数据 </span> </div> <nav class="md-nav"> <ul class="md-nav__list"> <li class="md-nav__item"> <div class="md-nav__link"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"></path></svg> <time datetime="2024-05-22 00:00:00+00:00" class="md-ellipsis">2024年5月22日星期三</time> </div> </li> <li class="md-nav__item"> <div class="md-nav__link"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"></path></svg> <span class="md-ellipsis"> 分类于 <a href="../../../category/windows%E7%A8%8B%E5%BA%8F.html">windows程序</a></span> </div> </li> <li class="md-nav__item"> <div class="md-nav__link"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"></path></svg> <span class="md-ellipsis"> 需要 8 分钟阅读时间 </span> </div> </li> </ul> </nav> </li> </ul> </nav> <nav class="md-nav md-nav--secondary" aria-label="目录"> <label class="md-nav__title" for="__toc"> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix> <li class="md-nav__item"> <a href="#_1" class="md-nav__link"> <span class="md-ellipsis"> 安装软件 </span> </a> </li> <li class="md-nav__item"> <a href="#python" class="md-nav__link"> <span class="md-ellipsis"> 安装python插件 </span> </a> </li> <li class="md-nav__item"> <a href="#_2" class="md-nav__link"> <span class="md-ellipsis"> 代码 </span> </a> </li> <li class="md-nav__item"> <a href="#_3" class="md-nav__link"> <span class="md-ellipsis"> 其它设置 </span> </a> </li> </ul> </nav> </div> </div> </div> <article class="md-content__inner md-typeset"> <nav class="md-tags"> <a href="../../../../index.html#tag:dwg" class="md-tag md-tag-icon">DWG</a> <a href="../../../../index.html#tag:svg" class="md-tag md-tag-icon">SVG</a> <a href="../../../../index.html#tag:ezdxf" class="md-tag md-tag-icon">ezdxf</a> </nav> <h1 id="dwgsvg">DWG转svg<a class="headerlink" href="#dwgsvg" title="Permanent link">¶</a></h1> <h2 id="_1">安装软件<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2> <p>ezdxf不支持处理dwg文件，那么就需要使用<a href="https://www.opendesign.com/guestfiles/oda_file_converter">oda_file_converter</a></p> <h2 id="python">安装python插件<a class="headerlink" href="#python" title="Permanent link">¶</a></h2> <div class="language-python highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">Python</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">pip</span> <span class="n">install</span> <span class="n">pydantic</span> <span class="n">ezdxf</span>
+</span></code></pre></div></td></tr></tbody></table></div> <h2 id="_2">代码<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2> <p>将dwg转成svg</p> <div class="language-python highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">Python</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span>
+<span class="normal"><a href="#__codelineno-1-26">26</a></span>
+<span class="normal"><a href="#__codelineno-1-27">27</a></span>
+<span class="normal"><a href="#__codelineno-1-28">28</a></span>
+<span class="normal"><a href="#__codelineno-1-29">29</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ezdxf.addons.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Frontend</span><span class="p">,</span> <span class="n">RenderContext</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ezdxf.addons.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">layout</span><span class="p">,</span> <span class="n">svg</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ezdxf.addons</span><span class="w"> </span><span class="kn">import</span> <span class="n">odafc</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="c1"># 通过修改win_exec_path的值为自定义安装路径</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="n">odafc</span><span class="o">.</span><span class="n">win_exec_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'C:</span><span class="se">\\</span><span class="s1">Program Files</span><span class="se">\\</span><span class="s1">ODA</span><span class="se">\\</span><span class="s1">ODAFileConverter 25.5.0</span><span class="se">\\</span><span class="s1">ODAFileConverter.exe'</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">convert_dwg_to_svg</span><span class="p">(</span><span class="n">dxf_path</span><span class="p">,</span> <span class="n">svg_path</span><span class="p">):</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a>    <span class="n">doc</span> <span class="o">=</span> <span class="n">odafc</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="n">dxf_path</span><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a>    <span class="n">msp</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">modelspace</span><span class="p">()</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a>    <span class="c1"># 1. create the render context</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a>    <span class="n">context</span> <span class="o">=</span> <span class="n">RenderContext</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12"></a>    <span class="c1"># 2. create the backend</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">SVGBackend</span><span class="p">()</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14"></a>    <span class="c1"># 3. create the frontend</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15"></a>    <span class="n">frontend</span> <span class="o">=</span> <span class="n">Frontend</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16"></a>    <span class="c1"># 4. draw the modelspace</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17"></a>    <span class="n">frontend</span><span class="o">.</span><span class="n">draw_layout</span><span class="p">(</span><span class="n">msp</span><span class="p">)</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18"></a>    <span class="c1"># 5. create an A4 page layout, not required for all backends</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19"></a>    <span class="n">page</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">Page</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">mm</span><span class="p">,</span> <span class="n">margins</span><span class="o">=</span><span class="n">layout</span><span class="o">.</span><span class="n">Margins</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20"></a>    <span class="c1"># 6. get the SVG rendering as string - this step is backend dependent</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21"></a>    <span class="n">svg_string</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">svg_path</span><span class="p">,</span> <span class="s2">"wt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23"></a>        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">svg_string</span><span class="p">)</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24"></a>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26"></a>    <span class="n">filePath</span> <span class="o">=</span> <span class="s1">'D:</span><span class="se">\\</span><span class="s1">Test</span><span class="se">\\</span><span class="s1">'</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27"></a>    <span class="n">dwg_path</span> <span class="o">=</span> <span class="n">filePath</span> <span class="o">+</span> <span class="s1">'5000报废矩形立井.dwg'</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28"></a>    <span class="n">svg_path</span> <span class="o">=</span> <span class="n">filePath</span> <span class="o">+</span> <span class="s1">'5000报废矩形立井11.svg'</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29"></a>    <span class="n">convert_dwg_to_svg</span><span class="p">(</span><span class="n">dwg_path</span><span class="p">,</span> <span class="n">svg_path</span><span class="p">)</span>
+</span></code></pre></div></td></tr></tbody></table></div> <p>完整代码如下所示：</p> <div class="language-python highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">Python</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">  1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">  2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">  3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">  4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">  5</a></span>
+<span class="normal"><a href="#__codelineno-2-6">  6</a></span>
+<span class="normal"><a href="#__codelineno-2-7">  7</a></span>
+<span class="normal"><a href="#__codelineno-2-8">  8</a></span>
+<span class="normal"><a href="#__codelineno-2-9">  9</a></span>
+<span class="normal"><a href="#__codelineno-2-10"> 10</a></span>
+<span class="normal"><a href="#__codelineno-2-11"> 11</a></span>
+<span class="normal"><a href="#__codelineno-2-12"> 12</a></span>
+<span class="normal"><a href="#__codelineno-2-13"> 13</a></span>
+<span class="normal"><a href="#__codelineno-2-14"> 14</a></span>
+<span class="normal"><a href="#__codelineno-2-15"> 15</a></span>
+<span class="normal"><a href="#__codelineno-2-16"> 16</a></span>
+<span class="normal"><a href="#__codelineno-2-17"> 17</a></span>
+<span class="normal"><a href="#__codelineno-2-18"> 18</a></span>
+<span class="normal"><a href="#__codelineno-2-19"> 19</a></span>
+<span class="normal"><a href="#__codelineno-2-20"> 20</a></span>
+<span class="normal"><a href="#__codelineno-2-21"> 21</a></span>
+<span class="normal"><a href="#__codelineno-2-22"> 22</a></span>
+<span class="normal"><a href="#__codelineno-2-23"> 23</a></span>
+<span class="normal"><a href="#__codelineno-2-24"> 24</a></span>
+<span class="normal"><a href="#__codelineno-2-25"> 25</a></span>
+<span class="normal"><a href="#__codelineno-2-26"> 26</a></span>
+<span class="normal"><a href="#__codelineno-2-27"> 27</a></span>
+<span class="normal"><a href="#__codelineno-2-28"> 28</a></span>
+<span class="normal"><a href="#__codelineno-2-29"> 29</a></span>
+<span class="normal"><a href="#__codelineno-2-30"> 30</a></span>
+<span class="normal"><a href="#__codelineno-2-31"> 31</a></span>
+<span class="normal"><a href="#__codelineno-2-32"> 32</a></span>
+<span class="normal"><a href="#__codelineno-2-33"> 33</a></span>
+<span class="normal"><a href="#__codelineno-2-34"> 34</a></span>
+<span class="normal"><a href="#__codelineno-2-35"> 35</a></span>
+<span class="normal"><a href="#__codelineno-2-36"> 36</a></span>
+<span class="normal"><a href="#__codelineno-2-37"> 37</a></span>
+<span class="normal"><a href="#__codelineno-2-38"> 38</a></span>
+<span class="normal"><a href="#__codelineno-2-39"> 39</a></span>
+<span class="normal"><a href="#__codelineno-2-40"> 40</a></span>
+<span class="normal"><a href="#__codelineno-2-41"> 41</a></span>
+<span class="normal"><a href="#__codelineno-2-42"> 42</a></span>
+<span class="normal"><a href="#__codelineno-2-43"> 43</a></span>
+<span class="normal"><a href="#__codelineno-2-44"> 44</a></span>
+<span class="normal"><a href="#__codelineno-2-45"> 45</a></span>
+<span class="normal"><a href="#__codelineno-2-46"> 46</a></span>
+<span class="normal"><a href="#__codelineno-2-47"> 47</a></span>
+<span class="normal"><a href="#__codelineno-2-48"> 48</a></span>
+<span class="normal"><a href="#__codelineno-2-49"> 49</a></span>
+<span class="normal"><a href="#__codelineno-2-50"> 50</a></span>
+<span class="normal"><a href="#__codelineno-2-51"> 51</a></span>
+<span class="normal"><a href="#__codelineno-2-52"> 52</a></span>
+<span class="normal"><a href="#__codelineno-2-53"> 53</a></span>
+<span class="normal"><a href="#__codelineno-2-54"> 54</a></span>
+<span class="normal"><a href="#__codelineno-2-55"> 55</a></span>
+<span class="normal"><a href="#__codelineno-2-56"> 56</a></span>
+<span class="normal"><a href="#__codelineno-2-57"> 57</a></span>
+<span class="normal"><a href="#__codelineno-2-58"> 58</a></span>
+<span class="normal"><a href="#__codelineno-2-59"> 59</a></span>
+<span class="normal"><a href="#__codelineno-2-60"> 60</a></span>
+<span class="normal"><a href="#__codelineno-2-61"> 61</a></span>
+<span class="normal"><a href="#__codelineno-2-62"> 62</a></span>
+<span class="normal"><a href="#__codelineno-2-63"> 63</a></span>
+<span class="normal"><a href="#__codelineno-2-64"> 64</a></span>
+<span class="normal"><a href="#__codelineno-2-65"> 65</a></span>
+<span class="normal"><a href="#__codelineno-2-66"> 66</a></span>
+<span class="normal"><a href="#__codelineno-2-67"> 67</a></span>
+<span class="normal"><a href="#__codelineno-2-68"> 68</a></span>
+<span class="normal"><a href="#__codelineno-2-69"> 69</a></span>
+<span class="normal"><a href="#__codelineno-2-70"> 70</a></span>
+<span class="normal"><a href="#__codelineno-2-71"> 71</a></span>
+<span class="normal"><a href="#__codelineno-2-72"> 72</a></span>
+<span class="normal"><a href="#__codelineno-2-73"> 73</a></span>
+<span class="normal"><a href="#__codelineno-2-74"> 74</a></span>
+<span class="normal"><a href="#__codelineno-2-75"> 75</a></span>
+<span class="normal"><a href="#__codelineno-2-76"> 76</a></span>
+<span class="normal"><a href="#__codelineno-2-77"> 77</a></span>
+<span class="normal"><a href="#__codelineno-2-78"> 78</a></span>
+<span class="normal"><a href="#__codelineno-2-79"> 79</a></span>
+<span class="normal"><a href="#__codelineno-2-80"> 80</a></span>
+<span class="normal"><a href="#__codelineno-2-81"> 81</a></span>
+<span class="normal"><a href="#__codelineno-2-82"> 82</a></span>
+<span class="normal"><a href="#__codelineno-2-83"> 83</a></span>
+<span class="normal"><a href="#__codelineno-2-84"> 84</a></span>
+<span class="normal"><a href="#__codelineno-2-85"> 85</a></span>
+<span class="normal"><a href="#__codelineno-2-86"> 86</a></span>
+<span class="normal"><a href="#__codelineno-2-87"> 87</a></span>
+<span class="normal"><a href="#__codelineno-2-88"> 88</a></span>
+<span class="normal"><a href="#__codelineno-2-89"> 89</a></span>
+<span class="normal"><a href="#__codelineno-2-90"> 90</a></span>
+<span class="normal"><a href="#__codelineno-2-91"> 91</a></span>
+<span class="normal"><a href="#__codelineno-2-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-2-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-2-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-2-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-2-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-2-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-2-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-2-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-2-100">100</a></span>
+<span class="normal"><a href="#__codelineno-2-101">101</a></span>
+<span class="normal"><a href="#__codelineno-2-102">102</a></span>
+<span class="normal"><a href="#__codelineno-2-103">103</a></span>
+<span class="normal"><a href="#__codelineno-2-104">104</a></span>
+<span class="normal"><a href="#__codelineno-2-105">105</a></span>
+<span class="normal"><a href="#__codelineno-2-106">106</a></span>
+<span class="normal"><a href="#__codelineno-2-107">107</a></span>
+<span class="normal"><a href="#__codelineno-2-108">108</a></span>
+<span class="normal"><a href="#__codelineno-2-109">109</a></span>
+<span class="normal"><a href="#__codelineno-2-110">110</a></span>
+<span class="normal"><a href="#__codelineno-2-111">111</a></span>
+<span class="normal"><a href="#__codelineno-2-112">112</a></span>
+<span class="normal"><a href="#__codelineno-2-113">113</a></span>
+<span class="normal"><a href="#__codelineno-2-114">114</a></span>
+<span class="normal"><a href="#__codelineno-2-115">115</a></span>
+<span class="normal"><a href="#__codelineno-2-116">116</a></span>
+<span class="normal"><a href="#__codelineno-2-117">117</a></span>
+<span class="normal"><a href="#__codelineno-2-118">118</a></span>
+<span class="normal"><a href="#__codelineno-2-119">119</a></span>
+<span class="normal"><a href="#__codelineno-2-120">120</a></span>
+<span class="normal"><a href="#__codelineno-2-121">121</a></span>
+<span class="normal"><a href="#__codelineno-2-122">122</a></span>
+<span class="normal"><a href="#__codelineno-2-123">123</a></span>
+<span class="normal"><a href="#__codelineno-2-124">124</a></span>
+<span class="normal"><a href="#__codelineno-2-125">125</a></span>
+<span class="normal"><a href="#__codelineno-2-126">126</a></span>
+<span class="normal"><a href="#__codelineno-2-127">127</a></span>
+<span class="normal"><a href="#__codelineno-2-128">128</a></span>
+<span class="normal"><a href="#__codelineno-2-129">129</a></span>
+<span class="normal"><a href="#__codelineno-2-130">130</a></span>
+<span class="normal"><a href="#__codelineno-2-131">131</a></span>
+<span class="normal"><a href="#__codelineno-2-132">132</a></span>
+<span class="normal"><a href="#__codelineno-2-133">133</a></span>
+<span class="normal"><a href="#__codelineno-2-134">134</a></span>
+<span class="normal"><a href="#__codelineno-2-135">135</a></span>
+<span class="normal"><a href="#__codelineno-2-136">136</a></span>
+<span class="normal"><a href="#__codelineno-2-137">137</a></span>
+<span class="normal"><a href="#__codelineno-2-138">138</a></span>
+<span class="normal"><a href="#__codelineno-2-139">139</a></span>
+<span class="normal"><a href="#__codelineno-2-140">140</a></span>
+<span class="normal"><a href="#__codelineno-2-141">141</a></span>
+<span class="normal"><a href="#__codelineno-2-142">142</a></span>
+<span class="normal"><a href="#__codelineno-2-143">143</a></span>
+<span class="normal"><a href="#__codelineno-2-144">144</a></span>
+<span class="normal"><a href="#__codelineno-2-145">145</a></span>
+<span class="normal"><a href="#__codelineno-2-146">146</a></span>
+<span class="normal"><a href="#__codelineno-2-147">147</a></span>
+<span class="normal"><a href="#__codelineno-2-148">148</a></span>
+<span class="normal"><a href="#__codelineno-2-149">149</a></span>
+<span class="normal"><a href="#__codelineno-2-150">150</a></span>
+<span class="normal"><a href="#__codelineno-2-151">151</a></span>
+<span class="normal"><a href="#__codelineno-2-152">152</a></span>
+<span class="normal"><a href="#__codelineno-2-153">153</a></span>
+<span class="normal"><a href="#__codelineno-2-154">154</a></span>
+<span class="normal"><a href="#__codelineno-2-155">155</a></span>
+<span class="normal"><a href="#__codelineno-2-156">156</a></span>
+<span class="normal"><a href="#__codelineno-2-157">157</a></span>
+<span class="normal"><a href="#__codelineno-2-158">158</a></span>
+<span class="normal"><a href="#__codelineno-2-159">159</a></span>
+<span class="normal"><a href="#__codelineno-2-160">160</a></span>
+<span class="normal"><a href="#__codelineno-2-161">161</a></span>
+<span class="normal"><a href="#__codelineno-2-162">162</a></span>
+<span class="normal"><a href="#__codelineno-2-163">163</a></span>
+<span class="normal"><a href="#__codelineno-2-164">164</a></span>
+<span class="normal"><a href="#__codelineno-2-165">165</a></span>
+<span class="normal"><a href="#__codelineno-2-166">166</a></span>
+<span class="normal"><a href="#__codelineno-2-167">167</a></span>
+<span class="normal"><a href="#__codelineno-2-168">168</a></span>
+<span class="normal"><a href="#__codelineno-2-169">169</a></span>
+<span class="normal"><a href="#__codelineno-2-170">170</a></span>
+<span class="normal"><a href="#__codelineno-2-171">171</a></span>
+<span class="normal"><a href="#__codelineno-2-172">172</a></span>
+<span class="normal"><a href="#__codelineno-2-173">173</a></span>
+<span class="normal"><a href="#__codelineno-2-174">174</a></span>
+<span class="normal"><a href="#__codelineno-2-175">175</a></span>
+<span class="normal"><a href="#__codelineno-2-176">176</a></span>
+<span class="normal"><a href="#__codelineno-2-177">177</a></span>
+<span class="normal"><a href="#__codelineno-2-178">178</a></span>
+<span class="normal"><a href="#__codelineno-2-179">179</a></span>
+<span class="normal"><a href="#__codelineno-2-180">180</a></span>
+<span class="normal"><a href="#__codelineno-2-181">181</a></span>
+<span class="normal"><a href="#__codelineno-2-182">182</a></span>
+<span class="normal"><a href="#__codelineno-2-183">183</a></span>
+<span class="normal"><a href="#__codelineno-2-184">184</a></span>
+<span class="normal"><a href="#__codelineno-2-185">185</a></span>
+<span class="normal"><a href="#__codelineno-2-186">186</a></span>
+<span class="normal"><a href="#__codelineno-2-187">187</a></span>
+<span class="normal"><a href="#__codelineno-2-188">188</a></span>
+<span class="normal"><a href="#__codelineno-2-189">189</a></span>
+<span class="normal"><a href="#__codelineno-2-190">190</a></span>
+<span class="normal"><a href="#__codelineno-2-191">191</a></span>
+<span class="normal"><a href="#__codelineno-2-192">192</a></span>
+<span class="normal"><a href="#__codelineno-2-193">193</a></span>
+<span class="normal"><a href="#__codelineno-2-194">194</a></span>
+<span class="normal"><a href="#__codelineno-2-195">195</a></span>
+<span class="normal"><a href="#__codelineno-2-196">196</a></span>
+<span class="normal"><a href="#__codelineno-2-197">197</a></span>
+<span class="normal"><a href="#__codelineno-2-198">198</a></span>
+<span class="normal"><a href="#__codelineno-2-199">199</a></span>
+<span class="normal"><a href="#__codelineno-2-200">200</a></span>
+<span class="normal"><a href="#__codelineno-2-201">201</a></span>
+<span class="normal"><a href="#__codelineno-2-202">202</a></span>
+<span class="normal"><a href="#__codelineno-2-203">203</a></span>
+<span class="normal"><a href="#__codelineno-2-204">204</a></span>
+<span class="normal"><a href="#__codelineno-2-205">205</a></span>
+<span class="normal"><a href="#__codelineno-2-206">206</a></span>
+<span class="normal"><a href="#__codelineno-2-207">207</a></span>
+<span class="normal"><a href="#__codelineno-2-208">208</a></span>
+<span class="normal"><a href="#__codelineno-2-209">209</a></span>
+<span class="normal"><a href="#__codelineno-2-210">210</a></span>
+<span class="normal"><a href="#__codelineno-2-211">211</a></span>
+<span class="normal"><a href="#__codelineno-2-212">212</a></span>
+<span class="normal"><a href="#__codelineno-2-213">213</a></span>
+<span class="normal"><a href="#__codelineno-2-214">214</a></span>
+<span class="normal"><a href="#__codelineno-2-215">215</a></span>
+<span class="normal"><a href="#__codelineno-2-216">216</a></span>
+<span class="normal"><a href="#__codelineno-2-217">217</a></span>
+<span class="normal"><a href="#__codelineno-2-218">218</a></span>
+<span class="normal"><a href="#__codelineno-2-219">219</a></span>
+<span class="normal"><a href="#__codelineno-2-220">220</a></span>
+<span class="normal"><a href="#__codelineno-2-221">221</a></span>
+<span class="normal"><a href="#__codelineno-2-222">222</a></span>
+<span class="normal"><a href="#__codelineno-2-223">223</a></span>
+<span class="normal"><a href="#__codelineno-2-224">224</a></span>
+<span class="normal"><a href="#__codelineno-2-225">225</a></span>
+<span class="normal"><a href="#__codelineno-2-226">226</a></span>
+<span class="normal"><a href="#__codelineno-2-227">227</a></span>
+<span class="normal"><a href="#__codelineno-2-228">228</a></span>
+<span class="normal"><a href="#__codelineno-2-229">229</a></span>
+<span class="normal"><a href="#__codelineno-2-230">230</a></span>
+<span class="normal"><a href="#__codelineno-2-231">231</a></span>
+<span class="normal"><a href="#__codelineno-2-232">232</a></span>
+<span class="normal"><a href="#__codelineno-2-233">233</a></span>
+<span class="normal"><a href="#__codelineno-2-234">234</a></span>
+<span class="normal"><a href="#__codelineno-2-235">235</a></span>
+<span class="normal"><a href="#__codelineno-2-236">236</a></span>
+<span class="normal"><a href="#__codelineno-2-237">237</a></span>
+<span class="normal"><a href="#__codelineno-2-238">238</a></span>
+<span class="normal"><a href="#__codelineno-2-239">239</a></span>
+<span class="normal"><a href="#__codelineno-2-240">240</a></span>
+<span class="normal"><a href="#__codelineno-2-241">241</a></span>
+<span class="normal"><a href="#__codelineno-2-242">242</a></span>
+<span class="normal"><a href="#__codelineno-2-243">243</a></span>
+<span class="normal"><a href="#__codelineno-2-244">244</a></span>
+<span class="normal"><a href="#__codelineno-2-245">245</a></span>
+<span class="normal"><a href="#__codelineno-2-246">246</a></span>
+<span class="normal"><a href="#__codelineno-2-247">247</a></span>
+<span class="normal"><a href="#__codelineno-2-248">248</a></span>
+<span class="normal"><a href="#__codelineno-2-249">249</a></span>
+<span class="normal"><a href="#__codelineno-2-250">250</a></span>
+<span class="normal"><a href="#__codelineno-2-251">251</a></span>
+<span class="normal"><a href="#__codelineno-2-252">252</a></span>
+<span class="normal"><a href="#__codelineno-2-253">253</a></span>
+<span class="normal"><a href="#__codelineno-2-254">254</a></span>
+<span class="normal"><a href="#__codelineno-2-255">255</a></span>
+<span class="normal"><a href="#__codelineno-2-256">256</a></span>
+<span class="normal"><a href="#__codelineno-2-257">257</a></span>
+<span class="normal"><a href="#__codelineno-2-258">258</a></span>
+<span class="normal"><a href="#__codelineno-2-259">259</a></span>
+<span class="normal"><a href="#__codelineno-2-260">260</a></span>
+<span class="normal"><a href="#__codelineno-2-261">261</a></span>
+<span class="normal"><a href="#__codelineno-2-262">262</a></span>
+<span class="normal"><a href="#__codelineno-2-263">263</a></span>
+<span class="normal"><a href="#__codelineno-2-264">264</a></span>
+<span class="normal"><a href="#__codelineno-2-265">265</a></span>
+<span class="normal"><a href="#__codelineno-2-266">266</a></span>
+<span class="normal"><a href="#__codelineno-2-267">267</a></span>
+<span class="normal"><a href="#__codelineno-2-268">268</a></span>
+<span class="normal"><a href="#__codelineno-2-269">269</a></span>
+<span class="normal"><a href="#__codelineno-2-270">270</a></span>
+<span class="normal"><a href="#__codelineno-2-271">271</a></span>
+<span class="normal"><a href="#__codelineno-2-272">272</a></span>
+<span class="normal"><a href="#__codelineno-2-273">273</a></span>
+<span class="normal"><a href="#__codelineno-2-274">274</a></span>
+<span class="normal"><a href="#__codelineno-2-275">275</a></span>
+<span class="normal"><a href="#__codelineno-2-276">276</a></span>
+<span class="normal"><a href="#__codelineno-2-277">277</a></span>
+<span class="normal"><a href="#__codelineno-2-278">278</a></span>
+<span class="normal"><a href="#__codelineno-2-279">279</a></span>
+<span class="normal"><a href="#__codelineno-2-280">280</a></span>
+<span class="normal"><a href="#__codelineno-2-281">281</a></span>
+<span class="normal"><a href="#__codelineno-2-282">282</a></span>
+<span class="normal"><a href="#__codelineno-2-283">283</a></span>
+<span class="normal"><a href="#__codelineno-2-284">284</a></span>
+<span class="normal"><a href="#__codelineno-2-285">285</a></span>
+<span class="normal"><a href="#__codelineno-2-286">286</a></span>
+<span class="normal"><a href="#__codelineno-2-287">287</a></span>
+<span class="normal"><a href="#__codelineno-2-288">288</a></span>
+<span class="normal"><a href="#__codelineno-2-289">289</a></span>
+<span class="normal"><a href="#__codelineno-2-290">290</a></span>
+<span class="normal"><a href="#__codelineno-2-291">291</a></span>
+<span class="normal"><a href="#__codelineno-2-292">292</a></span>
+<span class="normal"><a href="#__codelineno-2-293">293</a></span>
+<span class="normal"><a href="#__codelineno-2-294">294</a></span>
+<span class="normal"><a href="#__codelineno-2-295">295</a></span>
+<span class="normal"><a href="#__codelineno-2-296">296</a></span>
+<span class="normal"><a href="#__codelineno-2-297">297</a></span>
+<span class="normal"><a href="#__codelineno-2-298">298</a></span>
+<span class="normal"><a href="#__codelineno-2-299">299</a></span>
+<span class="normal"><a href="#__codelineno-2-300">300</a></span>
+<span class="normal"><a href="#__codelineno-2-301">301</a></span>
+<span class="normal"><a href="#__codelineno-2-302">302</a></span>
+<span class="normal"><a href="#__codelineno-2-303">303</a></span>
+<span class="normal"><a href="#__codelineno-2-304">304</a></span>
+<span class="normal"><a href="#__codelineno-2-305">305</a></span>
+<span class="normal"><a href="#__codelineno-2-306">306</a></span>
+<span class="normal"><a href="#__codelineno-2-307">307</a></span>
+<span class="normal"><a href="#__codelineno-2-308">308</a></span>
+<span class="normal"><a href="#__codelineno-2-309">309</a></span>
+<span class="normal"><a href="#__codelineno-2-310">310</a></span>
+<span class="normal"><a href="#__codelineno-2-311">311</a></span>
+<span class="normal"><a href="#__codelineno-2-312">312</a></span>
+<span class="normal"><a href="#__codelineno-2-313">313</a></span>
+<span class="normal"><a href="#__codelineno-2-314">314</a></span>
+<span class="normal"><a href="#__codelineno-2-315">315</a></span>
+<span class="normal"><a href="#__codelineno-2-316">316</a></span>
+<span class="normal"><a href="#__codelineno-2-317">317</a></span>
+<span class="normal"><a href="#__codelineno-2-318">318</a></span>
+<span class="normal"><a href="#__codelineno-2-319">319</a></span>
+<span class="normal"><a href="#__codelineno-2-320">320</a></span>
+<span class="normal"><a href="#__codelineno-2-321">321</a></span>
+<span class="normal"><a href="#__codelineno-2-322">322</a></span>
+<span class="normal"><a href="#__codelineno-2-323">323</a></span>
+<span class="normal"><a href="#__codelineno-2-324">324</a></span>
+<span class="normal"><a href="#__codelineno-2-325">325</a></span>
+<span class="normal"><a href="#__codelineno-2-326">326</a></span>
+<span class="normal"><a href="#__codelineno-2-327">327</a></span>
+<span class="normal"><a href="#__codelineno-2-328">328</a></span>
+<span class="normal"><a href="#__codelineno-2-329">329</a></span>
+<span class="normal"><a href="#__codelineno-2-330">330</a></span>
+<span class="normal"><a href="#__codelineno-2-331">331</a></span>
+<span class="normal"><a href="#__codelineno-2-332">332</a></span>
+<span class="normal"><a href="#__codelineno-2-333">333</a></span>
+<span class="normal"><a href="#__codelineno-2-334">334</a></span>
+<span class="normal"><a href="#__codelineno-2-335">335</a></span>
+<span class="normal"><a href="#__codelineno-2-336">336</a></span>
+<span class="normal"><a href="#__codelineno-2-337">337</a></span>
+<span class="normal"><a href="#__codelineno-2-338">338</a></span>
+<span class="normal"><a href="#__codelineno-2-339">339</a></span>
+<span class="normal"><a href="#__codelineno-2-340">340</a></span>
+<span class="normal"><a href="#__codelineno-2-341">341</a></span>
+<span class="normal"><a href="#__codelineno-2-342">342</a></span>
+<span class="normal"><a href="#__codelineno-2-343">343</a></span>
+<span class="normal"><a href="#__codelineno-2-344">344</a></span>
+<span class="normal"><a href="#__codelineno-2-345">345</a></span>
+<span class="normal"><a href="#__codelineno-2-346">346</a></span>
+<span class="normal"><a href="#__codelineno-2-347">347</a></span>
+<span class="normal"><a href="#__codelineno-2-348">348</a></span>
+<span class="normal"><a href="#__codelineno-2-349">349</a></span>
+<span class="normal"><a href="#__codelineno-2-350">350</a></span>
+<span class="normal"><a href="#__codelineno-2-351">351</a></span>
+<span class="normal"><a href="#__codelineno-2-352">352</a></span>
+<span class="normal"><a href="#__codelineno-2-353">353</a></span>
+<span class="normal"><a href="#__codelineno-2-354">354</a></span>
+<span class="normal"><a href="#__codelineno-2-355">355</a></span>
+<span class="normal"><a href="#__codelineno-2-356">356</a></span>
+<span class="normal"><a href="#__codelineno-2-357">357</a></span>
+<span class="normal"><a href="#__codelineno-2-358">358</a></span>
+<span class="normal"><a href="#__codelineno-2-359">359</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ezdxf.addons.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Frontend</span><span class="p">,</span> <span class="n">RenderContext</span><span class="p">,</span> <span class="n">pymupdf</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">svg</span><span class="p">,</span> <span class="n">config</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ezdxf.addons</span><span class="w"> </span><span class="kn">import</span> <span class="n">odafc</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">configparser</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="c1"># 通过修改win_exec_path的值为自定义安装路径</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="n">odafc</span><span class="o">.</span><span class="n">win_exec_path</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a>    <span class="sa">r</span><span class="s2">"C:</span><span class="se">\\</span><span class="s2">Program Files</span><span class="se">\\</span><span class="s2">ODA</span><span class="se">\\</span><span class="s2">ODAFileConverter 25.5.0</span><span class="se">\\</span><span class="s2">ODAFileConverter.exe"</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="p">)</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="c1"># 自定义config解析</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">myconf</span><span class="p">(</span><span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">):</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="w">        </span><span class="sd">"""</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="sd">        初始化ConfigParser类的实例。</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="sd">        通过调用父类configparser.ConfigParser的构造方法，初始化配置解析器实例。</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="sd">        该构造方法允许指定默认配置值，这些值将在读取配置文件之前提供基本的配置项。</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20"></a><span class="sd">        参数:</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="sd">        - defaults: 可选参数，字典类型，提供基本的配置项和值。如果未提供，将使用父类的默认设置。</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22"></a><span class="sd">        """</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23"></a>        <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24"></a>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">optionxform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optionstr</span><span class="p">):</span>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26"></a>        <span class="k">return</span> <span class="n">optionstr</span>
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27"></a>
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fp</span><span class="p">):</span>
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29"></a><span class="w">        </span><span class="sd">"""</span>
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30"></a><span class="sd">        将配置数据写入指定的文件指针。</span>
+</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31"></a><span class="sd">        参数:</span>
+</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32"></a><span class="sd">        - fp: 文件指针，用于写入配置数据。</span>
+</span><span id="__span-2-33"><a id="__codelineno-2-33" name="__codelineno-2-33"></a><span class="sd">        该方法首先检查是否有默认配置，默认配置是 configparser 模块的特殊部分。</span>
+</span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34"></a><span class="sd">        如果有默认配置，它将写入一个包含默认值的部分。</span>
+</span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35"></a><span class="sd">        然后，它遍历所有部分，为每个部分写入对应的键值对。</span>
+</span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36"></a><span class="sd">        """</span>
+</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37"></a>        <span class="c1"># 检查是否有默认配置，如果有，则写入默认配置部分</span>
+</span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span><span class="p">:</span>
+</span><span id="__span-2-39"><a id="__codelineno-2-39" name="__codelineno-2-39"></a>            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"[</span><span class="si">%s</span><span class="s2">]</span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="n">configparser</span><span class="o">.</span><span class="n">DEFAULTSECT</span><span class="p">)</span>
+</span><span id="__span-2-40"><a id="__codelineno-2-40" name="__codelineno-2-40"></a>        <span class="c1"># 遍历默认配置，写入每个键值对</span>
+</span><span id="__span-2-41"><a id="__codelineno-2-41" name="__codelineno-2-41"></a>        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-2-42"><a id="__codelineno-2-42" name="__codelineno-2-42"></a>            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+</span><span id="__span-2-43"><a id="__codelineno-2-43" name="__codelineno-2-43"></a>                <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\n\t</span><span class="s2">"</span><span class="p">)))</span>
+</span><span id="__span-2-44"><a id="__codelineno-2-44" name="__codelineno-2-44"></a>                <span class="c1"># fp.write("\n")</span>
+</span><span id="__span-2-45"><a id="__codelineno-2-45" name="__codelineno-2-45"></a>        <span class="c1"># 遍历所有部分，写入每个部分及其键值对</span>
+</span><span id="__span-2-46"><a id="__codelineno-2-46" name="__codelineno-2-46"></a>        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sections</span><span class="p">:</span>
+</span><span id="__span-2-47"><a id="__codelineno-2-47" name="__codelineno-2-47"></a>            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"[</span><span class="si">%s</span><span class="s2">]</span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="n">section</span><span class="p">)</span>
+</span><span id="__span-2-48"><a id="__codelineno-2-48" name="__codelineno-2-48"></a>            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sections</span><span class="p">[</span><span class="n">section</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-2-49"><a id="__codelineno-2-49" name="__codelineno-2-49"></a>                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"__name__"</span><span class="p">:</span>
+</span><span id="__span-2-50"><a id="__codelineno-2-50" name="__codelineno-2-50"></a>                    <span class="k">continue</span>
+</span><span id="__span-2-51"><a id="__codelineno-2-51" name="__codelineno-2-51"></a>                <span class="c1"># 添加一行key为空的代码</span>
+</span><span id="__span-2-52"><a id="__codelineno-2-52" name="__codelineno-2-52"></a>                <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_optcre</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">OPTCRE</span><span class="p">):</span>
+</span><span id="__span-2-53"><a id="__codelineno-2-53" name="__codelineno-2-53"></a>                    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+</span><span id="__span-2-54"><a id="__codelineno-2-54" name="__codelineno-2-54"></a>                        <span class="n">key</span> <span class="o">=</span> <span class="s2">"="</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\n\t</span><span class="s2">"</span><span class="p">)))</span>
+</span><span id="__span-2-55"><a id="__codelineno-2-55" name="__codelineno-2-55"></a>                        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+</span><span id="__span-2-56"><a id="__codelineno-2-56" name="__codelineno-2-56"></a>            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-57"><a id="__codelineno-2-57" name="__codelineno-2-57"></a>
+</span><span id="__span-2-58"><a id="__codelineno-2-58" name="__codelineno-2-58"></a>
+</span><span id="__span-2-59"><a id="__codelineno-2-59" name="__codelineno-2-59"></a><span class="c1"># 获取同一目录下的所有dwg文件的绝对路径</span>
+</span><span id="__span-2-60"><a id="__codelineno-2-60" name="__codelineno-2-60"></a><span class="k">def</span><span class="w"> </span><span class="nf">getFileName</span><span class="p">(</span><span class="n">filedir</span><span class="p">):</span>
+</span><span id="__span-2-61"><a id="__codelineno-2-61" name="__codelineno-2-61"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-2-62"><a id="__codelineno-2-62" name="__codelineno-2-62"></a><span class="sd">    获取指定目录下所有以"dwg"为后缀的文件的绝对路径列表。</span>
+</span><span id="__span-2-63"><a id="__codelineno-2-63" name="__codelineno-2-63"></a><span class="sd">    参数:</span>
+</span><span id="__span-2-64"><a id="__codelineno-2-64" name="__codelineno-2-64"></a><span class="sd">    filedir: str - 文件目录的路径。</span>
+</span><span id="__span-2-65"><a id="__codelineno-2-65" name="__codelineno-2-65"></a><span class="sd">    返回:</span>
+</span><span id="__span-2-66"><a id="__codelineno-2-66" name="__codelineno-2-66"></a><span class="sd">    List[str] - 包含所有符合条件的文件的绝对路径的列表，如果没有找到任何文件，则返回空列表。</span>
+</span><span id="__span-2-67"><a id="__codelineno-2-67" name="__codelineno-2-67"></a><span class="sd">    """</span>
+</span><span id="__span-2-68"><a id="__codelineno-2-68" name="__codelineno-2-68"></a>    <span class="c1"># 使用列表推导式和os.walk遍历指定目录及其子目录，查找所有以"dwg"结尾的文件</span>
+</span><span id="__span-2-69"><a id="__codelineno-2-69" name="__codelineno-2-69"></a>    <span class="c1"># os.path.join用于拼接文件的绝对路径</span>
+</span><span id="__span-2-70"><a id="__codelineno-2-70" name="__codelineno-2-70"></a>    <span class="n">file_list</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-2-71"><a id="__codelineno-2-71" name="__codelineno-2-71"></a>        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">filespath</span><span class="p">)</span>
+</span><span id="__span-2-72"><a id="__codelineno-2-72" name="__codelineno-2-72"></a>        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">filedir</span><span class="p">)</span>
+</span><span id="__span-2-73"><a id="__codelineno-2-73" name="__codelineno-2-73"></a>        <span class="k">for</span> <span class="n">filespath</span> <span class="ow">in</span> <span class="n">files</span>
+</span><span id="__span-2-74"><a id="__codelineno-2-74" name="__codelineno-2-74"></a>        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">filespath</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"dwg"</span><span class="p">)</span>
+</span><span id="__span-2-75"><a id="__codelineno-2-75" name="__codelineno-2-75"></a>    <span class="p">]</span>
+</span><span id="__span-2-76"><a id="__codelineno-2-76" name="__codelineno-2-76"></a>    <span class="c1"># 如果file_list不为空，则返回file_list，否则返回空列表</span>
+</span><span id="__span-2-77"><a id="__codelineno-2-77" name="__codelineno-2-77"></a>    <span class="k">return</span> <span class="n">file_list</span> <span class="k">if</span> <span class="n">file_list</span> <span class="k">else</span> <span class="p">[]</span>
+</span><span id="__span-2-78"><a id="__codelineno-2-78" name="__codelineno-2-78"></a>
+</span><span id="__span-2-79"><a id="__codelineno-2-79" name="__codelineno-2-79"></a>
+</span><span id="__span-2-80"><a id="__codelineno-2-80" name="__codelineno-2-80"></a><span class="c1"># 获取当前脚本目录</span>
+</span><span id="__span-2-81"><a id="__codelineno-2-81" name="__codelineno-2-81"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_current_file_path</span><span class="p">():</span>
+</span><span id="__span-2-82"><a id="__codelineno-2-82" name="__codelineno-2-82"></a>    <span class="c1"># 通过命令行参数获取当前脚本的绝对路径</span>
+</span><span id="__span-2-83"><a id="__codelineno-2-83" name="__codelineno-2-83"></a>    <span class="n">abs_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-2-84"><a id="__codelineno-2-84" name="__codelineno-2-84"></a>    <span class="c1"># 将路径中的斜杠替换为反斜杠，以适应Windows系统</span>
+</span><span id="__span-2-85"><a id="__codelineno-2-85" name="__codelineno-2-85"></a>    <span class="n">windows_path</span> <span class="o">=</span> <span class="n">abs_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"/"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-86"><a id="__codelineno-2-86" name="__codelineno-2-86"></a>    <span class="c1"># 去除路径中的脚本文件名，仅保留目录部分</span>
+</span><span id="__span-2-87"><a id="__codelineno-2-87" name="__codelineno-2-87"></a>    <span class="n">windows_path</span> <span class="o">=</span> <span class="n">windows_path</span><span class="p">[:</span> <span class="n">windows_path</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">)]</span>
+</span><span id="__span-2-88"><a id="__codelineno-2-88" name="__codelineno-2-88"></a>    <span class="c1"># 返回脚本所在的目录路径</span>
+</span><span id="__span-2-89"><a id="__codelineno-2-89" name="__codelineno-2-89"></a>    <span class="k">return</span> <span class="n">windows_path</span>
+</span><span id="__span-2-90"><a id="__codelineno-2-90" name="__codelineno-2-90"></a>
+</span><span id="__span-2-91"><a id="__codelineno-2-91" name="__codelineno-2-91"></a>
+</span><span id="__span-2-92"><a id="__codelineno-2-92" name="__codelineno-2-92"></a><span class="c1"># 用于将DXF格式的文件转换为指定格式的图像文件</span>
+</span><span id="__span-2-93"><a id="__codelineno-2-93" name="__codelineno-2-93"></a><span class="k">def</span><span class="w"> </span><span class="nf">convert_dxf_to_image</span><span class="p">(</span>
+</span><span id="__span-2-94"><a id="__codelineno-2-94" name="__codelineno-2-94"></a>    <span class="n">dxf_path</span><span class="p">,</span> <span class="n">output_file_name</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">backgroundtype</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">file_suffix</span><span class="o">=</span><span class="s2">"pdf"</span>
+</span><span id="__span-2-95"><a id="__codelineno-2-95" name="__codelineno-2-95"></a><span class="p">):</span>
+</span><span id="__span-2-96"><a id="__codelineno-2-96" name="__codelineno-2-96"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-2-97"><a id="__codelineno-2-97" name="__codelineno-2-97"></a>        <span class="n">doc</span> <span class="o">=</span> <span class="n">odafc</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="n">dxf_path</span><span class="p">)</span>
+</span><span id="__span-2-98"><a id="__codelineno-2-98" name="__codelineno-2-98"></a>    <span class="k">except</span> <span class="n">odafc</span><span class="o">.</span><span class="n">DXFStructureError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-2-99"><a id="__codelineno-2-99" name="__codelineno-2-99"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"DXF Structure Error in file </span><span class="si">{</span><span class="n">dxf_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-100"><a id="__codelineno-2-100" name="__codelineno-2-100"></a>        <span class="k">return</span>
+</span><span id="__span-2-101"><a id="__codelineno-2-101" name="__codelineno-2-101"></a>    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+</span><span id="__span-2-102"><a id="__codelineno-2-102" name="__codelineno-2-102"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"File not found: </span><span class="si">{</span><span class="n">dxf_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-103"><a id="__codelineno-2-103" name="__codelineno-2-103"></a>        <span class="k">return</span>
+</span><span id="__span-2-104"><a id="__codelineno-2-104" name="__codelineno-2-104"></a>    <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
+</span><span id="__span-2-105"><a id="__codelineno-2-105" name="__codelineno-2-105"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Permission denied for file: </span><span class="si">{</span><span class="n">dxf_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-106"><a id="__codelineno-2-106" name="__codelineno-2-106"></a>        <span class="k">return</span>
+</span><span id="__span-2-107"><a id="__codelineno-2-107" name="__codelineno-2-107"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-2-108"><a id="__codelineno-2-108" name="__codelineno-2-108"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error reading file </span><span class="si">{</span><span class="n">dxf_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-109"><a id="__codelineno-2-109" name="__codelineno-2-109"></a>        <span class="k">return</span>
+</span><span id="__span-2-110"><a id="__codelineno-2-110" name="__codelineno-2-110"></a>    <span class="n">msp</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">modelspace</span><span class="p">()</span>
+</span><span id="__span-2-111"><a id="__codelineno-2-111" name="__codelineno-2-111"></a>    <span class="c1"># 创建渲染上下文</span>
+</span><span id="__span-2-112"><a id="__codelineno-2-112" name="__codelineno-2-112"></a>    <span class="n">context</span> <span class="o">=</span> <span class="n">RenderContext</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</span><span id="__span-2-113"><a id="__codelineno-2-113" name="__codelineno-2-113"></a>    <span class="c1"># 创建后端</span>
+</span><span id="__span-2-114"><a id="__codelineno-2-114" name="__codelineno-2-114"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">pymupdf</span><span class="o">.</span><span class="n">PyMuPdfBackend</span><span class="p">()</span>
+</span><span id="__span-2-115"><a id="__codelineno-2-115" name="__codelineno-2-115"></a>    <span class="c1"># 创建前端</span>
+</span><span id="__span-2-116"><a id="__codelineno-2-116" name="__codelineno-2-116"></a>    <span class="c1"># 定义一个字典来映射 backgroundtype 到对应的 BackgroundPolicy</span>
+</span><span id="__span-2-117"><a id="__codelineno-2-117" name="__codelineno-2-117"></a>    <span class="n">policy_map</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-2-118"><a id="__codelineno-2-118" name="__codelineno-2-118"></a>        <span class="mi">0</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">,</span>
+</span><span id="__span-2-119"><a id="__codelineno-2-119" name="__codelineno-2-119"></a>        <span class="mi">1</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">BLACK</span><span class="p">,</span>
+</span><span id="__span-2-120"><a id="__codelineno-2-120" name="__codelineno-2-120"></a>        <span class="mi">2</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">WHITE</span><span class="p">,</span>
+</span><span id="__span-2-121"><a id="__codelineno-2-121" name="__codelineno-2-121"></a>        <span class="mi">3</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">CUSTOM</span><span class="p">,</span>
+</span><span id="__span-2-122"><a id="__codelineno-2-122" name="__codelineno-2-122"></a>        <span class="mi">4</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">PAPERSPACE</span><span class="p">,</span>
+</span><span id="__span-2-123"><a id="__codelineno-2-123" name="__codelineno-2-123"></a>        <span class="mi">5</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">MODELSPACE</span><span class="p">,</span>
+</span><span id="__span-2-124"><a id="__codelineno-2-124" name="__codelineno-2-124"></a>        <span class="mi">6</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">OFF</span><span class="p">,</span>
+</span><span id="__span-2-125"><a id="__codelineno-2-125" name="__codelineno-2-125"></a>    <span class="p">}</span>
+</span><span id="__span-2-126"><a id="__codelineno-2-126" name="__codelineno-2-126"></a>    <span class="c1"># 使用 try-except 来处理可能出现的 KeyError 异常</span>
+</span><span id="__span-2-127"><a id="__codelineno-2-127" name="__codelineno-2-127"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-2-128"><a id="__codelineno-2-128" name="__codelineno-2-128"></a>        <span class="n">background_policy</span> <span class="o">=</span> <span class="n">policy_map</span><span class="p">[</span><span class="n">backgroundtype</span><span class="p">]</span>
+</span><span id="__span-2-129"><a id="__codelineno-2-129" name="__codelineno-2-129"></a>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+</span><span id="__span-2-130"><a id="__codelineno-2-130" name="__codelineno-2-130"></a>        <span class="c1"># 如果 backgroundtype 不在预定义的映射中，则使用默认策略</span>
+</span><span id="__span-2-131"><a id="__codelineno-2-131" name="__codelineno-2-131"></a>        <span class="n">background_policy</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">DEFAULT</span>
+</span><span id="__span-2-132"><a id="__codelineno-2-132" name="__codelineno-2-132"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">"Warning: Invalid backgroundtype. Using default policy."</span><span class="p">)</span>
+</span><span id="__span-2-133"><a id="__codelineno-2-133" name="__codelineno-2-133"></a>
+</span><span id="__span-2-134"><a id="__codelineno-2-134" name="__codelineno-2-134"></a>    <span class="c1"># 创建 Configuration 对象</span>
+</span><span id="__span-2-135"><a id="__codelineno-2-135" name="__codelineno-2-135"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">Configuration</span><span class="p">(</span><span class="n">background_policy</span><span class="o">=</span><span class="n">background_policy</span><span class="p">)</span>
+</span><span id="__span-2-136"><a id="__codelineno-2-136" name="__codelineno-2-136"></a>    <span class="c1"># 初始化 Frontend 实例</span>
+</span><span id="__span-2-137"><a id="__codelineno-2-137" name="__codelineno-2-137"></a>    <span class="n">frontend</span> <span class="o">=</span> <span class="n">Frontend</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">cfg</span><span class="p">)</span>
+</span><span id="__span-2-138"><a id="__codelineno-2-138" name="__codelineno-2-138"></a>    <span class="c1"># 绘制模型空间</span>
+</span><span id="__span-2-139"><a id="__codelineno-2-139" name="__codelineno-2-139"></a>    <span class="n">frontend</span><span class="o">.</span><span class="n">draw_layout</span><span class="p">(</span><span class="n">msp</span><span class="p">)</span>
+</span><span id="__span-2-140"><a id="__codelineno-2-140" name="__codelineno-2-140"></a>    <span class="c1"># 创建A4页面布局</span>
+</span><span id="__span-2-141"><a id="__codelineno-2-141" name="__codelineno-2-141"></a>    <span class="n">page</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">Page</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">mm</span><span class="p">,</span> <span class="n">margins</span><span class="o">=</span><span class="n">layout</span><span class="o">.</span><span class="n">Margins</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+</span><span id="__span-2-142"><a id="__codelineno-2-142" name="__codelineno-2-142"></a>    <span class="c1"># 获取PDF或PNG渲染结果作为字节流</span>
+</span><span id="__span-2-143"><a id="__codelineno-2-143" name="__codelineno-2-143"></a>    <span class="k">if</span> <span class="n">file_suffix</span> <span class="o">==</span> <span class="s2">"pdf"</span><span class="p">:</span>
+</span><span id="__span-2-144"><a id="__codelineno-2-144" name="__codelineno-2-144"></a>        <span class="n">pdf_bytes</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">get_pdf_bytes</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+</span><span id="__span-2-145"><a id="__codelineno-2-145" name="__codelineno-2-145"></a>        <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-2-146"><a id="__codelineno-2-146" name="__codelineno-2-146"></a>            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file_name</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span><span id="__span-2-147"><a id="__codelineno-2-147" name="__codelineno-2-147"></a>                <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pdf_bytes</span><span class="p">)</span>
+</span><span id="__span-2-148"><a id="__codelineno-2-148" name="__codelineno-2-148"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-2-149"><a id="__codelineno-2-149" name="__codelineno-2-149"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error writing to file </span><span class="si">{</span><span class="n">output_file_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-150"><a id="__codelineno-2-150" name="__codelineno-2-150"></a>            <span class="k">return</span>
+</span><span id="__span-2-151"><a id="__codelineno-2-151" name="__codelineno-2-151"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-2-152"><a id="__codelineno-2-152" name="__codelineno-2-152"></a>        <span class="n">png_bytes</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">get_pixmap_bytes</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span>
+</span><span id="__span-2-153"><a id="__codelineno-2-153" name="__codelineno-2-153"></a>        <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-2-154"><a id="__codelineno-2-154" name="__codelineno-2-154"></a>            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file_name</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span><span id="__span-2-155"><a id="__codelineno-2-155" name="__codelineno-2-155"></a>                <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">png_bytes</span><span class="p">)</span>
+</span><span id="__span-2-156"><a id="__codelineno-2-156" name="__codelineno-2-156"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-2-157"><a id="__codelineno-2-157" name="__codelineno-2-157"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error writing to file </span><span class="si">{</span><span class="n">output_file_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-158"><a id="__codelineno-2-158" name="__codelineno-2-158"></a>            <span class="k">return</span>
+</span><span id="__span-2-159"><a id="__codelineno-2-159" name="__codelineno-2-159"></a>
+</span><span id="__span-2-160"><a id="__codelineno-2-160" name="__codelineno-2-160"></a>        <span class="k">if</span> <span class="n">file_suffix</span> <span class="o">==</span> <span class="s2">"bmp"</span><span class="p">:</span>
+</span><span id="__span-2-161"><a id="__codelineno-2-161" name="__codelineno-2-161"></a>            <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">output_file_name</span><span class="p">)</span>
+</span><span id="__span-2-162"><a id="__codelineno-2-162" name="__codelineno-2-162"></a>            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">"RGB"</span><span class="p">)</span>
+</span><span id="__span-2-163"><a id="__codelineno-2-163" name="__codelineno-2-163"></a>            <span class="n">bmp_out_file_name</span> <span class="o">=</span> <span class="n">output_file_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".png"</span><span class="p">,</span> <span class="s2">".bmp"</span><span class="p">)</span>
+</span><span id="__span-2-164"><a id="__codelineno-2-164" name="__codelineno-2-164"></a>            <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">bmp_out_file_name</span><span class="p">,</span> <span class="s2">"BMP"</span><span class="p">)</span>
+</span><span id="__span-2-165"><a id="__codelineno-2-165" name="__codelineno-2-165"></a>            <span class="n">output_file_name</span> <span class="o">=</span> <span class="n">bmp_out_file_name</span>
+</span><span id="__span-2-166"><a id="__codelineno-2-166" name="__codelineno-2-166"></a>
+</span><span id="__span-2-167"><a id="__codelineno-2-167" name="__codelineno-2-167"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">output_file_name</span> <span class="o">+</span> <span class="s2">"文件已经转换"</span><span class="p">)</span>
+</span><span id="__span-2-168"><a id="__codelineno-2-168" name="__codelineno-2-168"></a>
+</span><span id="__span-2-169"><a id="__codelineno-2-169" name="__codelineno-2-169"></a>
+</span><span id="__span-2-170"><a id="__codelineno-2-170" name="__codelineno-2-170"></a><span class="c1"># 用于将DXF格式的文件转换为SVG格式的文件</span>
+</span><span id="__span-2-171"><a id="__codelineno-2-171" name="__codelineno-2-171"></a><span class="k">def</span><span class="w"> </span><span class="nf">convert_dwg_to_svg</span><span class="p">(</span><span class="n">dxf_path</span><span class="p">,</span> <span class="n">svg_path</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
+</span><span id="__span-2-172"><a id="__codelineno-2-172" name="__codelineno-2-172"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-2-173"><a id="__codelineno-2-173" name="__codelineno-2-173"></a>        <span class="n">doc</span> <span class="o">=</span> <span class="n">odafc</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="n">dxf_path</span><span class="p">)</span>
+</span><span id="__span-2-174"><a id="__codelineno-2-174" name="__codelineno-2-174"></a>    <span class="k">except</span> <span class="n">odafc</span><span class="o">.</span><span class="n">DXFStructureError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-2-175"><a id="__codelineno-2-175" name="__codelineno-2-175"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"DXF Structure Error in file </span><span class="si">{</span><span class="n">dxf_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-176"><a id="__codelineno-2-176" name="__codelineno-2-176"></a>        <span class="k">return</span>
+</span><span id="__span-2-177"><a id="__codelineno-2-177" name="__codelineno-2-177"></a>    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+</span><span id="__span-2-178"><a id="__codelineno-2-178" name="__codelineno-2-178"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"File not found: </span><span class="si">{</span><span class="n">dxf_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-179"><a id="__codelineno-2-179" name="__codelineno-2-179"></a>        <span class="k">return</span>
+</span><span id="__span-2-180"><a id="__codelineno-2-180" name="__codelineno-2-180"></a>    <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
+</span><span id="__span-2-181"><a id="__codelineno-2-181" name="__codelineno-2-181"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Permission denied for file: </span><span class="si">{</span><span class="n">dxf_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-182"><a id="__codelineno-2-182" name="__codelineno-2-182"></a>        <span class="k">return</span>
+</span><span id="__span-2-183"><a id="__codelineno-2-183" name="__codelineno-2-183"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-2-184"><a id="__codelineno-2-184" name="__codelineno-2-184"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error reading file </span><span class="si">{</span><span class="n">dxf_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-185"><a id="__codelineno-2-185" name="__codelineno-2-185"></a>        <span class="k">return</span>
+</span><span id="__span-2-186"><a id="__codelineno-2-186" name="__codelineno-2-186"></a>    <span class="n">msp</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">modelspace</span><span class="p">()</span>
+</span><span id="__span-2-187"><a id="__codelineno-2-187" name="__codelineno-2-187"></a>    <span class="c1"># 1. create the render context</span>
+</span><span id="__span-2-188"><a id="__codelineno-2-188" name="__codelineno-2-188"></a>    <span class="n">context</span> <span class="o">=</span> <span class="n">RenderContext</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</span><span id="__span-2-189"><a id="__codelineno-2-189" name="__codelineno-2-189"></a>    <span class="c1"># 2. create the backend</span>
+</span><span id="__span-2-190"><a id="__codelineno-2-190" name="__codelineno-2-190"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">SVGBackend</span><span class="p">()</span>
+</span><span id="__span-2-191"><a id="__codelineno-2-191" name="__codelineno-2-191"></a>    <span class="c1"># 3. create the frontend</span>
+</span><span id="__span-2-192"><a id="__codelineno-2-192" name="__codelineno-2-192"></a>    <span class="c1"># 定义一个字典来映射 backgroundtype 到对应的 BackgroundPolicy</span>
+</span><span id="__span-2-193"><a id="__codelineno-2-193" name="__codelineno-2-193"></a>    <span class="n">policy_map</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-2-194"><a id="__codelineno-2-194" name="__codelineno-2-194"></a>        <span class="mi">0</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">,</span>
+</span><span id="__span-2-195"><a id="__codelineno-2-195" name="__codelineno-2-195"></a>        <span class="mi">1</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">BLACK</span><span class="p">,</span>
+</span><span id="__span-2-196"><a id="__codelineno-2-196" name="__codelineno-2-196"></a>        <span class="mi">2</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">WHITE</span><span class="p">,</span>
+</span><span id="__span-2-197"><a id="__codelineno-2-197" name="__codelineno-2-197"></a>        <span class="mi">3</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">CUSTOM</span><span class="p">,</span>
+</span><span id="__span-2-198"><a id="__codelineno-2-198" name="__codelineno-2-198"></a>        <span class="mi">4</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">PAPERSPACE</span><span class="p">,</span>
+</span><span id="__span-2-199"><a id="__codelineno-2-199" name="__codelineno-2-199"></a>        <span class="mi">5</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">MODELSPACE</span><span class="p">,</span>
+</span><span id="__span-2-200"><a id="__codelineno-2-200" name="__codelineno-2-200"></a>        <span class="mi">6</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">OFF</span><span class="p">,</span>
+</span><span id="__span-2-201"><a id="__codelineno-2-201" name="__codelineno-2-201"></a>    <span class="p">}</span>
+</span><span id="__span-2-202"><a id="__codelineno-2-202" name="__codelineno-2-202"></a>
+</span><span id="__span-2-203"><a id="__codelineno-2-203" name="__codelineno-2-203"></a>    <span class="c1"># 使用 try-except 来处理可能出现的 KeyError 异常</span>
+</span><span id="__span-2-204"><a id="__codelineno-2-204" name="__codelineno-2-204"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-2-205"><a id="__codelineno-2-205" name="__codelineno-2-205"></a>        <span class="n">background_policy</span> <span class="o">=</span> <span class="n">policy_map</span><span class="p">[</span><span class="n">backgroundtype</span><span class="p">]</span>
+</span><span id="__span-2-206"><a id="__codelineno-2-206" name="__codelineno-2-206"></a>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+</span><span id="__span-2-207"><a id="__codelineno-2-207" name="__codelineno-2-207"></a>        <span class="c1"># 如果 backgroundtype 不在预定义的映射中，则使用默认策略</span>
+</span><span id="__span-2-208"><a id="__codelineno-2-208" name="__codelineno-2-208"></a>        <span class="n">background_policy</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">DEFAULT</span>
+</span><span id="__span-2-209"><a id="__codelineno-2-209" name="__codelineno-2-209"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">"Warning: Invalid backgroundtype. Using default policy."</span><span class="p">)</span>
+</span><span id="__span-2-210"><a id="__codelineno-2-210" name="__codelineno-2-210"></a>
+</span><span id="__span-2-211"><a id="__codelineno-2-211" name="__codelineno-2-211"></a>    <span class="c1"># 创建 Configuration 对象</span>
+</span><span id="__span-2-212"><a id="__codelineno-2-212" name="__codelineno-2-212"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">Configuration</span><span class="p">(</span><span class="n">background_policy</span><span class="o">=</span><span class="n">background_policy</span><span class="p">)</span>
+</span><span id="__span-2-213"><a id="__codelineno-2-213" name="__codelineno-2-213"></a>
+</span><span id="__span-2-214"><a id="__codelineno-2-214" name="__codelineno-2-214"></a>    <span class="c1"># 初始化 Frontend 实例</span>
+</span><span id="__span-2-215"><a id="__codelineno-2-215" name="__codelineno-2-215"></a>    <span class="n">frontend</span> <span class="o">=</span> <span class="n">Frontend</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">cfg</span><span class="p">)</span>
+</span><span id="__span-2-216"><a id="__codelineno-2-216" name="__codelineno-2-216"></a>    <span class="c1"># 4. draw the modelspace</span>
+</span><span id="__span-2-217"><a id="__codelineno-2-217" name="__codelineno-2-217"></a>    <span class="n">frontend</span><span class="o">.</span><span class="n">draw_layout</span><span class="p">(</span><span class="n">msp</span><span class="p">)</span>
+</span><span id="__span-2-218"><a id="__codelineno-2-218" name="__codelineno-2-218"></a>    <span class="c1"># 5. create an A4 page layout, not required for all backends</span>
+</span><span id="__span-2-219"><a id="__codelineno-2-219" name="__codelineno-2-219"></a>    <span class="n">page</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">Page</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">mm</span><span class="p">,</span> <span class="n">margins</span><span class="o">=</span><span class="n">layout</span><span class="o">.</span><span class="n">Margins</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+</span><span id="__span-2-220"><a id="__codelineno-2-220" name="__codelineno-2-220"></a>    <span class="c1"># 6. get the SVG rendering as string - this step is backend dependent</span>
+</span><span id="__span-2-221"><a id="__codelineno-2-221" name="__codelineno-2-221"></a>    <span class="n">svg_string</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+</span><span id="__span-2-222"><a id="__codelineno-2-222" name="__codelineno-2-222"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">svg_path</span><span class="p">,</span> <span class="s2">"wt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span><span id="__span-2-223"><a id="__codelineno-2-223" name="__codelineno-2-223"></a>        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">svg_string</span><span class="p">)</span>
+</span><span id="__span-2-224"><a id="__codelineno-2-224" name="__codelineno-2-224"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">svg_path</span> <span class="o">+</span> <span class="s2">"文件已经转换"</span><span class="p">)</span>
+</span><span id="__span-2-225"><a id="__codelineno-2-225" name="__codelineno-2-225"></a>
+</span><span id="__span-2-226"><a id="__codelineno-2-226" name="__codelineno-2-226"></a>
+</span><span id="__span-2-227"><a id="__codelineno-2-227" name="__codelineno-2-227"></a><span class="k">def</span><span class="w"> </span><span class="nf">is_float_zero</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+</span><span id="__span-2-228"><a id="__codelineno-2-228" name="__codelineno-2-228"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-2-229"><a id="__codelineno-2-229" name="__codelineno-2-229"></a><span class="sd">    判断一个浮点数是否接近零。</span>
+</span><span id="__span-2-230"><a id="__codelineno-2-230" name="__codelineno-2-230"></a><span class="sd">    由于浮点数的精度问题，直接比较数值与零相等通常是不推荐的。通过指定一个极小的误差范围（epsilon），</span>
+</span><span id="__span-2-231"><a id="__codelineno-2-231" name="__codelineno-2-231"></a><span class="sd">    判断数值是否在这个误差范围内，从而确定该数值是否接近零。</span>
+</span><span id="__span-2-232"><a id="__codelineno-2-232" name="__codelineno-2-232"></a><span class="sd">    参数:</span>
+</span><span id="__span-2-233"><a id="__codelineno-2-233" name="__codelineno-2-233"></a><span class="sd">    num: 待判断的浮点数。</span>
+</span><span id="__span-2-234"><a id="__codelineno-2-234" name="__codelineno-2-234"></a><span class="sd">    epsilon: 可接受的误差范围，默认值为1e-6。</span>
+</span><span id="__span-2-235"><a id="__codelineno-2-235" name="__codelineno-2-235"></a><span class="sd">    返回值:</span>
+</span><span id="__span-2-236"><a id="__codelineno-2-236" name="__codelineno-2-236"></a><span class="sd">    如果 num 的绝对值小于 epsilon，返回 True，表示 num 接近零。</span>
+</span><span id="__span-2-237"><a id="__codelineno-2-237" name="__codelineno-2-237"></a><span class="sd">    否则，返回 False，表示 num 不接近零。</span>
+</span><span id="__span-2-238"><a id="__codelineno-2-238" name="__codelineno-2-238"></a><span class="sd">    """</span>
+</span><span id="__span-2-239"><a id="__codelineno-2-239" name="__codelineno-2-239"></a>    <span class="k">return</span> <span class="o">-</span><span class="n">epsilon</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="n">epsilon</span>
+</span><span id="__span-2-240"><a id="__codelineno-2-240" name="__codelineno-2-240"></a>
+</span><span id="__span-2-241"><a id="__codelineno-2-241" name="__codelineno-2-241"></a>
+</span><span id="__span-2-242"><a id="__codelineno-2-242" name="__codelineno-2-242"></a><span class="k">def</span><span class="w"> </span><span class="nf">read_config_file</span><span class="p">(</span><span class="n">inifile</span><span class="p">):</span>
+</span><span id="__span-2-243"><a id="__codelineno-2-243" name="__codelineno-2-243"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-2-244"><a id="__codelineno-2-244" name="__codelineno-2-244"></a><span class="sd">    读取配置文件并解析其中的设置。</span>
+</span><span id="__span-2-245"><a id="__codelineno-2-245" name="__codelineno-2-245"></a><span class="sd">    该函数尝试读取一个INI格式的配置文件，并从中获取特定的设置值，</span>
+</span><span id="__span-2-246"><a id="__codelineno-2-246" name="__codelineno-2-246"></a><span class="sd">    包括输入路径、宽度、高度和文件后缀。如果无法读取或解析配置文件，</span>
+</span><span id="__span-2-247"><a id="__codelineno-2-247" name="__codelineno-2-247"></a><span class="sd">    它将返回一组默认的空值。</span>
+</span><span id="__span-2-248"><a id="__codelineno-2-248" name="__codelineno-2-248"></a><span class="sd">    参数:</span>
+</span><span id="__span-2-249"><a id="__codelineno-2-249" name="__codelineno-2-249"></a><span class="sd">    inifile (str): 配置文件的路径。</span>
+</span><span id="__span-2-250"><a id="__codelineno-2-250" name="__codelineno-2-250"></a><span class="sd">    返回:</span>
+</span><span id="__span-2-251"><a id="__codelineno-2-251" name="__codelineno-2-251"></a><span class="sd">    tuple: 包含输入路径（str）、宽度（float）、高度（float）和文件后缀（str）的元组。</span>
+</span><span id="__span-2-252"><a id="__codelineno-2-252" name="__codelineno-2-252"></a><span class="sd">           如果发生错误，返回("", 0.0, 0.0, "")。</span>
+</span><span id="__span-2-253"><a id="__codelineno-2-253" name="__codelineno-2-253"></a><span class="sd">    """</span>
+</span><span id="__span-2-254"><a id="__codelineno-2-254" name="__codelineno-2-254"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-2-255"><a id="__codelineno-2-255" name="__codelineno-2-255"></a>        <span class="c1"># 尝试读取配置文件</span>
+</span><span id="__span-2-256"><a id="__codelineno-2-256" name="__codelineno-2-256"></a>        <span class="n">iniconfig</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">inifile</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+</span><span id="__span-2-257"><a id="__codelineno-2-257" name="__codelineno-2-257"></a>        <span class="c1"># 从配置文件的"settings"部分获取各个配置项的值</span>
+</span><span id="__span-2-258"><a id="__codelineno-2-258" name="__codelineno-2-258"></a>        <span class="n">inputpath</span> <span class="o">=</span> <span class="n">iniconfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"settings"</span><span class="p">,</span> <span class="s2">"path"</span><span class="p">)</span>
+</span><span id="__span-2-259"><a id="__codelineno-2-259" name="__codelineno-2-259"></a>        <span class="n">width</span> <span class="o">=</span> <span class="n">iniconfig</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s2">"settings"</span><span class="p">,</span> <span class="s2">"width"</span><span class="p">)</span>
+</span><span id="__span-2-260"><a id="__codelineno-2-260" name="__codelineno-2-260"></a>        <span class="n">height</span> <span class="o">=</span> <span class="n">iniconfig</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s2">"settings"</span><span class="p">,</span> <span class="s2">"height"</span><span class="p">)</span>
+</span><span id="__span-2-261"><a id="__codelineno-2-261" name="__codelineno-2-261"></a>        <span class="n">file_suffix</span> <span class="o">=</span> <span class="n">iniconfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"settings"</span><span class="p">,</span> <span class="s2">"file_suffix"</span><span class="p">)</span>
+</span><span id="__span-2-262"><a id="__codelineno-2-262" name="__codelineno-2-262"></a>        <span class="n">backgroundtype</span> <span class="o">=</span> <span class="n">iniconfig</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"settings"</span><span class="p">,</span> <span class="s2">"backgroundtype"</span><span class="p">)</span>
+</span><span id="__span-2-263"><a id="__codelineno-2-263" name="__codelineno-2-263"></a>        <span class="c1"># 返回解析的配置项值</span>
+</span><span id="__span-2-264"><a id="__codelineno-2-264" name="__codelineno-2-264"></a>        <span class="k">return</span> <span class="n">inputpath</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">file_suffix</span><span class="p">,</span> <span class="n">backgroundtype</span>
+</span><span id="__span-2-265"><a id="__codelineno-2-265" name="__codelineno-2-265"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-2-266"><a id="__codelineno-2-266" name="__codelineno-2-266"></a>        <span class="c1"># 如果发生异常，打印错误信息并返回一组默认的空值</span>
+</span><span id="__span-2-267"><a id="__codelineno-2-267" name="__codelineno-2-267"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"读取配置文件时发生错误: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-268"><a id="__codelineno-2-268" name="__codelineno-2-268"></a>        <span class="k">return</span> <span class="s2">""</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="mi">0</span>
+</span><span id="__span-2-269"><a id="__codelineno-2-269" name="__codelineno-2-269"></a>
+</span><span id="__span-2-270"><a id="__codelineno-2-270" name="__codelineno-2-270"></a>
+</span><span id="__span-2-271"><a id="__codelineno-2-271" name="__codelineno-2-271"></a><span class="k">def</span><span class="w"> </span><span class="nf">process_files</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">file_suffix</span><span class="p">,</span> <span class="n">backgroundtype</span><span class="p">,</span> <span class="n">filelist</span><span class="p">):</span>
+</span><span id="__span-2-272"><a id="__codelineno-2-272" name="__codelineno-2-272"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-2-273"><a id="__codelineno-2-273" name="__codelineno-2-273"></a><span class="sd">    根据提供的文件列表和参数，将指定的文件转换为指定格式的PDF或图片文件。</span>
+</span><span id="__span-2-274"><a id="__codelineno-2-274" name="__codelineno-2-274"></a><span class="sd">    参数:</span>
+</span><span id="__span-2-275"><a id="__codelineno-2-275" name="__codelineno-2-275"></a><span class="sd">    - width: 转换后文件的宽度，用于调整输出文件的尺寸。</span>
+</span><span id="__span-2-276"><a id="__codelineno-2-276" name="__codelineno-2-276"></a><span class="sd">    - height: 转换后文件的高度，用于调整输出文件的尺寸。</span>
+</span><span id="__span-2-277"><a id="__codelineno-2-277" name="__codelineno-2-277"></a><span class="sd">    - file_suffix: 输出文件的格式，如'pdf', 'png', 'svg'等。</span>
+</span><span id="__span-2-278"><a id="__codelineno-2-278" name="__codelineno-2-278"></a><span class="sd">    - filelist: 需要转换的文件列表，包含多个文件的路径。</span>
+</span><span id="__span-2-279"><a id="__codelineno-2-279" name="__codelineno-2-279"></a><span class="sd">    - backgroundtype: 背景颜色信息。</span>
+</span><span id="__span-2-280"><a id="__codelineno-2-280" name="__codelineno-2-280"></a><span class="sd">    返回值:</span>
+</span><span id="__span-2-281"><a id="__codelineno-2-281" name="__codelineno-2-281"></a><span class="sd">    无直接返回值，该函数的主要作用是转换文件并保存到指定路径。</span>
+</span><span id="__span-2-282"><a id="__codelineno-2-282" name="__codelineno-2-282"></a><span class="sd">    """</span>
+</span><span id="__span-2-283"><a id="__codelineno-2-283" name="__codelineno-2-283"></a>    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+</span><span id="__span-2-284"><a id="__codelineno-2-284" name="__codelineno-2-284"></a>        <span class="c1"># 打印当前处理的文件名</span>
+</span><span id="__span-2-285"><a id="__codelineno-2-285" name="__codelineno-2-285"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="__span-2-286"><a id="__codelineno-2-286" name="__codelineno-2-286"></a>        <span class="c1"># 获取文件名，不包含扩展名</span>
+</span><span id="__span-2-287"><a id="__codelineno-2-287" name="__codelineno-2-287"></a>        <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-2-288"><a id="__codelineno-2-288" name="__codelineno-2-288"></a>        <span class="c1"># 获取文件的目录路径</span>
+</span><span id="__span-2-289"><a id="__codelineno-2-289" name="__codelineno-2-289"></a>        <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="__span-2-290"><a id="__codelineno-2-290" name="__codelineno-2-290"></a>        <span class="c1"># 根据文件名和指定的文件格式构建输出文件的完整路径</span>
+</span><span id="__span-2-291"><a id="__codelineno-2-291" name="__codelineno-2-291"></a>        <span class="n">pdf_file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_suffix</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-292"><a id="__codelineno-2-292" name="__codelineno-2-292"></a>        <span class="c1"># 如果文件格式为bmp，则输出格式为png</span>
+</span><span id="__span-2-293"><a id="__codelineno-2-293" name="__codelineno-2-293"></a>        <span class="k">if</span> <span class="n">file_suffix</span> <span class="o">==</span> <span class="s2">"bmp"</span><span class="p">:</span>
+</span><span id="__span-2-294"><a id="__codelineno-2-294" name="__codelineno-2-294"></a>            <span class="n">pdf_file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.png"</span><span class="p">)</span>
+</span><span id="__span-2-295"><a id="__codelineno-2-295" name="__codelineno-2-295"></a>        <span class="c1"># 如果文件格式为svg，则调用特定的转换函数</span>
+</span><span id="__span-2-296"><a id="__codelineno-2-296" name="__codelineno-2-296"></a>        <span class="k">if</span> <span class="n">file_suffix</span> <span class="o">==</span> <span class="s2">"svg"</span><span class="p">:</span>
+</span><span id="__span-2-297"><a id="__codelineno-2-297" name="__codelineno-2-297"></a>            <span class="n">convert_dwg_to_svg</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">pdf_file_name</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+</span><span id="__span-2-298"><a id="__codelineno-2-298" name="__codelineno-2-298"></a>        <span class="c1"># 对于其他格式，假设为dwg，调用转换为pdf或其他图片格式的函数</span>
+</span><span id="__span-2-299"><a id="__codelineno-2-299" name="__codelineno-2-299"></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-2-300"><a id="__codelineno-2-300" name="__codelineno-2-300"></a>            <span class="n">convert_dxf_to_image</span><span class="p">(</span>
+</span><span id="__span-2-301"><a id="__codelineno-2-301" name="__codelineno-2-301"></a>                <span class="n">file</span><span class="p">,</span> <span class="n">pdf_file_name</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">backgroundtype</span><span class="p">,</span> <span class="n">file_suffix</span>
+</span><span id="__span-2-302"><a id="__codelineno-2-302" name="__codelineno-2-302"></a>            <span class="p">)</span>
+</span><span id="__span-2-303"><a id="__codelineno-2-303" name="__codelineno-2-303"></a>
+</span><span id="__span-2-304"><a id="__codelineno-2-304" name="__codelineno-2-304"></a><span class="k">def</span><span class="w"> </span><span class="nf">ensure_non_empty_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
+</span><span id="__span-2-305"><a id="__codelineno-2-305" name="__codelineno-2-305"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-2-306"><a id="__codelineno-2-306" name="__codelineno-2-306"></a><span class="sd">    Ensure the given value is non-empty. If the value is empty, return the default value.</span>
+</span><span id="__span-2-307"><a id="__codelineno-2-307" name="__codelineno-2-307"></a><span class="sd">    Parameters:</span>
+</span><span id="__span-2-308"><a id="__codelineno-2-308" name="__codelineno-2-308"></a><span class="sd">    - value: The value to check and return if it is non-empty.</span>
+</span><span id="__span-2-309"><a id="__codelineno-2-309" name="__codelineno-2-309"></a><span class="sd">    - default: The default value to return if the given value is empty.</span>
+</span><span id="__span-2-310"><a id="__codelineno-2-310" name="__codelineno-2-310"></a><span class="sd">    Returns:</span>
+</span><span id="__span-2-311"><a id="__codelineno-2-311" name="__codelineno-2-311"></a><span class="sd">    - The given value if it is non-empty; otherwise, the default value.</span>
+</span><span id="__span-2-312"><a id="__codelineno-2-312" name="__codelineno-2-312"></a><span class="sd">    """</span>
+</span><span id="__span-2-313"><a id="__codelineno-2-313" name="__codelineno-2-313"></a>    <span class="c1"># Return the given value if it is non-empty, otherwise return the default value</span>
+</span><span id="__span-2-314"><a id="__codelineno-2-314" name="__codelineno-2-314"></a>    <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">default</span>
+</span><span id="__span-2-315"><a id="__codelineno-2-315" name="__codelineno-2-315"></a>
+</span><span id="__span-2-316"><a id="__codelineno-2-316" name="__codelineno-2-316"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+</span><span id="__span-2-317"><a id="__codelineno-2-317" name="__codelineno-2-317"></a>    <span class="n">currentPath</span> <span class="o">=</span> <span class="n">get_current_file_path</span><span class="p">()</span>
+</span><span id="__span-2-318"><a id="__codelineno-2-318" name="__codelineno-2-318"></a>    <span class="n">inifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">currentPath</span><span class="p">,</span> <span class="s2">"dwg2svg.ini"</span><span class="p">)</span>
+</span><span id="__span-2-319"><a id="__codelineno-2-319" name="__codelineno-2-319"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"开始转换,ini文件为</span><span class="si">{</span><span class="n">inifile</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-320"><a id="__codelineno-2-320" name="__codelineno-2-320"></a>    <span class="nb">print</span><span class="p">(</span>
+</span><span id="__span-2-321"><a id="__codelineno-2-321" name="__codelineno-2-321"></a><span class="w">        </span><span class="sd">"""配置文件格式为</span>
+</span><span id="__span-2-322"><a id="__codelineno-2-322" name="__codelineno-2-322"></a><span class="sd">            {</span>
+</span><span id="__span-2-323"><a id="__codelineno-2-323" name="__codelineno-2-323"></a><span class="sd">                \033[34m[settings]</span>
+</span><span id="__span-2-324"><a id="__codelineno-2-324" name="__codelineno-2-324"></a><span class="sd">                path=</span>
+</span><span id="__span-2-325"><a id="__codelineno-2-325" name="__codelineno-2-325"></a><span class="sd">                width=64</span>
+</span><span id="__span-2-326"><a id="__codelineno-2-326" name="__codelineno-2-326"></a><span class="sd">                height=64</span>
+</span><span id="__span-2-327"><a id="__codelineno-2-327" name="__codelineno-2-327"></a><span class="sd">                file_suffix=svg</span>
+</span><span id="__span-2-328"><a id="__codelineno-2-328" name="__codelineno-2-328"></a><span class="sd">                backgroundtype=0\033[0m</span>
+</span><span id="__span-2-329"><a id="__codelineno-2-329" name="__codelineno-2-329"></a><span class="sd">            }</span>
+</span><span id="__span-2-330"><a id="__codelineno-2-330" name="__codelineno-2-330"></a><span class="sd">            \033[32mfile_suffix\033[0m为pdf、bmp、png、svg</span>
+</span><span id="__span-2-331"><a id="__codelineno-2-331" name="__codelineno-2-331"></a><span class="sd">            \033[32mbackgroundtype\033[0m默认为0</span>
+</span><span id="__span-2-332"><a id="__codelineno-2-332" name="__codelineno-2-332"></a><span class="sd">            \033[34m{</span>
+</span><span id="__span-2-333"><a id="__codelineno-2-333" name="__codelineno-2-333"></a><span class="sd">                0: config.BackgroundPolicy.DEFAULT,</span>
+</span><span id="__span-2-334"><a id="__codelineno-2-334" name="__codelineno-2-334"></a><span class="sd">                1: config.BackgroundPolicy.BLACK,</span>
+</span><span id="__span-2-335"><a id="__codelineno-2-335" name="__codelineno-2-335"></a><span class="sd">                2: config.BackgroundPolicy.WHITE,</span>
+</span><span id="__span-2-336"><a id="__codelineno-2-336" name="__codelineno-2-336"></a><span class="sd">                3: config.BackgroundPolicy.CUSTOM,</span>
+</span><span id="__span-2-337"><a id="__codelineno-2-337" name="__codelineno-2-337"></a><span class="sd">                4: config.BackgroundPolicy.PAPERSPACE,</span>
+</span><span id="__span-2-338"><a id="__codelineno-2-338" name="__codelineno-2-338"></a><span class="sd">                5: config.BackgroundPolicy.MODELSPACE,</span>
+</span><span id="__span-2-339"><a id="__codelineno-2-339" name="__codelineno-2-339"></a><span class="sd">                6: config.BackgroundPolicy.OFF,</span>
+</span><span id="__span-2-340"><a id="__codelineno-2-340" name="__codelineno-2-340"></a><span class="sd">            }\033[0m</span>
+</span><span id="__span-2-341"><a id="__codelineno-2-341" name="__codelineno-2-341"></a><span class="sd">        """</span>
+</span><span id="__span-2-342"><a id="__codelineno-2-342" name="__codelineno-2-342"></a>    <span class="p">)</span>
+</span><span id="__span-2-343"><a id="__codelineno-2-343" name="__codelineno-2-343"></a>    <span class="n">iniconfig</span> <span class="o">=</span> <span class="n">myconf</span><span class="p">()</span>
+</span><span id="__span-2-344"><a id="__codelineno-2-344" name="__codelineno-2-344"></a>    <span class="n">inputpath</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">file_suffix</span><span class="p">,</span> <span class="n">backgroundtype</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="mi">0</span>
+</span><span id="__span-2-345"><a id="__codelineno-2-345" name="__codelineno-2-345"></a>    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">inifile</span><span class="p">):</span>
+</span><span id="__span-2-346"><a id="__codelineno-2-346" name="__codelineno-2-346"></a>        <span class="n">inputpath</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">file_suffix</span><span class="p">,</span> <span class="n">backgroundtype</span> <span class="o">=</span> <span class="n">read_config_file</span><span class="p">(</span>
+</span><span id="__span-2-347"><a id="__codelineno-2-347" name="__codelineno-2-347"></a>            <span class="n">inifile</span>
+</span><span id="__span-2-348"><a id="__codelineno-2-348" name="__codelineno-2-348"></a>        <span class="p">)</span>
+</span><span id="__span-2-349"><a id="__codelineno-2-349" name="__codelineno-2-349"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-2-350"><a id="__codelineno-2-350" name="__codelineno-2-350"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">inifile</span><span class="si">}</span><span class="s2"> 配置文件不存在，请检查配置文件路径是否正确"</span><span class="p">)</span>
+</span><span id="__span-2-351"><a id="__codelineno-2-351" name="__codelineno-2-351"></a>    <span class="n">inputpath</span> <span class="o">=</span> <span class="n">ensure_non_empty_value</span><span class="p">(</span><span class="n">inputpath</span><span class="p">,</span> <span class="n">currentPath</span><span class="p">)</span>
+</span><span id="__span-2-352"><a id="__codelineno-2-352" name="__codelineno-2-352"></a>    <span class="n">width</span> <span class="o">=</span> <span class="n">ensure_non_empty_value</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+</span><span id="__span-2-353"><a id="__codelineno-2-353" name="__codelineno-2-353"></a>    <span class="n">height</span> <span class="o">=</span> <span class="n">ensure_non_empty_value</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+</span><span id="__span-2-354"><a id="__codelineno-2-354" name="__codelineno-2-354"></a>    <span class="n">file_suffix</span> <span class="o">=</span> <span class="n">ensure_non_empty_value</span><span class="p">(</span><span class="n">file_suffix</span><span class="p">,</span> <span class="s2">"pdf"</span><span class="p">)</span>
+</span><span id="__span-2-355"><a id="__codelineno-2-355" name="__codelineno-2-355"></a>    <span class="n">backgroundtype</span> <span class="o">=</span> <span class="n">ensure_non_empty_value</span><span class="p">(</span><span class="n">backgroundtype</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-2-356"><a id="__codelineno-2-356" name="__codelineno-2-356"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"dwg文件夹为:</span><span class="si">{</span><span class="n">inputpath</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-2-357"><a id="__codelineno-2-357" name="__codelineno-2-357"></a>    <span class="n">filelist</span> <span class="o">=</span> <span class="n">getFileName</span><span class="p">(</span><span class="n">inputpath</span><span class="p">)</span>
+</span><span id="__span-2-358"><a id="__codelineno-2-358" name="__codelineno-2-358"></a>    <span class="n">process_files</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">file_suffix</span><span class="p">,</span> <span class="n">backgroundtype</span><span class="p">,</span> <span class="n">filelist</span><span class="p">)</span>
+</span><span id="__span-2-359"><a id="__codelineno-2-359" name="__codelineno-2-359"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"结束转换"</span><span class="p">)</span>
+</span></code></pre></div></td></tr></tbody></table></div> <p><mark>dwg2svg.ini</mark></p> <div class="language-ini highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">INI</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span>
+<span class="normal"><a href="#__codelineno-3-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">[settings]</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="na">path</span><span class="o">=</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="na">width</span><span class="o">=</span><span class="s">64</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="na">height</span><span class="o">=</span><span class="s">64</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="na">file_suffix</span><span class="o">=</span><span class="s">svg</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="na">backgroundtype</span><span class="o">=</span><span class="s">0</span>
+</span></code></pre></div></td></tr></tbody></table></div> <h2 id="_3">其它设置<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2> <p>如果要改成白底</p> <div class="language-python highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">Python</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span>
+<span class="normal"><a href="#__codelineno-4-12">12</a></span>
+<span class="normal"><a href="#__codelineno-4-13">13</a></span>
+<span class="normal"><a href="#__codelineno-4-14">14</a></span>
+<span class="normal"><a href="#__codelineno-4-15">15</a></span>
+<span class="normal"><a href="#__codelineno-4-16">16</a></span>
+<span class="normal"><a href="#__codelineno-4-17">17</a></span>
+<span class="normal"><a href="#__codelineno-4-18">18</a></span>
+<span class="normal"><a href="#__codelineno-4-19">19</a></span>
+<span class="normal"><a href="#__codelineno-4-20">20</a></span>
+<span class="normal"><a href="#__codelineno-4-21">21</a></span>
+<span class="normal"><a href="#__codelineno-4-22">22</a></span>
+<span class="normal"><a href="#__codelineno-4-23">23</a></span>
+<span class="normal"><a href="#__codelineno-4-24">24</a></span>
+<span class="normal"><a href="#__codelineno-4-25">25</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1"># 3. create the frontend</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="c1"># 定义一个字典来映射 backgroundtype 到对应的 BackgroundPolicy</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="n">policy_map</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a>    <span class="mi">0</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">,</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a>    <span class="mi">1</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">BLACK</span><span class="p">,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a>    <span class="mi">2</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">WHITE</span><span class="p">,</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a>    <span class="mi">3</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">CUSTOM</span><span class="p">,</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a>    <span class="mi">4</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">PAPERSPACE</span><span class="p">,</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9"></a>    <span class="mi">5</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">MODELSPACE</span><span class="p">,</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10"></a>    <span class="mi">6</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">OFF</span><span class="p">,</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">}</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12"></a>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="c1"># 使用 try-except 来处理可能出现的 KeyError 异常</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="k">try</span><span class="p">:</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15"></a>    <span class="n">background_policy</span> <span class="o">=</span> <span class="n">policy_map</span><span class="p">[</span><span class="n">backgroundtype</span><span class="p">]</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17"></a>    <span class="c1"># 如果 backgroundtype 不在预定义的映射中，则使用默认策略</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18"></a>    <span class="n">background_policy</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">BackgroundPolicy</span><span class="o">.</span><span class="n">DEFAULT</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Warning: Invalid backgroundtype. Using default policy."</span><span class="p">)</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20"></a>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21"></a>    <span class="c1"># 创建 Configuration 对象</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">Configuration</span><span class="p">(</span><span class="n">background_policy</span><span class="o">=</span><span class="n">background_policy</span><span class="p">)</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23"></a>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24"></a>    <span class="c1"># 初始化 Frontend 实例</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25"></a>    <span class="n">frontend</span> <span class="o">=</span> <span class="n">Frontend</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">cfg</span><span class="p">)</span>
+</span></code></pre></div></td></tr></tbody></table></div> <form class="md-feedback" name="feedback" hidden> <fieldset> <legend class="md-feedback__title"> 这个页面对您有帮助吗？ </legend> <div class="md-feedback__inner"> <div class="md-feedback__list"> <button class="md-feedback__icon md-icon" type="submit" title="有帮助" data-md-value="1"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m7 0c0 .8-.7 1.5-1.5 1.5S14 10.3 14 9.5 14.7 8 15.5 8s1.5.7 1.5 1.5m-5 7.73c-1.75 0-3.29-.73-4.19-1.81L9.23 14c.45.72 1.52 1.23 2.77 1.23s2.32-.51 2.77-1.23l1.42 1.42c-.9 1.08-2.44 1.81-4.19 1.81"></path></svg> </button> <button class="md-feedback__icon md-icon" type="submit" title="可以改进" data-md-value="0"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10m-6.5-4c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m2 4.5c1.75 0 3.29.72 4.19 1.81l-1.42 1.42C14.32 16.5 13.25 16 12 16s-2.32.5-2.77 1.23l-1.42-1.42C8.71 14.72 10.25 14 12 14"></path></svg> </button> </div> <div class="md-feedback__note"> <div data-md-value="1" hidden> 感谢您的反馈！ </div> <div data-md-value="0" hidden> 感谢您的反馈！请帮助我们改进这个页面， <a href="https://github.com/mazaiguo/mazaiguo.github.io/issues/new/?title=[Feedback]+DWG%E8%BD%ACSVG+-+/blog/2024/05/22/dwg%E8%BD%ACsvg.html" target="_blank" rel="noopener">告诉我们需要改进的地方</a>。 </div> </div> </div> </fieldset> </form> </article> </div> <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script> <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script> </div> <button type="button" class="md-top md-icon" data-md-component="top" hidden> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg> 回到页面顶部 </button> </main> <footer class="md-footer"> <nav class="md-footer__inner md-grid" aria-label="页脚"> <a href="../18/pdf%E6%89%93%E5%8D%B0%E4%BD%BF%E7%94%A8monochromectb%E4%B8%8D%E8%B5%B7%E4%BD%9C%E7%94%A8.html" class="md-footer__link md-footer__link--prev" aria-label="上一页: PDF打印使用Monochrome.ctb不起作用"> <div class="md-footer__button md-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg> </div> <div class="md-footer__title"> <span class="md-footer__direction"> 上一页 </span> <div class="md-ellipsis"> PDF打印使用Monochrome.ctb不起作用 </div> </div> </a> <a href="../30/rapidjson%E4%BB%A3%E7%A0%81%E5%B0%81%E8%A3%85.html" class="md-footer__link md-footer__link--next" aria-label="下一页: Rapidjson代码封装"> <div class="md-footer__title"> <span class="md-footer__direction"> 下一页 </span> <div class="md-ellipsis"> Rapidjson代码封装 </div> </div> <div class="md-footer__button md-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg> </div> </a> </nav> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class="md-copyright"> <div class="md-copyright__highlight"> Copyright © 2016 - present JerryMa </div> </div> <div class="md-social"> <a href="https://github.com/mazaiguo" target="_blank" rel="noopener" title="JerryMa on Github" class="md-social__link"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg> </a> <a href="https://gitlab.zwsoft.cn/mazaiguo" target="_blank" rel="noopener" title="gitlab.zwsoft.cn" class="md-social__link"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m504 204.6-.7-1.8L433.6 21c-1.4-3.6-3.9-6.6-7.2-8.6-2.4-1.6-5.1-2.5-8-2.8s-5.7.1-8.4 1.1-5.1 2.7-7.1 4.8c-1.9 2.1-3.3 4.7-4.1 7.4l-47 144H161.3l-47.1-144c-.8-2.8-2.2-5.3-4.1-7.4-2-2.1-4.4-3.7-7.1-4.8-2.6-1-5.5-1.4-8.4-1.1s-5.6 1.2-8 2.8c-3.2 2-5.8 5.1-7.2 8.6L9.8 202.8l-.8 1.8c-10 26.2-11.3 55-3.5 82 7.7 26.9 24 50.7 46.4 67.6l.3.2.6.4 106 79.5c38.5 29.1 66.7 50.3 84.6 63.9 3.7 1.9 8.3 4.3 13 4.3s9.3-2.4 13-4.3c17.9-13.5 46.1-34.9 84.6-63.9l106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82"></path></svg> </a> <a href="mailto:mazaiguo@126.com" target="_blank" rel="noopener" title="Email" class="md-social__link"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M61.4 64C27.5 64 0 91.5 0 125.4c0 .9 0 1.7.1 2.6H0v256c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V128h-.1c0-.9.1-1.7.1-2.6 0-33.9-27.5-61.4-61.4-61.4zM464 192.3V384c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192.3l154.8 117.4c31.4 23.9 74.9 23.9 106.4 0zM48 125.4c0-7.4 6-13.4 13.4-13.4h389.2c7.4 0 13.4 6 13.4 13.4 0 4.2-2 8.2-5.3 10.7L280.2 271.5c-14.3 10.8-34.1 10.8-48.4 0L53.3 136.1c-3.3-2.5-5.3-6.5-5.3-10.7"></path></svg> </a> </div> </div> </div> </footer> </div> <div class="md-dialog" data-md-component="dialog"> <div class="md-dialog__inner md-typeset"></div> </div> <div class="md-progress" data-md-component="progress" role="progressbar"></div> <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["announce.dismiss", "content.tabs.link", "content.tooltips", "content.code.copy", "content.code.select", "content.code.annotate", "content.footnote.tooltips", "header.autohide", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.prune", "navigation.sections", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": {".NET": "dotnet", "AutoCAD": "autocad", "C#": "csharp", "C++": "cpp", "CSS": "css", "HTML5": "html", "JavaScript": "js", "Python": "python"}, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script> <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script> <script src="../../../../javascripts/katex.js"></script> <script src="../../../../javascripts/apple-code-style.js"></script> <script src="../../../../javascripts/code-block-toggle.js"></script> <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script> <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
