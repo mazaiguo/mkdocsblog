@@ -37,6 +37,13 @@ authors:
 - **通信**: WebView2 postMessage
 - **编码**: Vue/TS 使用 UTF-8；C++ 使用 GB2312（兼容 CAD 编译器）
 
+## 文件编码（强制）
+
+- 严禁将任何源文件转换为 UTF-8、UTF-16 或其他编码。
+- 读取、修改、写回文件时，必须保持文件原始编码格式不变。
+- 若需向 Big5 文件插入含繁体中文的内容，必须使用 Python 脚本以 Big5 字节方式写入，而不能通过文本工具直接写入（防止工具自动将内容转为 UTF-8）。
+- 使用 StrReplace/Write 工具时，仅允许操作 ASCII 内容；凡含非 ASCII 字符（如中文字符串）的修改，必须改用 Python 脚本以二进制模式（`rb`/`wb`）处理文件。
+
 ---
 
 ## Industrial UI Pro 设计规范
@@ -157,7 +164,7 @@ authors:
 .split-container { display: flex; height: 100%; overflow: hidden; }
 .sidebar { display: flex; flex-direction: column; border-right: 1px solid var(--cad-border); background: #f9fafc; transition: width 0.2s; min-width: 120px; }
 .sidebar-header { padding: 6px 8px; background: var(--cad-bg-header); font-weight: bold; border-bottom: 1px solid var(--cad-border); font-size: 12px; }
-.splitter-handle { width: 8px; background: #f0f0f0; border-right: 1px solid var(--cad-border); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.splitter-handle { width: 8px; background: #f0f0f0; border-right: 1px solid var(--cad-border); cursor: col-resize; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .splitter-handle:hover { background: #e0e0e0; }
 .main-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; background: #fff; }
 .content-header { padding: 6px 8px; border-bottom: 1px solid var(--cad-border); background: var(--cad-bg-footer); flex-shrink: 0; }
@@ -290,6 +297,7 @@ onUnmounted(() => { window.removeEventListener('resize', updateLayout) })
 | YAML | `yaml-cpp` | C++ YAML 解析标准选择，MIT 协议 |
 | INI | `inih` (benhoyt/inih) | 极简 C 库，单文件，直接嵌入项目 |
 | CSV | `csv-parser` (vincentlaucsb) | Header-only，流式解析，高性能 |
+| Excel | `libxl` 或 `OpenXLSX` | 读写 xls/xlsx |
 | 日志 | `spdlog` | Header-only，高性能异步日志 |
 | HTTP | `cpp-httplib` | Header-only，适合简单 REST 调用 |
 
@@ -303,7 +311,7 @@ onUnmounted(() => { window.removeEventListener('resize', updateLayout) })
 
 | 用途 | 推荐库 (NuGet) | 说明 |
 |------|----------------|------|
-| JSON | `System.Text.Json` 或 `Newtonsoft.Json` | 内置优先，复杂场景用 Newtonsoft |
+| JSON | `Newtonsoft.Json` 或 `System.Text.Json` | 优先 Newtonsoft，简单场景可用内置 |
 | XML | `System.Xml.Linq` (XDocument) | .NET 内置，LINQ to XML |
 | YAML | `YamlDotNet` | C# YAML 解析标准选择 |
 | INI | `ini-parser` (rickyah) | 轻量 INI 读写 |
@@ -312,6 +320,10 @@ onUnmounted(() => { window.removeEventListener('resize', updateLayout) })
 | 日志 | `Serilog` | 结构化日志，支持多种 Sink |
 | 音频 | `NAudio` | 音频录制/播放，适合语音批注场景 |
 | SQLite | `Microsoft.Data.Sqlite` | 轻量数据库，适合全局变量存储 |
+| HTTP | `HttpClient`（推荐）或 `RestSharp` | async/await 友好 |
+| DI | `Microsoft.Extensions.DependencyInjection` | 依赖注入容器 |
+
+- **异步**: 优先使用 async/await，避免 `.Result` 和 `.Wait()` 死锁
 
 ---
 
@@ -352,6 +364,62 @@ const emit = defineEmits<Emits>()
 .component-name :deep(.el-input__wrapper:hover) { border-color: #409eff !important; background-color: #f5f9ff; }
 .component-name :deep(.el-table__body tr:hover > td) { background-color: #d9ecff !important; cursor: pointer; }
 </style>
+```
+
+---
+
+## CAD WebView2 离线部署规范
+
+### 构建要求
+
+- 使用 Vite 构建，输出单文件 HTML 内联所有资源
+- 禁止引用任何外部 CDN 资源（字体、脚本、样式表等）
+- 所有图标使用 Element Plus 内置图标或 SVG 内联
+- 不使用 Google Fonts 等远程字体，使用系统字体栈
+
+### Vite 单文件构建配置
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { viteSingleFile } from 'vite-plugin-singlefile'
+
+export default defineConfig({
+  plugins: [vue(), viteSingleFile()],
+  build: {
+    target: 'esnext',
+    cssCodeSplit: false,
+    assetsInlineLimit: 100000000,
+  }
+})
+```
+
+### 离线检查清单
+
+- [ ] 无任何外部 CDN 引用（link/script/font-face）
+- [ ] 所有图片资源使用 Base64 内联或 SVG
+- [ ] `npm run build` 后 dist/ 目录只有一个 index.html
+- [ ] 双击打开 index.html 功能正常（无需 HTTP 服务器）
+- [ ] WebView2 加载本地文件路径可正常运行
+
+### package.json 必要依赖
+
+```json
+{
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite-plugin-singlefile": "^2.0.0",
+    "typescript": "^5.0.0",
+    "vue-tsc": "^2.0.0"
+  },
+  "dependencies": {
+    "vue": "^3.4.0",
+    "element-plus": "^2.7.0",
+    "@element-plus/icons-vue": "^2.3.0"
+  }
+}
 ```
 
 ---
